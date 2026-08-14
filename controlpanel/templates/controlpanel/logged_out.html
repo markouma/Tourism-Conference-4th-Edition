@@ -1,0 +1,37 @@
+<!-- templates/controlpanel/logged_out.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logged Out</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #333;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>You’ve been logged out 👋</h2>
+    <p>Thanks for managing the event like a boss.</p>
+
+    <a href="{% url 'controlpanel:controlpanel_login' %}" class="btn">Log In Again</a>
+    <a href="/" class="btn">Go to Homepage</a>
+</body>
+</html>

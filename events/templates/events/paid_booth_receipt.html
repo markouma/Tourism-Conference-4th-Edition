@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booth Booking Receipt</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+  background: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.receipt {
+  background: #fff;
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  text-align: left;
+}
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+.receipt-header img {
+  height: 150px;
+  width: auto;
+}
+.company-info-container {
+  display: flex;
+  justify-content: flex-end;
+  text-align: left;
+}
+.company-info {
+  font-size: 1rem;
+}
+.receipt-title {
+  text-align: center;
+  /* font-weight: bold; */
+  color: #1d3557;
+  margin: 0 0 5px 0;
+  font-size: 1.4rem;
+}
+.conference-info {
+  text-align: center;
+  /* margin-bottom: 25px; */
+}
+.conference-info span {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #1d3557;
+  white-space: nowrap;
+}
+.conference-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #333;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1px;
+  font-size: 0.95rem;
+}
+.info-left, .info-right {
+  width: 48%;
+}
+.divider {
+  border-top: 4px solid #BF1F2F;
+  margin: 15px 0 20px 0;
+}
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  border: 1.5px solid #ddd;
+  padding: 8px;
+  vertical-align: middle;
+}
+.table th {
+  background-color: #BF1F2F;
+  color: #fff;
+  text-align: center;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+.table td.text-end {
+  text-align: right;
+}
+.table tfoot td {
+  font-weight: bold;
+}
+.table tfoot tr td:last-child {
+  text-align: right;
+}
+.table tfoot tr:last-child td {
+  color: #BF1F2F;
+  font-size: 1.1rem;
+}
+.booth-details {
+  background-color: #f8f8f8;
+  border: 1.5px solid #ddd;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 1px;
+  font-size: 0.95rem;
+}
+.booth-details-items {
+  display: flex;
+  flex-wrap: wrap;
+}
+.booth-details-items div {
+  width: 33%;
+}
+.booth-details-items div ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.payment-terms {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+.payment-info {
+  text-align: left;
+}
+.terms {
+  text-align: left;
+}
+.issued-to-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.issued-to {
+  text-align: left;
+}
+.signature {
+  margin-top: 20px;
+  text-align: right;
+  
+}
+</style>
+
+
+</head>
+<body>
+
+<div class="receipt" id="receipt">
+  <div class="receipt-header">
+<img src="file://{{ buzz_logo_path }}" alt="Buzz AFRIQUE" class="sponsor-logo">
+    <div class="company-info-container">
+      <div class="company-info">
+        <strong>BUZZ AFRIQUE LIMITED</strong><br>
+        P.O Box 81039-80100 <br>
+        Mombasa <br>
+        +254 722 274707 <br>
+        accounts@buzzafrique.co.ke
+      </div>
+    </div>
+  </div>
+
+  <div class="receipt-title">PAYMENT RECEIPT</div>
+
+  <div class="conference-info">
+    <span>THE 4TH UGANDA - KENYA COAST TOURISM CONFERENCE & EXHIBITION</span>
+    <p>Venue: Ocean Beach Resort and Spa, Malindi | Dates: 27th - 28th October 2025</p>
+  </div>
+
+  <div class="info-row">
+    <div class="info-left">
+      <p class="mb-0">
+        Receipt No: <strong>{{ receipt_number }}</strong><br>
+        Date: <strong>{{ date }}</strong>
+      </p>
+    </div>
+    <div class="info-right text-end">
+      <p class="mb-0">
+        Your PIN: <strong>{{ customer_pin }}</strong><br>
+        Our PIN: <strong>{{ company_pin }}</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="info-row">
+    <div class="info-left">
+      <p><strong>Issued By:</strong><br>
+      {{ company_name }}<br>
+      {{ company_phone }}<br>
+      {{ company_email }}</p>
+    </div>
+    <div class="issued-to-container">
+      <div class="issued-to">
+        <p><strong>Issued To:</strong><br>
+        {{ customer_name }}<br>
+        {{ customer_phone }}<br>
+        {{ customer_email }}</p>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Booth No</th>
+        <th>PRICE</th>
+        <th>QTY</th>
+        <th class="text-end">TOTAL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Booth {{ booth_number }}</td>
+        <td class="text-end">Ksh {{ booth_price|floatformat:0 }}</td>
+        <td style="text-align: center;">1</td>
+        <td class="text-end">Ksh {{ booth_price|floatformat:0 }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">Subtotal:</td>
+        <td class="text-end">Ksh {{ booth_price|floatformat:0 }}</td>
+      </tr>
+      <tr>
+        <td colspan="3">VAT (16%):</td>
+        <td class="text-end">Ksh {{ vat_amount|floatformat:0 }}</td>
+      </tr>
+      <tr>
+        <td colspan="3">Grand Total:</td>
+        <td class="text-end">Ksh {{ total_amount|floatformat:0 }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="booth-details">
+    <strong>Booth Details:</strong>
+    <div class="booth-details-items">
+      <div><ul><li>1 rectangle table</li></ul></div>
+      <div><ul><li>2 plastic chairs</li></ul></div>
+      <div><ul><li>2 spotlights</li></ul></div>
+      <div><ul><li>1 power socket</li></ul></div>
+      <div><ul><li>1 waste bin</li></ul></div>
+      <div><ul><li>Fascia name</li></ul></div>
+    </div>
+    <p style="margin-top:10px;"><strong>Maximum number of people per booth is 2.</strong></p>
+  </div>
+
+  <div class="payment-terms">
+    <div class="payment-info">
+      <strong>Payment Info:</strong><br>
+      Transaction ID: {{ transaction_id }}<br>
+      Payment Method: MTN (Send Money)
+    </div>
+    <div class="terms">
+      <strong>Terms & Conditions:</strong><br>
+      Booth bookings are non-refundable.
+    </div>
+  </div>
+
+  <div class="signature">
+    <p>_______________________<br>{{ company_name }}</p>
+  </div>
+</div>
+
+</body>
+</html>

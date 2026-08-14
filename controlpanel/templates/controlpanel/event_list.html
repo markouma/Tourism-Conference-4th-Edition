@@ -1,0 +1,139 @@
+{% extends 'controlpanel/base.html' %}
+
+{% block title %}Events Dashboard{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-home {
+    background-color: #007bff;
+    color: white;
+  }
+  .btn-home:hover {
+    background-color: #0056b3;
+  }
+
+  .btn-logout {
+    background-color: #dc3545;
+    color: white;
+  }
+  .btn-logout:hover {
+    background-color: #c82333;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    background-color: white;
+    padding: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+  }
+
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f1f3f5;
+    font-weight: bold;
+    border-bottom: 2px solid #dee2e6;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9fafb;
+  }
+
+  tr:hover {
+    background-color: #eef1f5;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<h1>🎟️ Events Dashboard</h1>
+
+<div class="action-buttons">
+  <a href="{% url 'controlpanel:dashboard_home' %}" class="btn btn-home"> <i class="fa fa-home"> </i> Home</a>
+  
+  <form method="POST" action="{% url 'controlpanel:controlpanel_logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-logout"><span> Logout <i class="fa fa-sign-out"> </i> </span></button>
+  </form>
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+         <th>Event</th>
+        <th>Date</th>
+        <th>Tickets Sold</th>
+         <th>Total Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in events %}
+      <tr>
+        <td><a href="{% url 'controlpanel:event_detail_view' data.event.id %}">{{ data.event.name }}</a></td>
+        <td>{{ data.event.date }}</td>
+        <td>{{ data.tickets_sold }}</td>
+         <td>Ksh {{ data.total_revenue|floatformat:2 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

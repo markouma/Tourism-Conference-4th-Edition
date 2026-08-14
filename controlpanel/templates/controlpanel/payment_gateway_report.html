@@ -1,0 +1,29 @@
+{% extends 'controlpanel/base.html' %}
+
+{% block content %}
+<h2>Payment Gateway Sales Report</h2>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>Payment Gateway</th>
+      <th>Number of Sales</th>
+      <th>Total Revenue (KES)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in data %}
+    <tr>
+      <td>{{ row.payment_method }}</td>
+      <td>{{ row.total_sales }}</td>
+      <td>Ksh {{ row.total_revenue|floatformat:2 }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="3">No sales data available.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

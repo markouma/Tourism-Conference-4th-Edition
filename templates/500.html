@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Server Error</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- optional -->
+  <style>
+    body {
+      background: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 5em;
+    }
+    h1 {
+      font-size: 4em;
+      color: #e63946;
+    }
+    p {
+      font-size: 1.3em;
+      color: #555;
+    }
+    a {
+      margin-top: 2em;
+      display: inline-block;
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>500</h1>
+  <p>Whoops! Something broke on our side. 😬</p>
+  <p>Our team has been notified, hang tight.</p>
+  <a href="/">← Back to Homepage</a>
+</body>
+</html>

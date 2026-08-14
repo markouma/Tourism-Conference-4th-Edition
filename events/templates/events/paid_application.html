@@ -1,0 +1,446 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Paid Tag Application</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Icons + Phone -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Poppins&display=swap" rel="stylesheet">
+
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Navbar Styles */
+    .navmenu {
+      background-color: white;
+      border-bottom: 1px solid #eee;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      padding: 12px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .navmenu ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .navmenu ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .navmenu ul li a:hover {
+      color: #28a745;
+      border-bottom: 2px solid #28a745;
+    }
+
+    .mobile-nav-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    /* Mobile Navbar */
+    @media (max-width: 768px) {
+      .mobile-nav-toggle {
+        display: block;
+      }
+
+      #mobile-nav-links {
+        display: none;
+        flex-direction: column;
+        padding-top: 10px;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      #mobile-nav-links.show {
+        display: flex;
+      }
+
+      .navmenu ul {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Form Container */
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      text-align: center;
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    form label {
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    form input, form select {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    form input[type="file"] {
+      padding: 5px;
+    }
+
+    form button {
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    form button:hover {
+      background-color: #218838;
+    }
+
+    .flex-pair {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .flex-pair > div {
+      flex: 1;
+      min-width: 48%;
+    }
+
+    .logo img {
+      max-height: 80px;
+      width: auto;
+      
+    }
+    
+    .required {
+  color: red;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.flex-pair {
+  display: flex;
+  gap: 15px;
+}
+.flex-pair > div {
+  flex: 1;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Send to M-Pesa <br> <small>(Via MTN)</small> </h2>
+<p style="background-color: rgba(14, 85, 115, 0.172); padding: 15px; border:1px solid #ccc; border-radius: 10px; color: #333;">
+  <span >
+    
+   1. Dial *165# Select Send Money (1)  <br> 
+   2. Select International Transfer (3)  <br> 
+   3. Select Safaricom M-Pesa (1) <br>
+
+    4. Enter the recipient Number <b  >254721 587 514  <small>(Godfreys Samora)</small> </b> <br>
+    5. Amount is <b>UGX. 50,000</b> (Kshs 2,000) <br>
+
+         After receiving confirmation message, please fill out the form below with your payment details to complete your application for the accreditation tag.
+
+  </span>
+</p>
+
+    {% if form.errors %}
+  <ul class="errorlist" style="display:none;">
+    {% for field, errors in form.errors.items %}
+      {% for error in errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      let errors = document.querySelectorAll(".errorlist li");
+  
+      if (errors.length > 0) {
+        // filter only Mpesa-related errors
+        let mpesaErrors = Array.from(errors).filter(e =>
+          e.innerText.toLowerCase().includes("pesa")
+        );
+  
+        if (mpesaErrors.length > 0) {
+          let messages = mpesaErrors.map(e => e.innerText).join("\n");
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: messages,
+          });
+        }
+      }
+    });
+  </script>
+  
+{% endif %}
+
+
+<form method="POST" enctype="multipart/form-data" action="{% url 'paid_application' event.id %}">
+  {% csrf_token %}
+
+  <!-- Display non-field errors -->
+  {% if form.non_field_errors %}
+    <div class="error" style="color: red; margin-bottom: 15px; padding: 10px; border: 1px solid red; border-radius: 4px;">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+    <!-- Mpesa Code -->
+    <div class="form-group">
+      <label for="{{ form.mpesa_code.id_for_label }}">
+        {{ form.mpesa_code.label }} {% if form.mpesa_code.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.mpesa_code }}
+      {% if form.mpesa_code.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.mpesa_code.errors }}</div>
+      {% endif %}
+    </div>
+  
+  <!-- Full name -->
+  <div class="form-group">
+    <label for="{{ form.full_name.id_for_label }}">
+      {{ form.full_name.label }} {% if form.full_name.field.required %}<span class="required">*</span>{% endif %}
+    </label>
+    {{ form.full_name }}
+    {% if form.full_name.errors %}
+      <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.full_name.errors }}</div>
+    {% endif %}
+  </div>
+
+  <!-- Email + Phone -->
+  <div class="flex-pair">
+    <div class="form-group">
+      <label for="{{ form.email.id_for_label }}">
+        {{ form.email.label }} {% if form.email.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.email }}
+      {% if form.email.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.email.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.phone.id_for_label }}">
+        {{ form.phone.label }} {% if form.phone.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.phone }}
+      {% if form.phone.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.phone.errors }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Company + Designation -->
+  <div class="flex-pair">
+    <div class="form-group">
+      <label for="{{ form.company.id_for_label }}">
+        {{ form.company.label }} {% if form.company.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.company }}
+      {% if form.company.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.company.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.designation.id_for_label }}">
+        {{ form.designation.label }} {% if form.designation.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.designation }}
+      {% if form.designation.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.designation.errors }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+ 
+  <!-- Photo -->
+  <div class="form-group">
+    <label for="{{ form.photo.id_for_label }}">
+      {{ form.photo.label }} {% if form.photo.field.required %}<span class="required">*</span>{% endif %}
+    </label>
+    {{ form.photo }}
+    {% if form.photo.errors %}
+      <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.photo.errors }}</div>
+    {% endif %}
+  </div>
+
+  <!-- Country + City -->
+  <div class="flex-pair">
+    <div class="form-group">
+      <label for="{{ form.country.id_for_label }}">
+        {{ form.country.label }} {% if form.country.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.country }}
+      {% if form.country.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.country.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.city.id_for_label }}">
+        {{ form.city.label }} {% if form.city.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.city }}
+      {% if form.city.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.city.errors }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Age range -->
+  <div class="form-group">
+    <label for="{{ form.age_range.id_for_label }}">
+      {{ form.age_range.label }} {% if form.age_range.field.required %}<span class="required">*</span>{% endif %}
+    </label>
+    {{ form.age_range }}
+    {% if form.age_range.errors %}
+      <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.age_range.errors }}</div>
+    {% endif %}
+  </div>
+
+  <!-- Referral + Sector -->
+  <div class="flex-pair">
+    <div class="form-group">
+      <label for="{{ form.referral_source.id_for_label }}">
+        {{ form.referral_source.label }} {% if form.referral_source.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.referral_source }}
+      {% if form.referral_source.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.referral_source.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.sector.id_for_label }}">
+        {{ form.sector.label }} {% if form.sector.field.required %}<span class="required">*</span>{% endif %}
+      </label>
+      {{ form.sector }}
+      {% if form.sector.errors %}
+        <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.sector.errors }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Tshirt size -->
+  <div class="form-group">
+    <label for="{{ form.tshirt_size.id_for_label }}">
+      {{ form.tshirt_size.label }} {% if form.tshirt_size.field.required %}<span class="required">*</span>{% endif %}
+    </label>
+    {{ form.tshirt_size }}
+    {% if form.tshirt_size.errors %}
+      <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.tshirt_size.errors }}</div>
+    {% endif %}
+  </div>
+
+
+  <!-- Consent -->
+  <div class="form-group" style="margin-top: 15px;">
+    <label for="{{ form.consent.id_for_label }}">
+      {{ form.consent }} I consent to the use of my data and appearance in event media. {% if form.consent.field.required %}<span class="required">*</span>{% endif %}
+    </label>
+    {% if form.consent.errors %}
+      <div class="error" style="color: red; font-size: 0.875em; margin-top: 5px;">{{ form.consent.errors }}</div>
+    {% endif %}
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" style="margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+    Submit Application
+  </button>
+</form>
+  </div>
+
+  <!-- JS: Phone input -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+  <script>
+    const input = document.querySelector("#id_phone");
+    const iti = window.intlTelInput(input, {
+      initialCountry: "auto",
+      preferredCountries: [ "ug","ke","tz"],
+      separateDialCode: true,
+      geoIpLookup: function(callback) {
+        fetch("https://ipinfo.io/json?token=YOUR_TOKEN")
+          .then((resp) => resp.json())
+          .then((resp) => callback(resp.country))
+          .catch(() => callback("ug"));
+      },
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+    });
+
+    document.querySelector("form").addEventListener("submit", function(e) {
+      const number = iti.getNumber();
+      input.value = number;
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  {% include "includes/tracking_snippet.html" %}
+
+</body>
+</html>

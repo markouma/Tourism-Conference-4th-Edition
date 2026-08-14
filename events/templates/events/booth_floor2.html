@@ -1,0 +1,387 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Live Booth Status</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Roboto', sans-serif;
+      background: #f8f9fa;
+    }
+
+    /* Floor Plan Styling */
+    .floorplan {
+      display: grid;
+      grid-template-columns: repeat(11, 60px);
+      grid-auto-rows: 50px;
+      gap: 0px;
+      justify-content: center;
+      margin: 0px auto;
+      max-width: 550px;
+      position: relative;
+    }
+    
+    .booth {
+      background: #5cb6f7;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 1px solid #333;
+      border-radius: 1px;
+      position: relative;
+      z-index: 2;
+      cursor: default;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booth.booked {
+      background: darkred !important;
+      cursor: not-allowed;
+    }
+    
+    .performance {
+      position: absolute;
+      top: 40%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: #2a9d8f;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      z-index: 10;
+    }
+    
+    .side-label {
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    .conference {
+      position: absolute;
+      left: -120px;
+      top: 40%;
+      transform: translateY(-50%);
+    }
+    
+    .dining {
+      position: absolute;
+      right: -120px;
+      top: 40%;
+      transform: translateY(-50%);
+    }
+    
+    .entrance {
+      grid-column: 5 / span 3;
+      grid-row: 11;
+      background: #f85d23;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 5px;
+      font-size: 16px;
+      position: relative;
+    }
+    
+    .entrance::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: #000;
+      border-radius: 50% 50% 0 0;
+    }
+    
+    .conference::before {
+      content: "⮜⮜ ";
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 12px;
+    }
+    
+    .dining::after {
+      content: " ⮞⮞";
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 12px;
+    }
+    
+    .floorplan::before,
+    .floorplan::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 0.8px;
+      background: #333;
+      z-index: 1;
+    }
+    
+    .floorplan::before { top: 0px; }
+    .floorplan::after { bottom: 50px; }
+    
+    .legend-box {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      border: 1px solid #333;
+      vertical-align: middle;
+    }
+
+    .floorplan-wrapper {
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    .legend-section {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .last-update {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 12px;
+      color: #666;
+      padding: 5px;
+      background: white;
+      border-radius: 4px;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 576px) {
+      .floorplan {
+        transform: scale(0.7);
+        transform-origin: top center;
+      }
+      
+      .conference {
+        left: -80px;
+        font-size: 12px;
+      }
+      
+      .dining {
+        right: -80px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Legend -->
+  <div class="legend-section">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <div><span class="legend-box" style="background:#5cb6f7;"></span> Available</div>
+      <div><span class="legend-box" style="background:darkred;"></span> Booked</div>
+    </div>
+  </div>
+  <!-- Last Update Indicator -->
+  <div class="last-update" id="lastUpdate">
+    Last updated: Loading...
+  </div>
+  <!-- Floor Plan -->
+  <div class="floorplan-wrapper">
+    <div class="floorplan">
+      <!-- First Column -->
+      <div class="booth" data-name="1" style="grid-column:1; grid-row:1;">1</div>
+      <div class="booth" data-name="2" style="grid-column:1; grid-row:2;">2</div>
+      <div class="booth" data-name="3" style="grid-column:1; grid-row:3;">3</div>
+      <div class="booth" data-name="4" style="grid-column:1; grid-row:4;">4</div>
+      <div class="booth" data-name="24" style="grid-column:1; grid-row:6;">24</div>
+      <div class="booth" data-name="25" style="grid-column:1; grid-row:7;">25</div>
+      <div class="booth" data-name="26" style="grid-column:1; grid-row:8;">26</div>
+      <div class="booth" data-name="27" style="grid-column:1; grid-row:9;">27</div>
+      <div class="booth" data-name="28" style="grid-column:1; grid-row:10;">28</div>
+
+      <!-- Second Column -->
+      <div class="booth" data-name="5" style="grid-column:3; grid-row:1;">5</div>
+      <div class="booth" data-name="6" style="grid-column:3; grid-row:2;">6</div>
+      <div class="booth" data-name="7" style="grid-column:3; grid-row:3;">7</div>
+      <div class="booth" data-name="8" style="grid-column:4; grid-row:3;">8</div>
+      <div class="booth" data-name="10" style="grid-column:4; grid-row:1;">10</div>
+      <div class="booth" data-name="9" style="grid-column:4; grid-row:2;">9</div>
+      <div class="booth" data-name="38" style="grid-column:3; grid-row:4;">38</div>
+      <div class="booth" data-name="41" style="grid-column:4; grid-row:4;">41</div>
+      <div class="booth" data-name="32" style="grid-column:3; grid-row:6;">32</div>
+      <div class="booth" data-name="33" style="grid-column:4; grid-row:6;">33</div>
+      <div class="booth" data-name="31" style="grid-column:3; grid-row:7;">31</div>
+      <div class="booth" data-name="34" style="grid-column:4; grid-row:7;">34</div>
+      <div class="booth" data-name="30" style="grid-column:3; grid-row:8;">30</div>
+      <div class="booth" data-name="35" style="grid-column:4; grid-row:8;">35</div>
+      <div class="booth" data-name="29" style="grid-column:3; grid-row:9;">29</div>
+      <div class="booth" data-name="36" style="grid-column:4; grid-row:9;">36</div>
+
+      <!-- Center Left -->
+      <div class="booth" data-name="11" style="grid-column:6; grid-row:1;">11</div>
+      <div class="booth" data-name="12" style="grid-column:6; grid-row:2;">12</div>
+      <div class="booth" data-name="13" style="grid-column:6; grid-row:3;">13</div>
+      <div class="booth" data-name="14" style="grid-column:7; grid-row:1;">14</div>
+      <div class="booth" data-name="15" style="grid-column:7; grid-row:2;">15</div>
+      <div class="booth" data-name="16" style="grid-column:7; grid-row:3;">16</div>
+
+      <!-- Center Bottom -->
+      <div class="booth" data-name="39" style="grid-column:6; grid-row:7;">39</div>
+      <div class="booth" data-name="40" style="grid-column:7; grid-row:7;">40</div>
+
+      <!-- Center Right -->
+      <div class="booth" data-name="17" style="grid-column:9; grid-row:1;">17</div>
+      <div class="booth" data-name="18" style="grid-column:9; grid-row:2;">18</div>
+      <div class="booth" data-name="19" style="grid-column:9; grid-row:3;">19</div>
+      <div class="booth" data-name="37" style="grid-column:9; grid-row:4;">37</div>
+      <div class="booth" data-name="42" style="grid-column:9; grid-row:6;">42</div>
+      <div class="booth" data-name="45" style="grid-column:9; grid-row:7;">45</div>
+      <div class="booth" data-name="44" style="grid-column:9; grid-row:8;">44</div>
+      <div class="booth" data-name="43" style="grid-column:9; grid-row:9;">43</div>
+
+      <!-- Right Column -->
+      <div class="booth" data-name="23" style="grid-column:11; grid-row:1;">23</div>
+      <div class="booth" data-name="22" style="grid-column:11; grid-row:2;">22</div>
+      <div class="booth" data-name="21" style="grid-column:11; grid-row:3;">21</div>
+      <div class="booth" data-name="20" style="grid-column:11; grid-row:4;">20</div>
+      <div class="booth" data-name="46" style="grid-column:11; grid-row:6;">46</div>
+      <div class="booth" data-name="47" style="grid-column:11; grid-row:7;">47</div>
+      <div class="booth" data-name="48" style="grid-column:11; grid-row:8;">48</div>
+      <div class="booth" data-name="49" style="grid-column:11; grid-row:9;">49</div>
+      <div class="booth" data-name="50" style="grid-column:11; grid-row:10;">50</div>
+
+      <!-- Performance Area -->
+      <div class="performance">Performance<br>Area</div>
+      <div class="side-label conference">Conference Area</div>
+      <div class="side-label dining">Dining Area</div>
+      <div class="entrance">Entrance</div>
+    </div>
+  </div>
+
+
+
+  <script>
+    // Initialize booth data from Django template
+    const boothData = {{ booths_json|safe }};
+    const eventId = {{ event.id }};
+    let updateInterval;
+
+    function updateBoothStatus() {
+      fetch(`/events/${eventId}/booths-live/`, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Received booth data:', data); // Debug log
+        
+        data.booths.forEach(booth => {
+          // Find booth element by matching the booth name/number
+          const printedNum = parseInt(booth.name.toString().replace(/\D/g, ''), 10);
+          const boothElement = document.querySelector(`[data-name="${printedNum}"]`);
+          
+          if (boothElement) {
+            // Set data-id for reference
+            boothElement.dataset.id = booth.id;
+            
+            // Update visual status
+            if (booth.is_booked || booth.is_reserved) {
+              boothElement.style.background = 'darkred';
+              boothElement.classList.add('booked');
+            } else {
+              boothElement.style.background = '#5cb6f7';
+              boothElement.classList.remove('booked');
+            }
+          }
+        });
+        
+        // Update last update time
+        document.getElementById('lastUpdate').textContent = 
+          `Last updated: ${new Date().toLocaleTimeString()}`;
+      })
+      .catch(error => {
+        console.error('Error updating booth status:', error);
+        document.getElementById('lastUpdate').textContent = 
+          `Error updating: ${new Date().toLocaleTimeString()}`;
+      });
+    }
+
+    function initializeBooths() {
+      // Set initial booth states from Django data
+      const boxes = document.querySelectorAll('.booth');
+      
+      boxes.forEach(box => {
+        const printedNum = parseInt((box.dataset.name || box.textContent).replace(/\D/g, ''), 10);
+        if (isNaN(printedNum)) return;
+
+        const booth = boothData.find(b =>
+          parseInt(b.name.toString().replace(/\D/g, ''), 10) === printedNum
+        );
+        
+        if (!booth) return;
+
+        // Set booth ID
+        box.dataset.id = booth.id;
+
+        // Set initial visual state
+        if (booth.is_booked || booth.is_reserved) {
+          box.style.background = 'darkred';
+          box.classList.add('booked');
+        } else {
+          box.style.background = '#5cb6f7';
+          box.classList.remove('booked');
+        }
+      });
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Initializing booth status display...'); // Debug log
+      
+      // Set initial states
+      initializeBooths();
+      
+      // Start live updates
+      updateBoothStatus(); // Initial update
+      updateInterval = setInterval(updateBoothStatus, 15000); // Update every 15 seconds
+      
+      document.getElementById('lastUpdate').textContent = 
+        `Initialized: ${new Date().toLocaleTimeString()}`;
+    });
+
+    // Clean up interval when page unloads
+    window.addEventListener('beforeunload', function() {
+      if (updateInterval) {
+        clearInterval(updateInterval);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conference Badge</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <style>
+    body {
+      background: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      font-family: Arial, sans-serif;
+    }
+
+    .badge {
+      width: 350px;
+      height: fit-content;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .logo {
+      height: 50px;
+      border: 1px solid blue;
+    }
+
+    .top-section {
+      display: flex;
+      width: 90%;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .conference-info {
+      text-align: left;
+      flex: 1;
+    }
+
+    .conference-info .title {
+      font-weight: bold;
+      font-size: 17px;
+      color: #222;
+    }
+
+    .conference-info .detail {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.4;
+    }
+
+    .conference-banner {
+      flex: 1;
+      margin-left: 10px;
+    }
+
+    .conference-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .photo {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 4px 0;
+      border: 2px solid #ddd;
+    }
+
+    .name {
+      font-size: 15px;
+      font-weight: bold;
+      margin: 5px 0 2px;
+      color: #222;
+    }
+
+    .email, .phone {
+      font-size: 12px;
+      color: #444;
+      margin: 1px 0;
+    }
+
+    .org {
+      font-size: 12px;
+      color: #777;
+      margin: 3px 0 8px;
+    }
+
+    .qr-code {
+      margin: 0 auto 10px;
+    }
+
+    .qr-code-section {
+  text-align: center;
+  padding: 10px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.qr-code-section img {
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  width: 120px;
+  height: 120px;
+}
+
+
+
+    .footer {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: auto;
+      padding-bottom: 10px;
+    }
+
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+      .badge {
+        box-shadow: none;
+        page-break-inside: avoid;
+        border: 1px solid #000;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="badge">
+  <!-- Logo -->
+  <img src="{{ logo }}" alt="Logo" class="logo">
+
+  <!-- Conference Info + Banner -->
+  <div class="top-section">
+    <div class="conference-info">
+      <div class="title">{{ order.event.name }}</div>
+      <div class="detail">Date: <small><b>{{ order.event.date }} {{ order.event.time }}</b></small></div>
+      <div class="detail">Location: <small><b>{{ order.event.location }}</b></small></div>
+      <div class="detail">Category: <small><b>{{ category.name }}</b></small></div>
+
+       
+    </div>
+    <div class="conference-banner">
+      <img src="{{ order.event.poster }}" alt="Conference Banner">
+    </div>
+  </div>
+
+  <!-- User Info -->
+  <img src="{{ attendee_photo }}" alt="Passport Photo" class="photo">
+  <div class="name">{{ user_details.name }}</div>
+  <div class="email">{{ user_details.email }}</div>
+  <div class="phone">{{ user_details.phone }}</div>
+
+<!-- QR Code Section -->
+<div class="qr-code-section">
+  <img src="{{ qr_code }}" alt="QR Code">
+  <p style="font-size: 11px;">Scan this QR code at the event</p>
+</div>
+
+
+  <!-- Footer -->
+  <div class="footer"> www.thetourismconference.org</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+{% load static currency_filters %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice {{ h.invoice_number }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1cm;
+      @top-center { content: "BUZZ AFRIQUE LIMITED"; font-size: 10pt; }
+      @bottom-center { content: "Page " counter(page); font-size: 9pt; }
+    }
+    body {
+      font-family: "DejaVu Sans", sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      font-size: 11pt;
+      line-height: 1.4;
+    }
+    .invoice {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      position: relative;
+      min-height: 100vh;
+    }
+    .paid {
+      position: absolute;
+      top: 80px;
+      right: -60px;
+      transform: rotate(45deg);
+      background: green;
+      color: white;
+      font-weight: bold;
+      font-size: 3rem;
+      padding: 15px 80px;
+      opacity: 0.7;
+      z-index: 10;
+      box-shadow: 0 0 10px rgba(0,0,0,0.8);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      border-bottom: 3px solid #BF1F2F;
+      padding-bottom: 10px;
+    }
+    .header img {
+      height: 90px;
+      width: auto;
+    }
+    .company-info {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #1d3557;
+      margin: 15px 0;
+    }
+    .conference {
+      text-align: center;
+      margin: 10px 0;
+      font-weight: bold;
+      color: #1d3557;
+    }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+    }
+    .table th, .table td {
+      border: 1.5px solid #333;
+      padding: 10px;
+      text-align: left;
+    }
+    .table th {
+      background: #BF1F2F;
+      color: white;
+      font-weight: bold;
+    }
+    .table .text-end { text-align: right; }
+    .table tfoot td {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+    }
+    .clearfix::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+  </style>
+</head>
+<body>
+<div class="invoice">
+  <div class="paid">PAID</div>
+
+  <div class="header">
+    <img src="{% static 'assets/img/buzz.jpeg' %}" alt="Buzz Afrique">
+    <div class="company-info">
+      <strong>BUZZ AFRIQUE LIMITED</strong><br>
+      P.O Box 81039-80100, Mombasa<br>
+      +254 722 274707<br>
+      accounts@buzzafrique.co.ke
+    </div>
+  </div>
+
+  <div class="title"> INVOICE</div>
+
+  <div class="conference">
+    THE 4TH UGANDA-KENYA COAST TOURISM CONFERENCE & EXHIBITION<br>
+    <small>Ocean Beach Resort & Spa, Malindi | 27th–28th Oct 2025</small>
+  </div>
+
+  <div class="info">
+    <div>
+      <strong>Invoice #:</strong> {{ h.invoice_number }}<br>
+    <strong>Date:</strong> 
+{% if h.date_obj %}
+  {{ h.date_obj|date:"d/m/Y" }}
+{% else %}
+  —
+{% endif %}
+    </div>
+    <div style="text-align:right;">
+      <strong>Billed To:</strong><br>
+      {{ h.name }}<br>
+      {{ h.phone }}<br>
+      {{ h.email }}
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="text-end">Amount (KES)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          Delegate Ticket
+        </td>
+        <td class="text-end">{{ h.amount|floatformat:0|ksh_format }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><strong>Total Paid</strong></td>
+        <td class="text-end"><strong>{{ h.amount|floatformat:0|ksh_format }}</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="footer">
+    Thank you for your participation!<br>
+    For inquiries: <strong>accounts@buzzafrique.co.ke</strong> | <strong>+254 722 274707</strong>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<h2>Preparing your payment...</h2>
+<p>Please wait. This will take a few seconds.</p>
+
+<script>
+    const orderId = "{{ order_id }}";
+    const checkUrl = `/check_pesapal_url/${orderId}/`;
+
+    function poll() {
+        fetch(checkUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data.ready) {
+                    window.location.href = data.url;
+                } else {
+                    setTimeout(poll, 3000);
+                }
+            });
+    }
+
+    poll();
+</script>

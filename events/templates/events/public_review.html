@@ -1,0 +1,11 @@
+
+<h2>Review {{ booth.name }}</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if recaptcha_site_key %}
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+  {% endif %}
+  <button type="submit">Submit Review</button>
+</form>

@@ -1,0 +1,22 @@
+<h2>Checkout - {{ booth.name }}</h2>
+<p>Event: {{ booth.event.name }}</p>
+<p>Price: KES {{ booth.price }}</p>
+
+<form method="post">
+  {% csrf_token %}
+  <label for="email">Your Email:</label>
+  <input type="email" name="email" required><br>
+  <label for="phone">Phone Number:</label>
+  <input type="text" name="phone" required><br>
+  <label for="company">Company Name:</label>
+  <input type="text" name="company" required><br>
+  <label for="designation">Designation:</label>
+  <input type="text" name="designation" required><br>
+  <label for="industry">Industry:</label>
+  <input type="text" name="industry" required><br>
+  <label for="industry_description">Industry Description:</label>
+  <textarea name="industry_description" rows="4" required></textarea><br>
+  <label for="attendee_photo">Upload Passport Photo:</label>
+  <input type="file" name="attendee_photo" accept="image/*"><br>
+  <button type="submit">Proceed to Pay</button>
+</form>

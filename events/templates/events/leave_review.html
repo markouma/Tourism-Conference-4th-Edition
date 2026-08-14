@@ -1,0 +1,22 @@
+<h2>
+  {% if existing_review %}
+    Edit your review for Booth {{ booth.name }}
+  {% else %}
+    Leave a review for Booth {{ booth.name }}
+  {% endif %}
+</h2>
+
+<form method="post">
+  {% csrf_token %}
+  
+  <label>Rating (1–5):</label>
+  <input type="number" name="rating" min="1" max="5" required
+         value="{% if existing_review %}{{ existing_review.rating }}{% endif %}"><br><br>
+
+  <label>Comment:</label><br>
+  <textarea name="content" rows="4" cols="40" required>{% if existing_review %}{{ existing_review.content }}{% endif %}</textarea><br><br>
+
+  <button type="submit">
+    {% if existing_review %}Update Review{% else %}Submit Review{% endif %}
+  </button>
+</form>

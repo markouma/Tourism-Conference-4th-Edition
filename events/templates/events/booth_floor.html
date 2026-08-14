@@ -1,0 +1,751 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Exhibition Booth Checkout</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+<meta http-equiv="refresh" content="300"> <!-- Refreshes every 30 seconds -->
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logosi.png' %}" rel="icon">
+  <link href="{% static 'assets/img/logosi.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <style>
+    /* force the offcanvas to respect screen height */
+    #checkoutSidebar .offcanvas-body {
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 70px); /* More conservative for mobile */
+      min-height: 400px;
+      padding: 0;
+    }
+
+    /* scroll only the form fields */
+    #checkoutSidebar #formsContainer {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      min-height: 0; /* crucial for Firefox/Chrome */
+      padding: 1rem;
+    }
+
+    /* bottom payment section fixed */
+    #checkoutSidebar .payment-section {
+      flex: 0 0 auto;
+      border-top: 1px solid #ddd;
+      background-color: #0f4405;
+      padding: 1rem;
+      color: white;
+    }
+
+    /* Floor Plan Styling */
+    .floorplan {
+      display: grid;
+      grid-template-columns: repeat(11, 60px);
+      grid-auto-rows: 50px;
+      gap: 0px;
+      justify-content: center;
+      margin: 0px auto;
+      max-width: 550px;
+      position: relative;
+    }
+    .booth {
+      background: #5cb6f7;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 1px solid #333;
+      border-radius: 1px;
+      position: relative;
+      z-index: 2;
+    }
+    .performance {
+      position: absolute;
+      top: 40%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: #2a9d8f;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      z-index: 10;
+    }
+    .side-label {
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .conference {
+      position: absolute;
+      left: -120px;
+      top: 40%;
+      transform: translateY(-50%);
+    }
+    .dining {
+      position: absolute;
+      right: -120px;
+      top: 40%;
+      transform: translateY(-50%);
+    }
+    .entrance {
+      grid-column: 5 / span 3;
+      grid-row: 11;
+      background: #f85d23;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 5px;
+      font-size: 16px;
+      position: relative;
+    }
+    .entrance::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: #000;
+      border-radius: 50% 50% 0 0;
+    }
+    .conference::before {
+      content: "⮜⮜ ";
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 12px;
+    }
+    .dining::after {
+      content: " ⮞⮞";
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 12px;
+    }
+    .floorplan::before,
+    .floorplan::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 0.8px;
+      background: #333;
+      z-index: 1;
+    }
+    .floorplan::before { top: 0px; }
+    .floorplan::after { bottom: 50px; }
+    .booth.selected {
+      background: gray !important;
+      color: #fff;
+    }
+    .booth.paid {
+      background: darkred !important;
+      color: #fff;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .legend-box {
+      display:inline-block;
+      width:20px;
+      height:20px;
+      margin-right:5px;
+      border:1px solid #333;
+      vertical-align:middle;
+    }
+
+    /* ✅ Wrapper for scaling */
+    .floorplan-wrapper {
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ✅ Mobile fix: shrink proportionally so full plan is always visible */
+    @media (max-width: 576px) {
+      .floorplan {
+        transform: scale(0.55);
+        transform-origin: top center;
+        width: 1000px;
+        max-width: unset;
+        position: relative;
+      }
+      .conference {
+        left: -60px;
+        top: 40%;
+        transform: translateY(-50%);
+        font-size: 20px;
+      }
+      .dining {
+        right: -60px;
+        top: 40%;
+        transform: translateY(-50%);
+        font-size: 20px;
+      } 
+      /* ✅ tighten gap between floorplan and legend on phones */
+      .legend-section {
+        margin-top: -330px !important;
+      }
+    }
+
+    /* ✅ Legend spacing (desktop default) */
+    .legend-section {
+      margin-top: -80px;
+    }
+  </style>
+</head>
+<body class="index-page">
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li> 
+          <li><a href="{% url 'Forewords' %}">Forewords</a></li>    
+          <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+          <li><a href="{% url 'golf' %}">Golf</a></li>
+          <li><a href="/events/1/booths/" class="active">Exhibitors</a></li>
+          <li><a href="{% url 'blog' %}">Gallery</a></li>
+          <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+          <li><a href="{% url 'index' %}#contact">Contact Us</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a href="/event/1/" class="btn-getstarted active">Register</a>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Floor Plan Section -->
+    <section class="section">
+      <!-- Legend + Selection Bar MOVED TO TOP -->
+      <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap mb-4">
+        <div><span class="legend-box" style="background:#5cb6f7;"></span> Available</div>
+        <div><span class="legend-box" style="background:gray;"></span> Selected</div>
+        <div><span class="legend-box" style="background:darkred;"></span> Booked</div>
+        <div id="selectionList">Selected: none</div>
+        <button id="payNowBtn" class="btn btn-success ms-3" disabled>Pay</button>
+      </div>
+
+      <!-- Floor Plan Wrapper -->
+      <div class="floorplan-wrapper">
+        <div class="floorplan">
+          <!-- First Column -->
+          <div class="booth" data-name="1" style="grid-column:1; grid-row:1;">1</div>
+          <div class="booth" data-name="2" style="grid-column:1; grid-row:2;">2</div>
+          <div class="booth" data-name="3" style="grid-column:1; grid-row:3;">3</div>
+          <div class="booth" data-name="4" style="grid-column:1; grid-row:4;">4</div>
+          <div class="booth" data-name="24" style="grid-column:1; grid-row:6;">24</div>
+          <div class="booth" data-name="25" style="grid-column:1; grid-row:7;">25</div>
+          <div class="booth" data-name="26" style="grid-column:1; grid-row:8;">26</div>
+          <div class="booth" data-name="27" style="grid-column:1; grid-row:9;">27</div>
+          <div class="booth" data-name="28" style="grid-column:1; grid-row:10;">28</div>
+
+          <!-- Second Column -->
+          <div class="booth" data-name="5" style="grid-column:3; grid-row:1;">5</div>
+          <div class="booth" data-name="6" style="grid-column:3; grid-row:2;">6</div>
+          <div class="booth" data-name="7" style="grid-column:3; grid-row:3;">7</div>
+          <div class="booth" data-name="8" style="grid-column:4; grid-row:3;">8</div>
+          <div class="booth" data-name="10" style="grid-column:4; grid-row:1;">10</div>
+          <div class="booth" data-name="9" style="grid-column:4; grid-row:2;">9</div>
+          <div class="booth" data-name="38" style="grid-column:3; grid-row:4;">38</div>
+          <div class="booth" data-name="41" style="grid-column:4; grid-row:4;">41</div>
+          <div class="booth" data-name="32" style="grid-column:3; grid-row:6;">32</div>
+          <div class="booth" data-name="33" style="grid-column:4; grid-row:6;">33</div>
+          <div class="booth" data-name="31" style="grid-column:3; grid-row:7;">31</div>
+          <div class="booth" data-name="34" style="grid-column:4; grid-row:7;">34</div>
+          <div class="booth" data-name="30" style="grid-column:3; grid-row:8;">30</div>
+          <div class="booth" data-name="35" style="grid-column:4; grid-row:8;">35</div>
+          <div class="booth" data-name="29" style="grid-column:3; grid-row:9;">29</div>
+          <div class="booth" data-name="36" style="grid-column:4; grid-row:9;">36</div>
+
+          <!-- Center Left -->
+          <div class="booth" data-name="11" style="grid-column:6; grid-row:1;">11</div>
+          <div class="booth" data-name="12" style="grid-column:6; grid-row:2;">12</div>
+          <div class="booth" data-name="13" style="grid-column:6; grid-row:3;">13</div>
+          <div class="booth" data-name="14" style="grid-column:7; grid-row:1;">14</div>
+          <div class="booth" data-name="15" style="grid-column:7; grid-row:2;">15</div>
+          <div class="booth" data-name="16" style="grid-column:7; grid-row:3;">16</div>
+
+          <!-- Center Bottom -->
+          <div class="booth" data-name="39" style="grid-column:6; grid-row:7;">39</div>
+          <div class="booth" data-name="40" style="grid-column:7; grid-row:7;">40</div>
+
+          <!-- Center Right -->
+          <div class="booth" data-name="17" style="grid-column:9; grid-row:1;">17</div>
+          <div class="booth" data-name="18" style="grid-column:9; grid-row:2;">18</div>
+          <div class="booth" data-name="19" style="grid-column:9; grid-row:3;">19</div>
+          <div class="booth" data-name="37" style="grid-column:9; grid-row:4;">37</div>
+          <div class="booth" data-name="42" style="grid-column:9; grid-row:6;">42</div>
+          <div class="booth" data-name="45" style="grid-column:9; grid-row:7;">45</div>
+          <div class="booth" data-name="44" style="grid-column:9; grid-row:8;">44</div>
+          <div class="booth" data-name="43" style="grid-column:9; grid-row:9;">43</div>
+
+          <!-- Right Column -->
+          <div class="booth" data-name="23" style="grid-column:11; grid-row:1;">23</div>
+          <div class="booth" data-name="22" style="grid-column:11; grid-row:2;">22</div>
+          <div class="booth" data-name="21" style="grid-column:11; grid-row:3;">21</div>
+          <div class="booth" data-name="20" style="grid-column:11; grid-row:4;">20</div>
+          <div class="booth" data-name="46" style="grid-column:11; grid-row:6;">46</div>
+          <div class="booth" data-name="47" style="grid-column:11; grid-row:7;">47</div>
+          <div class="booth" data-name="48" style="grid-column:11; grid-row:8;">48</div>
+          <div class="booth" data-name="49" style="grid-column:11; grid-row:9;">49</div>
+          <div class="booth" data-name="50" style="grid-column:11; grid-row:10;">50</div>
+
+          <!-- Performance Area -->
+          <div class="performance">Performance<br>Area</div>
+          <div class="side-label conference">Conference Area</div>
+          <div class="side-label dining">Dining Area</div>
+          <div class="entrance">Entrance</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Checkout Sidebar -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="checkoutSidebar">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Selected Booths</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" id="closeBtn"></button>
+    </div>
+
+    <!-- Checkout Form -->
+    <form id="boothForm" method="post" action="{% url 'booth_checkout' event.id %}" enctype="multipart/form-data" class="d-flex flex-column h-100">
+      {% csrf_token %}
+      <input type="hidden" name="booth_ids" id="booth_ids">
+      <input type="hidden" name="payment_method" id="payment_method">
+
+      <!-- Constrained body -->
+      <div class="offcanvas-body">
+        <!-- Scrollable fields -->
+        <div id="formsContainer"></div>
+
+        <!-- Fixed bottom -->
+        <div class="payment-section">
+  <div class="fw-bold mb-3 text-center" id="totalAmount">Total: Ksh 0</div>
+
+  <div class="mb-3">
+    <label class="form-label fw-bold text-white">Phone Number</label>
+    <input type="tel" name="phone" class="form-control" placeholder="07XX XXX XXX" required>
+  </div>
+
+ <div class="mb-3">
+  <label class="form-label fw-bold text-white">Company's KRA PIN </label>
+  <input type="text" name="primary_kra_pin" class="form-control" placeholder="e.g. P051185889S" maxlength="20">
+  <small class="form-text text-light">Tax Identification Number for payment receipt purposes.</small>
+</div>
+  <div class="d-grid gap-2">
+    <button type="button" class="btn w-100 text-white" style="background-color:#a81414;" id="pesapalBtn">Pay with Card/Airtel(Pesapal)</button>
+    <button type="button" class="btn w-100 text-white" style="background-color:#198754;" id="mpesaBtn">Pay with M-PESA</button>
+    <button style="background-color: yellow;" class="btn btn-success w-100" id="mtnBtn"><a href="/paid-booth-application/"> MTN (Send Money) </a></button>        
+  </div>
+</div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <!-- Main JavaScript -->
+  <script>
+    const boothData = {{ booths_json|safe }};
+    const boothIdMapping = {{ booths_dict_json|safe }};
+
+    const boxes = document.querySelectorAll('.booth');
+    const selectionList = document.getElementById('selectionList');
+    const payNowBtn = document.getElementById('payNowBtn');
+    const formsContainer = document.getElementById('formsContainer');
+    const totalAmount = document.getElementById('totalAmount');
+    const pesapalBtn = document.getElementById('pesapalBtn');
+    const mpesaBtn = document.getElementById('mpesaBtn');
+    const boothIdsInput = document.getElementById('booth_ids');
+    const boothForm = document.getElementById('boothForm');
+
+    let selectedBooths = [];
+
+    const fmtKsh = n => `Ksh ${n.toLocaleString('en-KE')}`;
+
+    function refreshSelectionBar() {
+      if (!selectedBooths.length) {
+        selectionList.textContent = 'Selected: none';
+        payNowBtn.disabled = true;
+        return;
+      }
+      selectionList.textContent = 'Selected: ' + selectedBooths.map(b => b.name).join(', ');
+      payNowBtn.disabled = false;
+    }
+
+    function refreshTotal() {
+  const subtotal = selectedBooths.reduce((sum, b) => sum + b.price, 0);
+  const vatAmount = Math.round(subtotal * 0.16); // 16% VAT
+  const total = subtotal + vatAmount;
+
+  totalAmount.innerHTML = `
+    Total: ${fmtKsh(total)} 
+    <span style="font-size: 0.85em; ">
+      (${fmtKsh(subtotal)} + ${fmtKsh(vatAmount)} VAT)
+    </span>
+    <br>
+    <small style="color: red;">*16% VAT is applied on the total Amount</small>
+  `;
+
+  const enable = selectedBooths.length > 0;
+  [pesapalBtn, mpesaBtn, mtnBtn].forEach(btn => {
+    btn.disabled = !enable;
+    btn.style.opacity = enable ? '1' : '0.6';
+  });
+}
+
+
+ 
+// Auto-fill KRA PIN across all hidden attendee form fields
+function setupKraPinAutoFill() {
+  const primaryKraPinInput = document.querySelector('input[name="primary_kra_pin"]');
+  
+  if (primaryKraPinInput) {
+    primaryKraPinInput.addEventListener('input', function() {
+      const kraPinValue = this.value;
+      
+      // Update all hidden attendee KRA PIN fields
+      const attendeeKraPinInputs = document.querySelectorAll('input[name*="[kra_pin]"]');
+      attendeeKraPinInputs.forEach(input => {
+        input.value = kraPinValue;
+      });
+    });
+  }
+}
+
+function refreshForms() {
+  formsContainer.innerHTML = '';
+  boothIdsInput.value = selectedBooths.map(b => b.id).join(',');
+
+  selectedBooths.forEach((booth, i) => {
+    const block = document.createElement('div');
+    block.className = 'border rounded p-3 mb-3';
+    const boothWithVAT = booth.price * 1.16;
+    block.innerHTML = `
+      <input type="hidden" name="attendees[${i}][booth_name]" value="${booth.name}">
+      <input type="hidden" name="attendees[${i}][booth_id]" value="${booth.id}">
+      <input type="hidden" name="attendees[${i}][booth_price]" value="${Math.round(booth.price * 1.16)}">
+
+      <h6 class="mb-3">Booth ${booth.name} — ${fmtKsh(booth.price)}</h6>
+      <div class="mb-3">
+        <label class="form-label">Full Names</label>
+        <input type="text" name="attendees[${i}][name]" class="form-control" required>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" name="attendees[${i}][email]" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Company</label>
+          <input type="text" name="attendees[${i}][company_name]" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Designation</label>
+          <input type="text" name="attendees[${i}][designation]" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Industry</label>
+          <input type="text" name="attendees[${i}][industry]" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Industry Description</label>
+        <textarea name="attendees[${i}][industry_description]" class="form-control" rows="3" required></textarea>
+      </div>
+
+      <!-- Hidden KRA PIN field - auto-filled from payment section -->
+      <input type="hidden" name="attendees[${i}][kra_pin]" class="kra-pin-field" maxlength="20">
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Country</label>
+          <select name="attendees[${i}][country]" class="form-select" required>
+            <option value="">Select country</option>
+            <option value="Kenya">Kenya</option>
+            <option value="Uganda">Uganda</option>
+            <option value="Tanzania">Tanzania</option>
+            <option value="Rwanda">Rwanda</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">City</label>
+          <input type="text" name="attendees[${i}][city]" class="form-control">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Age Range</label>
+          <select name="attendees[${i}][age_range]" class="form-select">
+            <option value="">Select age range</option>
+            <option value="18-25">18–25</option>
+            <option value="26-35">26–35</option>
+            <option value="36-45">36–45</option>
+            <option value="46+">46+</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">T-Shirt Size</label>
+          <select name="attendees[${i}][tshirt_size]" class="form-select">
+            <option value="">-- Select --</option>
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+            <option value="XXXL">XXXL</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">How did you hear about us?</label>
+        <select name="attendees[${i}][referral_source]" class="form-select">
+          <option value="">Choose one</option>
+          <option value="Referral">Referral</option>
+          <option value="Social Media">Social Media</option>
+          <option value="Website">Website</option>
+          <option value="TV/Radio">TV/Radio</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Passport Photo</label>
+        <input type="file" name="attendees[${i}][attendee_photo]" class="form-control attendee-photo" accept="image/*" required>
+      </div>
+
+      <div class="form-check mb-3">
+        <input type="checkbox" name="attendees[${i}][consent]" class="form-check-input" required>
+        <label class="form-check-label">
+          I consent to the use of my data and media for event purposes.
+        </label>
+      </div>
+    `;
+    formsContainer.appendChild(block);
+  });
+  
+  // Setup auto-fill after forms are created
+  setupKraPinAutoFill();
+  
+  // Auto-fill existing KRA PIN value if any to hidden fields
+  const primaryKraPin = document.querySelector('input[name="primary_kra_pin"]');
+  if (primaryKraPin && primaryKraPin.value) {
+    const attendeeKraPinInputs = document.querySelectorAll('input[name*="[kra_pin]"]');
+    attendeeKraPinInputs.forEach(input => {
+      input.value = primaryKraPin.value;
+    });
+  }
+}
+ 
+    
+
+    
+    // Initialize booths
+    boxes.forEach(box => {
+      const printedNum = parseInt((box.dataset.name || box.textContent).replace(/\D/g, ''), 10);
+      if (isNaN(printedNum)) return;
+
+      const booth = boothData.find(b =>
+        parseInt(b.name.toString().replace(/\D/g, ''), 10) === printedNum
+      );
+      if (!booth) return;
+
+      box.dataset.id = booth.id;
+
+      if (booth.is_booked || booth.is_reserved) {
+        box.style.background = 'darkred';
+        box.style.color = '#fff';
+        box.style.cursor = 'not-allowed';
+        box.style.pointerEvents = 'none';
+        return;
+      }
+
+      box.addEventListener('click', () => {
+        const idx = selectedBooths.findIndex(b => b.id === booth.id);
+        if (idx !== -1) {
+          selectedBooths.splice(idx, 1);
+          box.style.background = '#5cb6f7';
+        } else {
+          selectedBooths.push(booth);
+          box.style.background = 'gray';
+        }
+        refreshSelectionBar();
+      });
+    });
+
+    // Pay button click
+    payNowBtn.addEventListener('click', () => {
+      if (!selectedBooths.length) return;
+      refreshForms();
+      refreshTotal();
+      new bootstrap.Offcanvas(document.getElementById('checkoutSidebar')).show();
+    });
+
+       // Payment handlers with loading state
+    function handlePayment(method) {
+      // Disable all payment buttons and show loading state
+      const paymentButtons = [pesapalBtn, mpesaBtn];
+      const mtnLink = document.querySelector('a[href="/paid/apply/1/"]');
+      const mtnButton = mtnLink ? mtnLink.closest('button') : null;
+      
+      paymentButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.textContent = 'Initiating payment prompt...';
+        btn.style.opacity = '0.6';
+      });
+      
+      if (mtnButton) {
+        mtnButton.disabled = true;
+        mtnButton.innerHTML = 'Initiating payment prompt...';
+        mtnButton.style.opacity = '0.6';
+      }
+
+      document.getElementById('payment_method').value = method;
+
+      const badFile = [...document.querySelectorAll('.attendee-photo')].find(p =>
+        p.files.length && !p.files[0].type.startsWith('image/')
+      );
+
+      if (badFile) {
+        // Reset buttons if validation fails
+        resetPaymentButtons();
+        alert('Only image files are allowed for the passport photo.');
+        return;
+      }
+
+      if (boothForm.checkValidity()) {
+        boothForm.submit();
+      } else {
+        // Reset buttons if form validation fails
+        resetPaymentButtons();
+        boothForm.reportValidity();
+      }
+    }
+
+    // Function to reset payment buttons to original state
+    function resetPaymentButtons() {
+      pesapalBtn.disabled = false;
+      pesapalBtn.textContent = 'Pay with Pesapal';
+      pesapalBtn.style.opacity = '1';
+      
+      mpesaBtn.disabled = false;
+      mpesaBtn.textContent = 'Pay with M-PESA';
+      mpesaBtn.style.opacity = '1';
+      
+      const mtnLink = document.querySelector('a[href="/paid/apply/1/"]');
+      const mtnButton = mtnLink ? mtnLink.closest('button') : null;
+      if (mtnButton) {
+        mtnButton.disabled = false;
+        mtnButton.innerHTML = '<a href="/paid/apply/1/">MTN (Send Money)</a>';
+        mtnButton.style.opacity = '1';
+      }
+    }
+
+
+    
+    pesapalBtn.addEventListener('click', () => handlePayment('pesapal'));
+    mpesaBtn.addEventListener('click', () => handlePayment('mpesa'));
+
+    boothForm.addEventListener('submit', e => {
+      if (!selectedBooths.length) {
+        e.preventDefault();
+        alert('Please select at least one booth.');
+      }
+    });
+
+    refreshSelectionBar();
+    refreshTotal();
+  </script>
+
+  <!-- Optional Countdown Timer -->
+  <script>
+    const targetDate = new Date(2025, 7, 19, 9, 0, 0).getTime();
+    const countdownEl = document.getElementById("countdown");
+
+    if (countdownEl) {
+      const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance <= 0) {
+          clearInterval(timer);
+          countdownEl.innerHTML = "Ticket sales are now OPEN!";
+          const comingSoonBtn = document.querySelector(".btn-warning");
+          if (comingSoonBtn) {
+            comingSoonBtn.removeAttribute("disabled");
+            comingSoonBtn.innerText = "Buy Tickets";
+          }
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

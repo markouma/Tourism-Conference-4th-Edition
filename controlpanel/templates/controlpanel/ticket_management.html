@@ -1,0 +1,871 @@
+{% extends 'controlpanel/base.html' %}
+
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: #f5f7fa;
+        color: #2d3748;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #1a202c;
+        margin: 0;
+    }
+
+    .add-ticket-btn {
+        padding: 12px 24px;
+        background: #48bb78;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .add-ticket-btn:hover {
+        background: #38a169;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+    }
+
+    .search-section {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+    }
+
+    .search-box {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 14px 45px 14px 20px;
+        font-size: 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #417690;
+        box-shadow: 0 0 0 3px rgba(65, 118, 144, 0.1);
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        font-size: 20px;
+    }
+
+    .filters {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    select {
+        padding: 10px 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #417690;
+    }
+
+    .stats-bar {
+        display: flex;
+        gap: 20px;
+        background: white;
+        padding: 20px 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+    .stat {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 5px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #f7fafc;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    th {
+        padding: 16px 20px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 700;
+        color: #4a5568;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.15s;
+    }
+
+    tbody tr:hover {
+        background: #f7fafc;
+    }
+
+    tbody tr.hidden {
+        display: none;
+    }
+
+    td {
+        padding: 16px 20px;
+        font-size: 14px;
+    }
+
+    .ticket-number {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: #2d3748;
+        background: #edf2f7;
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .badge.used {
+        background: #c6f6d5;
+        color: #22543d;
+    }
+
+    .badge.not-used {
+        background: #fed7d7;
+        color: #742a2a;
+    }
+
+    .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background: #417690;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .download-btn:hover {
+        background: #2e5266;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .no-pdf {
+        color: #a0aec0;
+        font-style: italic;
+        font-size: 13px;
+    }
+
+    .clear-search {
+        background: #e53e3e;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: all 0.2s;
+    }
+
+    .clear-search:hover {
+        background: #c53030;
+    }
+
+    /* Modal Styles */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 800px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #1a202c;
+    }
+
+    .close-modal {
+        font-size: 32px;
+        color: #a0aec0;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.2s;
+    }
+
+    .close-modal:hover {
+        color: #2d3748;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 25px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 10px 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #417690;
+        box-shadow: 0 0 0 3px rgba(65, 118, 144, 0.1);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 20px 25px;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .btn-cancel {
+        padding: 10px 24px;
+        background: #e2e8f0;
+        color: #4a5568;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+        background: #cbd5e0;
+    }
+
+    .btn-submit {
+        padding: 10px 24px;
+        background: #417690;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+        background: #2e5266;
+    }
+
+    .messages {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 2000;
+    }
+
+    .alert {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideIn 0.3s ease;
+    }
+
+    .alert-success {
+        background: #c6f6d5;
+        color: #22543d;
+        border-left: 4px solid #38a169;
+    }
+
+    .alert-error {
+        background: #fed7d7;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="container">
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="header-section">
+        <h1>🎫 Ticket Management</h1>
+        <button type="button" id="addTicketBtn" class="add-ticket-btn">➕ Add New Ticket</button>
+    </div>
+
+    <div class="search-section">
+        <div class="search-box">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Start typing to search by name, email, ticket number, company..."
+                autocomplete="off"
+            >
+            <span class="search-icon">🔍</span>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.name|lower }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Status</label>
+                <select id="statusFilter">
+                    <option value="">All Tickets</option>
+                    <option value="used">Used</option>
+                    <option value="not-used">Not Used</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>PDF Available</label>
+                <select id="pdfFilter">
+                    <option value="">All</option>
+                    <option value="yes">Has PDF</option>
+                    <option value="no">No PDF</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="clear-search" id="clearBtn" style="display: none;">Clear All Filters</button>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-label">Total Tickets</div>
+            <div class="stat-value" id="totalCount">{{ total_tickets }}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Visible</div>
+            <div class="stat-value" id="visibleCount">{{ total_tickets }}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Used</div>
+            <div class="stat-value" id="usedCount">{{ used_count }}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Not Used</div>
+            <div class="stat-value" id="notUsedCount">{{ not_used_count }}</div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>Guest Name</th>
+                    <th>Email</th>
+                    <th>Category</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody id="ticketTable">
+                {% for ticket in tickets %}
+                <tr data-category="{{ ticket.category.name|lower }}" 
+                    data-status="{% if ticket.is_used %}used{% else %}not-used{% endif %}"
+                    data-has-pdf="{% if ticket.pdf_ticket %}yes{% else %}no{% endif %}">
+                    <td><span class="ticket-number">{{ ticket.ticket_number }}</span></td>
+                    <td>{{ ticket.guest_name }}</td>
+                    <td>{{ ticket.guest_email }}</td>
+                    <td>{{ ticket.category.name }}</td>
+                    <td>{{ ticket.company_name|default:"N/A" }}</td>
+                    <td>
+                        {% if ticket.is_used %}
+                            <span class="badge used">Used</span>
+                        {% else %}
+                            <span class="badge not-used">Not Used</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if ticket.pdf_ticket %}
+                            <a href="{{ ticket.pdf_ticket.url }}" class="download-btn" download>📥 Download</a>
+                        {% else %}
+                            <span class="no-pdf">No PDF</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px;">No tickets found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Ticket Modal -->
+<!-- Add Ticket Modal -->
+<div id="addTicketModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New Ticket</h2>
+            <span class="close-modal">&times;</span>
+        </div>
+        
+        <form method="POST" action="{% url 'controlpanel:create_ticket' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="guest_name">Guest Name *</label>
+                    <input type="text" id="guest_name" name="guest_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest_email">Email *</label>
+                    <input type="email" id="guest_email" name="guest_email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select Category</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest_phone">Phone</label>
+                    <input type="tel" id="guest_phone" name="guest_phone">
+                </div>
+
+                <div class="form-group">
+                    <label for="company_name">Company</label>
+                    <input type="text" id="company_name" name="company_name">
+                </div>
+
+                <div class="form-group">
+                    <label for="designation">Designation</label>
+                    <input type="text" id="designation" name="designation">
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" id="country" name="country">
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city">
+                </div>
+
+                <div class="form-group">
+                    <label for="kra_pin">KRA PIN</label>
+                    <input type="text" id="kra_pin" name="kra_pin">
+                </div>
+
+                <div class="form-group">
+                    <label for="tshirt_size">T-Shirt Size</label>
+                    <select id="tshirt_size" name="tshirt_size">
+                        <option value="">Select Size</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="XXXL">XXXL</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="attendee_photo">Attendee Photo</label>
+                    <input type="file" id="attendee_photo" name="attendee_photo" accept="image/*">
+                    <small style="color: #718096; font-size: 11px; margin-top: 4px;">Optional - for badge</small>
+                </div>
+            </div>
+
+            <!-- 🆕 Custom QR & PDF Upload Section -->
+            <div style="padding: 0 25px; margin-top: 20px;">
+                <div style="background: #f7fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #417690;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: #2d3748;">
+                        🎨 Custom Assets (Optional)
+                    </h3>
+                    <p style="margin: 0 0 20px 0; font-size: 13px; color: #718096;">
+                        Upload your own QR code and/or PDF ticket. Leave empty to auto-generate.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="custom_qr">📱 Custom QR Code</label>
+                            <input type="file" id="custom_qr" name="custom_qr" accept="image/png,image/jpg,image/jpeg">
+                            <small style="color: #718096; font-size: 11px; margin-top: 4px; display: block;">
+                                PNG or JPG format
+                            </small>
+                            <div id="qr-preview-container" style="display: none; margin-top: 10px;">
+                                <img id="qr-preview" style="width: 80px; height: 80px; object-fit: contain; border: 2px solid #e2e8f0; border-radius: 8px; background: white; padding: 5px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="custom_pdf">📄 Custom PDF Ticket</label>
+                            <input type="file" id="custom_pdf" name="custom_pdf" accept="application/pdf">
+                            <small style="color: #718096; font-size: 11px; margin-top: 4px; display: block;">
+                                PDF format only
+                            </small>
+                            <div id="pdf-preview-container" style="display: none; margin-top: 10px; padding: 10px; background: white; border: 2px solid #e2e8f0; border-radius: 8px;">
+                                <span id="pdf-filename" style="font-size: 12px; color: #2d3748;">📄 </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+                <button type="submit" class="btn-submit">🎫 Create & Email Ticket</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Wait for DOM to load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded');
+    
+    // Modal functionality
+    const addTicketBtn = document.getElementById('addTicketBtn');
+    const modal = document.getElementById('addTicketModal');
+    const closeModal = document.querySelector('.close-modal');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    console.log('Button:', addTicketBtn);
+    console.log('Modal:', modal);
+
+    if (addTicketBtn && modal) {
+        addTicketBtn.addEventListener('click', function() {
+            console.log('Opening modal...');
+            modal.style.display = 'flex';
+        });
+
+        if (closeModal) {
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+        }
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    } else {
+        console.error('Modal elements not found!');
+    }
+
+    // Search and filter functionality
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const pdfFilter = document.getElementById('pdfFilter');
+    const clearBtn = document.getElementById('clearBtn');
+    const table = document.getElementById('ticketTable');
+    const rows = table.getElementsByTagName('tr');
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const categoryValue = categoryFilter.value.toLowerCase();
+        const statusValue = statusFilter.value;
+        const pdfValue = pdfFilter.value;
+
+        let visibleCount = 0;
+        let usedCount = 0;
+        let notUsedCount = 0;
+
+        Array.from(rows).forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const category = row.dataset.category?.toLowerCase() || '';
+            const status = row.dataset.status || '';
+            const hasPdf = row.dataset.hasPdf || '';
+
+            const matchesSearch = !searchTerm || text.includes(searchTerm);
+            const matchesCategory = !categoryValue || category === categoryValue;
+            const matchesStatus = !statusValue || status === statusValue;
+            const matchesPdf = !pdfValue || hasPdf === pdfValue;
+
+            const isVisible = matchesSearch && matchesCategory && matchesStatus && matchesPdf;
+
+            if (isVisible) {
+                row.classList.remove('hidden');
+                visibleCount++;
+                if (status === 'used') usedCount++;
+                else notUsedCount++;
+            } else {
+                row.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('visibleCount').textContent = visibleCount;
+        document.getElementById('usedCount').textContent = usedCount;
+        document.getElementById('notUsedCount').textContent = notUsedCount;
+
+        const hasFilters = searchTerm || categoryValue || statusValue || pdfValue;
+        clearBtn.style.display = hasFilters ? 'block' : 'none';
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    categoryFilter.addEventListener('change', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+    pdfFilter.addEventListener('change', filterTable);
+
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        categoryFilter.value = '';
+        statusFilter.value = '';
+        pdfFilter.value = '';
+        filterTable();
+    });
+});
+
+
+
+// QR Code preview
+const qrInput = document.getElementById('custom_qr');
+const qrPreview = document.getElementById('qr-preview');
+const qrPreviewContainer = document.getElementById('qr-preview-container');
+
+if (qrInput && qrPreview) {
+    qrInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                qrPreview.src = e.target.result;
+                qrPreviewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            qrPreviewContainer.style.display = 'none';
+        }
+    });
+}
+
+// PDF filename preview
+const pdfInput = document.getElementById('custom_pdf');
+const pdfFilename = document.getElementById('pdf-filename');
+const pdfPreviewContainer = document.getElementById('pdf-preview-container');
+
+if (pdfInput && pdfFilename) {
+    pdfInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            pdfFilename.textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            pdfPreviewContainer.style.display = 'block';
+        } else {
+            pdfPreviewContainer.style.display = 'none';
+        }
+    });
+}
+
+// Attendee photo preview
+const photoInput = document.getElementById('attendee_photo');
+if (photoInput) {
+    photoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let preview = document.getElementById('photo-preview');
+                if (!preview) {
+                    preview = document.createElement('img');
+                    preview.id = 'photo-preview';
+                    preview.style.cssText = 'width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 2px solid #e2e8f0;';
+                    photoInput.parentElement.appendChild(preview);
+                }
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+</script>
+
+{% endblock %}

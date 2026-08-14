@@ -1,0 +1,554 @@
+<!-- traffic_report.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Traffic Report Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #2d3748;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* HEADER */
+.header {
+    background: white;
+    border-radius: 16px;
+    padding: 30px 40px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header p {
+    color: #718096;
+    margin-top: 8px;
+    font-size: 1rem;
+}
+
+/* SUMMARY CARDS */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #718096;
+    margin-bottom: 12px;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 8px;
+}
+
+.stat-list {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.stat-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.stat-list::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 10px;
+}
+
+.stat-list::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 10px;
+}
+
+.stat-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+}
+
+.stat-list li:last-child {
+    border-bottom: none;
+}
+
+.stat-list .name {
+    color: #2d3748;
+    font-weight: 500;
+}
+
+.stat-list .count {
+    color: #667eea;
+    font-weight: 600;
+    background: #eef2ff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+/* VISITOR SECTION */
+.visitors-section {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding: 10px 40px 10px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    width: 280px;
+    transition: all 0.3s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+}
+
+/* IP CARDS */
+.ip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ip-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+}
+
+.ip-card:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ip-header {
+    width: 100%;
+    background: white;
+    border: none;
+    padding: 20px 24px;
+    text-align: left;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 140px 1fr auto auto;
+    gap: 20px;
+    align-items: center;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.ip-header:hover {
+    background: #f7fafc;
+}
+
+.ip-header.active {
+    background: #eef2ff;
+}
+
+.ip-address {
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #2d3748;
+}
+
+.location-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+.location-icon {
+    color: #667eea;
+}
+
+.device-info {
+    color: #718096;
+    font-size: 0.875rem;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.visit-badge {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.expand-icon {
+    margin-left: 8px;
+    transition: transform 0.3s;
+    font-size: 1.2rem;
+}
+
+.ip-header.active .expand-icon {
+    transform: rotate(180deg);
+}
+
+/* VISIT DETAILS */
+.visit-details {
+    display: none;
+    background: white;
+    padding: 0;
+}
+
+.visit-details.active {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.visit-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.visit-table thead {
+    background: #f7fafc;
+}
+
+.visit-table th {
+    padding: 14px 24px;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.visit-table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.visit-table tbody tr {
+    transition: background 0.2s;
+}
+
+.visit-table tbody tr:hover {
+    background: #f7fafc;
+}
+
+.visit-time {
+    color: #4a5568;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.875rem;
+}
+
+.visit-path {
+    color: #2d3748;
+    font-weight: 500;
+    font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* RESPONSIVE */
+@media (max-width: 968px) {
+    .ip-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .device-info {
+        max-width: 100%;
+    }
+    
+    .search-box input {
+        width: 100%;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 20px 10px;
+    }
+    
+    .header {
+        padding: 20px;
+    }
+    
+    .header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+    }
+}
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #718096;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <h1>
+            <span>📊</span>
+            Traffic Dashboard
+        </h1>
+        <p>Real-time visitor analytics and tracking</p>
+    </div>
+
+    <!-- SUMMARY STATS -->
+    <div class="summary-grid">
+        <div class="stat-card">
+            <h3>Unique Visitors</h3>
+            <div class="stat-value">{{ total_users }}</div>
+            <p style="color: #718096; font-size: 0.875rem;">IP-based tracking</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Visits</h3>
+            <div class="stat-value">{{ total_visits }}</div>
+            <p style="color: #718096; font-size: 0.875rem;">All page views</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Countries</h3>
+            <ul class="stat-list">
+                {% for c in visits_per_country %}
+                <li>
+                    <span class="name">{{ c.country|default:"Unknown" }}</span>
+                    <span class="count">{{ c.count }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Cities</h3>
+            <ul class="stat-list">
+                {% for c in visits_per_city %}
+                <li>
+                    <span class="name">{{ c.city|default:"Unknown" }}</span>
+                    <span class="count">{{ c.count }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- DETAILED VISITOR DATA -->
+    <div class="visitors-section">
+        <div class="section-header">
+            <h2>Visitor Details</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by IP, location...">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <div class="ip-list" id="ipList">
+            {% for ip, data in ip_groups.items %}
+            <div class="ip-card" data-search="{{ ip }} {{ data.city|default:'' }} {{ data.country|default:'' }}">
+                <button class="ip-header">
+                    <div class="ip-address">{{ ip }}</div>
+                    <div class="location-info">
+                        <span class="location-icon">📍</span>
+                        <span>{{ data.city|default:"Unknown" }}, {{ data.country|default:"Unknown" }}</span>
+                    </div>
+                    <div class="device-info">{{ data.user_agent }}</div>
+                    <div class="visit-badge">
+                        <span>{{ data.visits|length }}</span>
+                        <span>visits</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                </button>
+                <div class="visit-details">
+                    <table class="visit-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Page Path</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for visit in data.visits %}
+                            <tr>
+                                <td class="visit-time">{{ visit.timestamp }}</td>
+                                <td class="visit-path">{{ visit.path }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+// Toggle visitor details
+document.querySelectorAll('.ip-header').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const details = this.nextElementSibling;
+        const isActive = details.classList.contains('active');
+        
+        // Close all other details
+        document.querySelectorAll('.visit-details').forEach(d => d.classList.remove('active'));
+        document.querySelectorAll('.ip-header').forEach(h => h.classList.remove('active'));
+        
+        // Toggle current
+        if (!isActive) {
+            details.classList.add('active');
+            this.classList.add('active');
+        }
+    });
+});
+
+// Search functionality
+const searchInput = document.getElementById('searchInput');
+const ipCards = document.querySelectorAll('.ip-card');
+
+searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    
+    ipCards.forEach(card => {
+        const searchText = card.dataset.search.toLowerCase();
+        if (searchText.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+</script>
+
+</body>
+</html>

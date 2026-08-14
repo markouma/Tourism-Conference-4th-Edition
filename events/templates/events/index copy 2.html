@@ -1,0 +1,950 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static  'assets/css/main2.css' %}" rel="stylesheet">
+
+  <style>
+    .sent-message,
+.error-message,
+.loading {
+  display: none;
+}
+
+   
+/* <!-- Inline CSS to style sponsor logos --> */
+.sponsor-logo {
+      max-height: 100px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      padding: 0px;
+    }
+
+    @media (max-width: 768px) {
+      .sponsor-logo {
+        max-height: 90px;
+        padding: 0px;
+      }
+    }
+
+
+
+  p,
+  li,
+  .lead,
+  .about-content-box,
+  .cta-content,
+  .step-info,
+  .services-description,
+  .service-info,
+  .stats-content,
+  .feature-box,
+  .contact-text,
+  .section-title,
+  .faq-cta,
+  .hero-content,
+  .stats-overview {
+    text-align: justify;
+  }
+  @media (max-width: 421px) {
+    .justify-on-phone{
+    text-align: left;
+  }
+    }
+
+</style>
+
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" class="active">Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" >Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/7/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Blog</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/7/"  class="btn-getstarted active">Register</a>
+    
+
+   
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+      <div class="container" data-aos="fade-up">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="hero-content" data-aos="fade-up" data-aos-delay="100">
+               
+              <h2 class="justify-on-phone">THE 4TH UGANDA- KENYA  <br>  <span class="highlight">COAST TOURISM CONFERENCE </span> <br> AND EXHIBITION</h2>
+
+                            <div class="hero-tag">
+                <i class="bi bi-book"></i>
+                <span>THEME:</span>
+              </div>
+              <p class="lead justify-on-phone">Leveraging youth, innovation and technology for responsive and inclusive tourism.</p>
+
+              <div class="hero-cta">
+                <a href="" class="btn btn-link"><i class="bi bi-clock"></i> DATE: 27TH- 28TH OCTOBER 2025</a> 
+                <a href="" class="btn btn-link"><i class="bi bi-geo-alt"></i> LOCATION: OCEAN BEACH RESORT AND SPA, MALINDI</a>
+              </div>
+
+              <div class="hero-cta">
+
+                <a  href="/event/7/" class="btn btn-primary">Register</a>
+
+                    
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="hero-image-wrapper" data-aos="fade-up" data-aos-delay="300">
+              <img src="{% static 'assets/img/about/abot.png' %}" alt="Hero image" class="img-fluid hero-image">
+              <div class="stat-card top-right">
+                <div class="stat-value">600+</div>
+                <div class="stat-label">Delegates in 2024</div>
+                <div class="stat-icon">
+                  <i class="bi bi-graph-up-arrow"></i>
+                </div>
+              </div>
+              <div class="stat-card bottom-left">
+                <div class="stat-value">+140%</div>
+                <div class="stat-label">Delegates increase from 2022</div>
+                <div class="stat-icon">
+                  <i class="bi bi-graph-up"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row justify-content-center mb-5">
+          <div class="col-lg-8 text-center" data-aos="fade-up" data-aos-delay="200">
+            <h2 class="section-heading">Theme: </h2>
+            
+            <p class="lead justify-on-phone">Leveraging youth, innovation and technology for responsive and inclusive tourism.</p>
+          </div>
+        </div>
+        
+        <div class="row align-items-center about-showcase">
+          <div class="col-lg-6 order-lg-2" data-aos="fade-left" data-aos-delay="300">
+            <div class="about-image-grid">
+              <img src="{% static 'assets/img/about/Abotu.jpg' %}" class="img-grid-main" alt="Our company vision">
+              <div class="experience-badge" data-aos="zoom-in" data-aos-delay="500">
+                <span class="years">4TH</span>
+                <span class="text">EDITION</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 order-lg-1" data-aos="fade-right" data-aos-delay="200">
+            <div class="about-content-box">
+              <h3 class="justify-on-phone">Background and Rationale</h3>
+              <p class="mb-4"> Since 2022, the Consulate General of Uganda in Mombasa,  working with key tourism stakeholders in Uganda and the Kenya Coast, 
+                has been promoting cooperation and complementarily between Uganda and Kenya through the Uganda- Kenya Coast partnership. 
+              The main aim of the partnership is to increase the number of tourists visiting Uganda and Kenya respectively through cross- selling of the tourism products, 
+              given that the two destinations possess different and unique tourism products that can complement rather than compete with one another.
+            The partnership is also intended to promote growth of regional tourism.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+                <!-- Call To Action Section -->
+    <section id="call-to-action" class="call-to-action section light-background">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="cta-wrapper">
+          <div class="cta-content" data-aos="fade-right" data-aos-delay="200">
+            <p> Against the above background, the Consulate General and key tourism stakeholders in Uganda and Kenya are organizing
+            the 4th Uganda-Kenya Coast tourism conference and Fam trip.
+          The conference will be held on 27th – 28th October 2025 at the Ocean Beach Resort & Spa, Malindi, Kilifi County.  The conference will be preceded by a Fam trip to the Kenya Coast by Ugandan tourism stakeholders
+          from 22nd – 26th October, and a golf tournament that will be held at Vipingo Ridge on 25th October 2025.
+        The conference and related activities will leverage on the achievements of the previous years and the emerging issues in the partnership.</p>
+          </div>
+          <div class="cta-image" data-aos="fade-left" data-aos-delay="300">
+            <img src="{% static 'assets/img/about/2nd abot.jpg' %}" alt="CTA Illustration" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </section><!-- /Call To Action Section -->
+      </div>            
+    </section><!-- /About Section -->
+
+    <!-- Services Section -->
+    <section id="services" class="services section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="services-row">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="services-headline" data-aos="fade-up">
+                <p class="services-subtitle">Why Choose Us </p>
+                <h2 class="services-title">	Why Choose Us </h2>
+              </div>
+
+              <div class="services-description" data-aos="fade-up" data-aos-delay="100">
+                <p>The overall objective of the 4th Uganda- Kenya will be to have a conversation on how 
+                  stakeholders in the tourism industry can tap into the emerging innovations and technology to drive tourism growth.</p>
+                  <p>The specific objectives are:</p>
+              </div>
+
+              <div class="services-image-container" data-aos="fade-up" data-aos-delay="200">
+                <div class="services-image">
+                  <img src="{% static 'assets/img/services/Abat.jpg' %}" alt="Services" class="img-fluid">
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="services-grid">
+                <div class="row gy-4">
+                  <!-- Service Item 1 -->
+                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-card">
+                      <div class="service-content text-center">
+                        <div class="service-icon">
+                          <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <div class="service-info">
+                <ul class="hero-features">
+                <li></i> <p>To discuss and create awareness about innovations and technological solutions that contribute to sustainable (responsive) tourism practices.</p></li>
+              </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Service Item 2 -->
+                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-card">
+                      <div class="service-content text-center">
+                        <div class="service-icon">
+                          <i class="bi bi-list-check"></i>
+                        </div>
+                        <div class="service-info">
+                <ul class="hero-features">
+                <li></i> <p>To develop and consolidate partnerships anchored on responsive and inclusive technological innovations.</p></li>
+              </ul>                    
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Service Item 3 -->
+                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-card">
+                      <div class="service-content text-center">
+                        <div class="service-icon">
+                          <i class="bi bi-bar-chart"></i>
+                        </div>
+                        <div class="service-info">
+                <ul class="hero-features">
+                <li></i> <p>To leverage technology in promotion of smart investments in tourism, connectivity and accessibility.</p></li>
+              </ul>  
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Service Item 4 -->
+                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-card">
+                      <div class="service-content text-center">
+                        <div class="service-icon">
+                          <i class="bi bi-pie-chart"></i>
+                        </div>
+                        <div class="service-info">
+                <ul class="hero-features">
+                <li></i> <p>To provide a platform for the youth to interface with key industry players in the tourism sector.</p></li>
+              </ul> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                                    <!-- Service Item 3 -->
+                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-card">
+                      <div class="service-content text-center">
+                        <div class="service-icon">
+                          <i class="bi bi-bar-chart"></i>
+                        </div>
+                        <div class="service-info">
+                <ul class="hero-features">
+                <li></i> <p>Build a mutually beneficial relationship for young tourism content creators and stakeholders across the sector.</p></li>
+              </ul>  
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+<div>
+  <br>
+</div>
+
+    <!-- Stats Section -->
+    <section id="stats" class="stats section light-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6 col-md-12">
+            <div class="stats-overview text-center text-lg-start" data-aos="fade-right" data-aos-delay="200">
+              <h3>Topics for discussion</h3>
+              <p></p>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-12">
+            <div class="stats-grid" data-aos="zoom-in" data-aos-delay="300">
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Keynote Address (on the theme).</p>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-folder2-open"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Tech based Tourism.</p>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-headset"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Harnessing CASH (Culture, adventure, sports and Heritage) Tourism.</p>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-person-workspace"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Smart Destinations.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Stats Section -->
+
+    <!-- Faq Section -->
+    <section id="faq" class="faq section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="faq-cta text-center mt-5" data-aos="fade-up" data-aos-delay="300">
+              <p>Get Your Booth in one Click</p>
+              <a href="exhibitors.html" class="btn btn-primary">Secure Booth</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Faq Section -->
+
+            <section id="about" class="about section">
+                      <div class="row justify-content-center mb-5">
+          <div class="col-lg-8 text-center" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="section-heading">The event Structure and Methodology  </h3>
+          </div>
+        </div>
+
+                  <div class="row g-4 mb-5">
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-hdd-network"></i>
+              </div>
+              <p>The Conference will be interactive, with inspiring industry leaders in technology and innovation, presentations and B2B which will provide a platform for networking,
+                 learning and sharing, equip the key tourism players. </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-arrows-angle-expand"></i>
+              </div>
+              <p>There will be an exhibition by tourism stakeholders from Uganda and the Kenya Coast.</p>
+            </div>
+          </div>
+
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-lightbulb"></i>
+              </div>
+              <p>The conference will also include visits to tourism sites in Kenya. </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-people-fill"></i>
+              </div>
+              <p>The familiarization trip to Uganda will be planned and organized by the Uganda Consulate General in Mombasa, 
+                in conjunction with UTB, AUTO, PSFU, UHOA and key players in the tourism sector in Uganda.  </p>
+            </div>
+          </div>
+        </div>
+        </section>
+
+
+    </section><!-- /Services Section -->
+ 
+    <!-- Stats Section -->
+    <section id="stats" class="stats section light-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6 col-md-12">
+            <div class="stats-overview text-center text-lg-start" data-aos="fade-right" data-aos-delay="200">
+              <h3>Topics for discussion</h3>
+              <p></p>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-12">
+            <div class="stats-grid" data-aos="zoom-in" data-aos-delay="300">
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Keynote Address (on the theme).</p>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-folder2-open"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Tech based Tourism.</p>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-headset"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Harnessing CASH (Culture, adventure, sports and Heritage) Tourism.</p>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-icon">
+                  <i class="bi bi-person-workspace"></i>
+                </div>
+                <div class="stats-content">
+                  <p>Smart Destinations.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Stats Section -->
+
+    <!-- Faq Section -->
+    <section id="faq" class="faq section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="faq-cta text-center mt-5" data-aos="fade-up" data-aos-delay="300">
+              <p>Get Your Booth in one Click</p>
+              <a href=" /events/7/booths/" class="btn btn-primary">Secure Booth</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Faq Section -->
+
+            <section id="about" class="about section">
+                      <div class="row justify-content-center mb-5">
+          <div class="col-lg-8 text-center" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="section-heading">The event Structure and Methodology  </h3>
+          </div>
+        </div>
+
+                  <div class="row g-4 mb-5">
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-hdd-network"></i>
+              </div>
+              <p>The Conference will be interactive, with inspiring industry Forewords in technology and innovation, presentations and B2B which will provide a platform for networking,
+                 learning and sharing, equip the key tourism players. </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-arrows-angle-expand"></i>
+              </div>
+              <p>There will be an exhibition by tourism stakeholders from Uganda and the Kenya Coast.</p>
+            </div>
+          </div>
+
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-lightbulb"></i>
+              </div>
+              <p>The conference will also include visits to tourism sites in Kenya. </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+            <div class="feature-box">
+              <div class="icon-container">
+                <i class="bi bi-people-fill"></i>
+              </div>
+              <p>The familiarization trip to Uganda will be planned and organized by the Uganda Consulate General in Mombasa, 
+                in conjunction with UTB, AUTO, PSFU, UHOA and key players in the tourism sector in Uganda.  </p>
+            </div>
+          </div>
+        </div>
+        </section>
+
+
+    </section><!-- /Services Section -->
+ 
+    <!-- Stats Section -->
+    <section id="stats" class="stats section light-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6 col-md-12">
+            <div class="stats-overview text-center text-lg-start" data-aos="fade-right" data-aos-delay="200">
+              <h3>Key themes</h3>
+              <p></p>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-12">
+            <div class="stats-grid" data-aos="zoom-in" data-aos-delay="300">
+              <div class="stats-card">
+                <div class="stats-content">
+                 <ul class="hero-features">
+                <li></i><p> Culture</p></li>
+                <li></i><p> Sustainable tourism</p></li>
+                <li></i><p> Innovation and technology </p></li>
+                <li></i><p> Religious tourism</p></li>
+                 </ul>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-content">
+                 <ul class="hero-features">
+                <li></i><p> Primates</p></li>
+                <li></i><p> Scenery</p></li>
+                <li></i><p> Marine Parks</p></li>
+                <li></i><p> Hotels</p></li>
+                 </ul>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-content">
+                 <ul class="hero-features">
+                <li></i><p> Sports</p></li>
+                <li></i><p> Historical sites</p></li>
+                <li></i><p> Beaches</p></li>
+                 </ul>
+                </div>
+              </div>
+
+              <div class="stats-card">
+                <div class="stats-content">
+                 <ul class="hero-features">
+                <li></i><p> Adventure</p></li>
+                <li></i><p> Heritage</p></li>
+                <li></i><p> Night Life/Entertainment</p></li>
+                 </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Stats Section -->
+
+<!-- How We Work Section -->
+    <section id="how-we-work" class="how-we-work section">
+
+            <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2 style="text-align: center;">Expected Target Participants</h2>
+        <h4 style="text-align: center;">Public Sector</h4>
+      </div><!-- End Section Title -->
+
+      <div style="display:flex;justify-content:center;align-items:center;min-height:40vh;background:white;padding:0px">
+  <img src="{% static 'assets/img/public.png' %}" alt="Public Sector Infographic" class="img-fluid" style="width:100%;max-width:50vw;height:auto">
+
+</div>
+
+
+<style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    .three-column-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .icon-box {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .icon-box i {
+      font-size: 32px;
+      color: #f85d23;
+    }
+
+    .icon-label {
+      font-size: 16px;
+      color: #333;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  
+</head>
+<body>
+
+  <div class="three-column-wrapper">
+    <div class="icon-box"><i class="bi bi-bus-front-fill"></i><span class="icon-label">Tour Operators</span></div>
+    <div class="icon-box"><i class="bi bi-airplane-engines"></i><span class="icon-label">Travel Agents</span></div>
+    <div class="icon-box"><i class="bi bi-building"></i><span class="icon-label">Hoteliers</span></div>
+    <div class="icon-box"><i class="bi bi-diagram-3-fill"></i><span class="icon-label">Private Sector</span></div>
+    <div class="icon-box"><i class="bi bi-bank2"></i><span class="icon-label">Coastal County Governments</span></div>
+    <div class="icon-box"><i class="bi bi-people-fill"></i><span class="icon-label">Members of Tourism Associations</span></div>
+    <div class="icon-box"><i class="bi bi-flag-fill"></i><span class="icon-label">Golfers</span></div>
+    <div class="icon-box"><i class="bi bi-person-fill"></i><span class="icon-label">Youth in Tourism</span></div>
+    <div class="icon-box"><i class="bi bi-cpu-fill"></i><span class="icon-label">Tech solution providers</span></div>
+    <div class="icon-box"><i class="bi bi-airplane-fill"></i><span class="icon-label">Airlines</span></div>
+  </div>
+
+</body>
+    </section><!-- /How We Work Section -->
+    
+ <!-- Contact Section -->
+<section id="contact" class="contact section">
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2 style="text-align: center;">Contact Us</h2>
+    <p style="text-align: center;">Get in touch with us</p>
+  </div><!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="contact-main-wrapper d-flex flex-wrap gap-4" style="align-items: stretch;">
+      
+      <!-- Map Side -->
+      <div class="map-wrapper" style="flex: 1; min-width: 300px;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.631408825825!2d40.1241774!3d-3.191201!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18158f2e6a01995d%3A0x1ba394995aa51da0!2sOcean%20Beach%20Resort%20%26%20Spa!5e0!3m2!1sen!2ske!4v1750333234295!5m2!1sen!2ske" 
+                style="border:0; width: 100%; height: 100%; min-height: 500px;" 
+                allowfullscreen="" loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <!-- Contact Form Side -->
+      <div class="contact-content" style="flex: 1; min-width: 300px;">
+        <div class="contact-cards-container" data-aos="fade-up" data-aos-delay="300">
+          <div class="contact-card">
+            <div class="icon-box">
+              <i class="bi bi-geo-alt"></i>
+            </div>
+            <div class="contact-text">
+              <h4>Location</h4>
+              <p>OCEAN BEACH RESORT AND SPA, MALINDI</p>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="icon-box">
+              <i class="bi bi-envelope"></i>
+            </div>
+            <div class="contact-text">
+              <h4>Email</h4>
+              <p>info@thetourismconference.org</p>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="icon-box">
+              <i class="bi bi-clock"></i>
+            </div>
+            <div class="contact-text">
+              <h4>Date</h4>
+              <p>27TH- 28TH OCTOBER 2025</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-container" data-aos="fade-up" data-aos-delay="400">
+          <h3>Get in Touch</h3>
+          <p></p>
+
+          <form action="forms/contact.php" method="post" class="php-email-form">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+              </div>
+              <div class="col-md-6 form-group mt-3 mt-md-0">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+              </div>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group mt-3">
+              <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+            </div>
+
+            <div class="my-3">
+              <div class="loading">Loading</div>
+              <div class="error-message"></div>
+              <div class="sent-message">Your message has been sent. Thank you!</div>
+            </div>
+
+            <div class="form-submit">
+              <button type="submit">Send Message</button>
+              <div class="social-links">
+                <a href="https://x.com/UgandaMombasa" target="_blank"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61557768419729" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/uganda_consulate_msa/" target="_blank"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/ugketourism/" target="_blank"><i class="bi bi-linkedin"></i></a>
+                <a href="https://www.youtube.com/@ugketourism" target="_blank"><i class="bi bi-youtube"></i></a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section><!-- /Contact Section -->
+
+<!-- Sponsors Section -->
+
+<!-- Sponsors Section -->
+<section id="sponsors" class="sponsors section">
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2 style="text-align: center;">Partners</h2>
+  </div><!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row justify-content-center align-items-center text-center gy-4">
+      
+      <!-- Sponsor Logo 1 -->
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <img src="{% static 'assets/img/consulate.jpg' %}" alt="Consulate" class="img-fluid sponsor-logo">
+      </div>
+
+      <!-- Sponsor Logo 2 -->
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <img src="{% static 'assets/img/ug.jpg' %}" alt="Explore Uganda-" class="img-fluid sponsor-logo">
+      </div>
+
+      <!-- Sponsor Logo 3 -->
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <img src="{% static 'assets/img/Kilifi.jpg' %}" class="img-fluid sponsor-logo" alt="Kilifi County">
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <img src="{% static 'assets/img/Riviera.jpg' %}"  alt="Riviera" class="img-fluid sponsor-logo">
+      </div>
+    </div>
+  </div>
+
+  
+</section><!-- /Sponsors Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+     
+          <div class="social-links d-flex mt-4">
+                    <a href="https://x.com/UgandaMombasa"target="_blank"><i class="bi bi-twitter-x"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61557768419729"target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/uganda_consulate_msa/"target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ugketourism/"target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@ugketourism"target="_blank"><i class="bi bi-youtube"></i></a>                      
+          </div>
+        </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('#contactForm');
+    
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+    
+        const formData = new FormData(form);
+    
+        document.querySelector('.loading').style.display = 'block';
+        document.querySelector('.sent-message').style.display = 'none';
+        document.querySelector('.error-message').style.display = 'none';
+    
+        fetch('/contact/submit/', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          document.querySelector('.loading').style.display = 'none';
+    
+          if (data.status === 'success') {
+            document.querySelector('.sent-message').style.display = 'block';
+            form.reset();
+          } else {
+            document.querySelector('.error-message').textContent = data.message;
+            document.querySelector('.error-message').style.display = 'block';
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          document.querySelector('.loading').style.display = 'none';
+          document.querySelector('.error-message').textContent = 'Something went wrong. Please try again.';
+          document.querySelector('.error-message').style.display = 'block';
+        });
+      });
+    });
+    </script>
+    
+
+
+
+    
+ 
+
+</body>
+
+</html>

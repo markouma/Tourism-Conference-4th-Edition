@@ -1,0 +1,293 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Blog - UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+  
+  <style>
+    .blog-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background-color: #fff;
+      height: 100%;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .blog-card-img {
+      height: 250px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .blog-card-body {
+      padding: 1.5rem;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #000;
+      text-decoration: none;
+    }
+
+    .blog-title:hover {
+      color: #0066cc;
+    }
+
+    .blog-excerpt {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .blog-meta {
+      font-size: 0.85rem;
+      color: #999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .blog-category {
+      background: #0066cc;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+
+    .blog-category:hover {
+      background: #0052a3;
+      color: white;
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ffc107;
+      color: #000;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .search-filter-section {
+      background: #f8f9fa;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+
+<body class="index-page">
+  <!-- Copy your header from speakers template -->
+  
+  <main class="main">
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Blog</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="current">Blog</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Search & Filter Section -->
+    <section class="search-filter-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <form method="get" class="d-flex gap-2">
+              <input type="text" name="search" class="form-control" 
+                     placeholder="Search blogs..." value="{{ request.GET.search }}">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Search
+              </button>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Categories Filter -->
+        <div class="row mt-3">
+          <div class="col-12 text-center">
+            <a href="{% url 'blog_list' %}" class="blog-category {% if not request.GET.category %}active{% endif %}" 
+               style="margin: 0.25rem;">All</a>
+            {% for category in categories %}
+            <a href="?category={{ category.slug }}" 
+               class="blog-category {% if request.GET.category == category.slug %}active{% endif %}"
+               style="margin: 0.25rem;">{{ category.name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Blogs Section -->
+    {% if featured_blogs and not request.GET.search and not request.GET.category %}
+    <section class="py-3">
+      <div class="container">
+        <h2 class="mb-4">Featured Posts</h2>
+        <div class="row g-4">
+          {% for blog in featured_blogs %}
+          <div class="col-md-4">
+            <div class="card blog-card">
+              <div style="position: relative;">
+                {% if blog.featured_image %}
+                <img src="{{ blog.featured_image.url }}" class="blog-card-img" alt="{{ blog.title }}">
+                {% else %}
+                <img src="{% static 'assets/img/default-blog.jpg' %}" class="blog-card-img" alt="{{ blog.title }}">
+                {% endif %}
+                <span class="featured-badge">Featured</span>
+              </div>
+              <div class="blog-card-body">
+                <a href="{% url 'blog_detail' blog.slug %}" class="blog-title d-block">
+                  {{ blog.title }}
+                </a>
+                <p class="blog-excerpt">{{ blog.excerpt|truncatewords:20 }}</p>
+                <div class="blog-meta">
+                  <span><i class="bi bi-calendar"></i> {{ blog.created_at|date:"M d, Y" }}</span>
+                  <span><i class="bi bi-eye"></i> {{ blog.views_count }} views</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    <hr class="my-4">
+    {% endif %}
+
+    <!-- All Blogs Section -->
+    <section class="py-5">
+      <div class="container" data-aos="fade-up">
+        <h2 class="mb-4">{% if request.GET.search %}Search Results{% elif request.GET.category %}Category: {{ request.GET.category|title }}{% else %}All Posts{% endif %}</h2>
+        
+        <div class="row g-4">
+          {% for blog in blogs %}
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card blog-card">
+              <div style="position: relative;">
+                {% if blog.featured_image %}
+                <img src="{{ blog.featured_image.url }}" class="blog-card-img" alt="{{ blog.title }}">
+                {% else %}
+                <img src="{% static 'assets/img/default-blog.jpg' %}" class="blog-card-img" alt="{{ blog.title }}">
+                {% endif %}
+                {% if blog.is_featured %}
+                <span class="featured-badge">Featured</span>
+                {% endif %}
+              </div>
+              <div class="blog-card-body">
+                {% if blog.category %}
+                <a href="?category={{ blog.category.slug }}" class="blog-category">
+                  {{ blog.category.name }}
+                </a>
+                {% endif %}
+                <a href="{% url 'blog_detail' blog.slug %}" class="blog-title d-block mt-2">
+                  {{ blog.title }}
+                </a>
+                <p class="blog-excerpt">{{ blog.excerpt|truncatewords:20 }}</p>
+                <div class="blog-meta">
+                  <span><i class="bi bi-calendar"></i> {{ blog.created_at|date:"M d, Y" }}</span>
+                  <span><i class="bi bi-eye"></i> {{ blog.views_count }} views</span>
+                </div>
+                {% if blog.author %}
+                <div class="blog-meta mt-2">
+                  <span><i class="bi bi-person"></i> {{ blog.author.get_full_name|default:blog.author.username }}</span>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-12">
+            <p class="text-center">No blog posts found.</p>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav class="mt-5">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">First</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">Previous</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+              <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">Next</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">Last</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Copy your footer from speakers template -->
+    <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+     
+          <div class="social-links d-flex mt-4">
+                    <a href="https://x.com/UgandaMombasa"target="_blank"><i class="bi bi-twitter-x"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61557768419729"target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/uganda_consulate_msa/"target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ugketourism/"target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@ugketourism"target="_blank"><i class="bi bi-youtube"></i></a>                      
+          </div>
+        </div>
+
+   <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp Dev</a> & <a href="">Mark</a>
+      </div>
+    </div>
+
+  </footer>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+</html>

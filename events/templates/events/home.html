@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA - KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Poppins&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" class="active">Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" >Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/7/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Blog</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/7/"  class="btn-getstarted active">Register</a>
+
+ 
+
+    </div>
+  </header>
+  <main class="main">
+
+    
+
+    <!-- Upcoming Events -->
+    <section id="upcoming-events" class="services section">
+      <div style="margin-top: 100px;" class="container section-title" data-aos="fade-up">
+        <h3 style="color: #f85d23;" >THE 4TH UGANDA - KENYA COAST TOURISM CONFERENCE</h3>
+       </div>
+
+      <div class="container">
+        <div class="row gy-4">
+          {% for event in upcoming_events %}
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="card">
+              <div class="card-img">
+                <img src="{{ event.poster.url }}" alt="{{ event.name }} Poster" class="img-fluid">
+              </div>
+              <h3><a href="{% url 'event_detail' event.id %}" class="stretched-link"> </a></h3>
+              <p style="margin-left: 5px;" ><b style="color: #f85d23; ">DATE:</b> 27TH - 28TH OCTOBER 2025 <br><b style="color: #f85d23; ">LOCATION:</b> OCEAN BEACH RESORT & SPA, MALINDI
+              </p>
+              <p style="margin: 5px;"><b>Theme: <br></b> "Leveraging Youth, Innovation and Technology for Responsive and Inclusive Tourism."</p>
+
+              <button style="background-color: #f85d23;" class="btn btn-primary">REGISTER</button></a>
+ 
+            </div>
+          </div>
+          {% empty %}
+          <p>No upcoming events {{querry}}.</p>
+          {% endfor %}
+
+          {% if query and not upcoming_events %}
+  <p>No  events matched your search <b>"{{ query }}"</b>.</p>
+{% endif %}
+          
+        </div>
+      </div>
+   
+    </section>
+
+ 
+  </main>
+<br> <br>
+
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+     
+          <div class="social-links d-flex mt-4">
+                    <a href="https://x.com/UgandaMombasa"target="_blank"><i class="bi bi-twitter-x"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61557768419729"target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/uganda_consulate_msa/"target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ugketourism/"target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@ugketourism"target="_blank"><i class="bi bi-youtube"></i></a>                      
+          </div>
+        </div>
+
+   <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp</a> & <a href="">Mark</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+
+
+  
+ 
+
+</body>
+
+
+</html>

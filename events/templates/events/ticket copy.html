@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conference Badge</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .badge-wrapper {
+      position: relative;
+      width: 396px;
+      height: 561px;
+      border: 2.5px solid #000;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .badge-wrapper .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("{{ tag }}") no-repeat center center;
+      background-size: cover;
+      z-index: 0;
+    }
+
+    .badge-wrapper .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.87);
+      z-index: 0.5;
+    }
+
+    .badge-wrapper .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      background: #1f2837;
+      height: 150px;
+      border-bottom-left-radius: 100% 50px;
+      border-bottom-right-radius: 100% 50px;
+      padding: 10px 14px 0 14px;
+      text-align: center;
+    }
+
+    .header img.logo {
+      width: 90px;
+      margin: 0 auto 5px auto;
+      display: block;
+    }
+
+    .company-name {
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 1.2; 
+    }
+
+    .subtitle {
+      color: #ccc;
+      font-size: 9px;
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+
+    .photo {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid #1f2837;
+      background: white;
+      padding: 2px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .details {
+      padding: 105px 16px 16px;
+      text-align: center;
+    }
+
+    .details h2 {
+      margin: 6px 0 0;
+      color: #FF5722;
+      font-size: 18px;
+    }
+
+    .details .role {
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .details .info-row {
+      text-align: left;
+      margin: 4px 0;
+      font-size: 13px;
+    }
+
+    .details .info-row span.label {
+      color: #FF5722;
+      font-weight: bold;
+      min-width: 90px;
+      display: inline-block;
+    }
+
+    .datetime-location {
+      background: #1f2837;
+      color: white;
+      border-radius: 8px;
+      margin: 10px auto;
+      padding: 8px 10px;
+      text-align: left;
+      width: 92%;
+      font-size: 11px;
+      font-weight: bold;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .datetime, .location {
+      display: flex;
+      align-items: center;
+      margin: 3px 0;
+    }
+
+    .datetime i,
+    .location i {
+      margin-right: 6px;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .datetime .text {
+      display: flex;
+      gap: 4px;
+    }
+
+    .datetime .year {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .qrcode {
+      margin: 12px auto 4px;
+      display: block;
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+    }
+
+    .website {
+      color: #FF5722;
+      font-size: 11px;
+      font-weight: normal;
+      text-align: center;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="badge-wrapper">
+    <div class="background"></div> <!-- Background image -->
+    <div class="overlay"></div>    <!-- Optional overlay -->
+
+    <div class="content">
+      <div class="header">
+        <!-- ✅ Logo as base64 -->
+        <img class="logo" src="{{ logo }}" alt="Logo">
+        
+        <div class="company-name">THE 4TH UGANDA-KENYA COAST TOURISM CONFERENCE AND EXHIBITION</div>
+        <div class="subtitle">
+          Leveraging Youth, Innovation and Technology for Responsive and Inclusive Tourism.
+        </div>
+      </div>
+
+      <div class="photo">
+        {% if attendee_photo %}
+          <!-- ✅ Attendee photo as base64 -->
+          <img src="{{ attendee_photo }}" alt="Attendee Photo">
+        {% else %}
+          <div style="font-size:12px;text-align:center;padding-top:30px;">No photo</div>
+        {% endif %}
+      </div>
+
+      <div class="details">
+        <h2>{{ user_details.name }}</h2>
+        <div class="role"><span style="font-weight: bolder; text-transform: uppercase;">Delegate</span></div>
+
+        <div class="info-row"><span class="label">Company:</span> <span style="font-weight: bold;"> {{ user_details.company }}</span> </div>
+        <div class="info-row"><span class="label">Designation:</span> <span style="font-weight: bold;"> {{ user_details.designation }} </span> </div>
+
+        <div class="datetime-location">
+          <div class="datetime">
+            <div class="text">
+              <span>DATE: 27TH - 28TH OCTOBER 2025</span>
+            </div>
+          </div>
+          <div class="location">
+            <span>LOCATION: OCEAN BEACH RESORT & SPA, MALINDI</span>
+          </div>
+        </div>
+
+        <!-- ✅ QR code as base64 -->
+        <img src="{{ qr_code }}" alt="QR Code" class="qrcode">
+        <div class="website">www.thetourismconference.org</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

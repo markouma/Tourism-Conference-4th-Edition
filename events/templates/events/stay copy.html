@@ -1,0 +1,425 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static  'assets/css/main2.css' %}" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .section-title h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    /* Sponsor logos */
+    .sponsor-logo {
+      width: 150px;
+      height: 100px;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+      padding: 5px;
+    }
+
+    /* Where to Stay Section */
+    .stay-info h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .stay-info p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    /* Gallery images */
+    .gallery img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Ocean Beach Content Section */
+    .stay-content p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    /* PDF + Contact */
+    .pdf-contact .btn {
+      font-size: 1rem;
+      border-radius: 8px;
+      background-color: #f85d23;
+      border: none;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+
+    .pdf-contact .btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .pdf-contact ul {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      list-style: none;
+      padding: 0;
+    }
+
+    .pdf-contact li {
+      color: #000;
+    }
+
+    .pdf-contact li a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    .pdf-contact li a:hover {
+      text-decoration: underline;
+    }
+
+    .pdf-contact li i {
+      color: #f85d23;
+    }
+  </style>
+</head>
+
+<body class="index-page">
+
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" >Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" >Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/1/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Gallery</a></li>
+        <li><a href="{% url 'stay' %}" class="active">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/1/"  class="btn-getstarted active">Register</a>
+    
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Where to stay</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="current">Where to stay</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Stay Info Section -->
+    <section id="stay-info" class="stay-info section py-5">
+      <div class="container section-title">
+        <h2>Jacaranda Beach Resort</h2>
+      </div>
+      <div class="container">
+        <div class="row align-items-stretch">
+          <!-- Image -->
+          <div class="col-lg-6 mb-4 mb-lg-0 d-flex justify-content-center align-items-center">
+            <img src="{% static 'assets/img/Jakaranda.png' %}" alt="Where to Stay" class="img-fluid rounded"
+              style="max-height: 250px; width: auto; object-fit: cover;" loading="eager">
+          </div>
+          <!-- Content -->
+          <div class="col-lg-6 d-flex flex-column justify-content-center">
+            <p>Jacaranda Beach Resort, Watamu stretches across nearly 32,000 square meters on the 1st row at The
+              Jacaranda Bay. Its 149 rooms are spread out along more than 100 meters of beachfront and within a lush
+              tropical garden. African-style buildings blend with Arab-inspired architecture, creating a striking
+              contrast against the blue sky, while beachfront rooms are housed in blocks just steps from the ocean.
+              Jacaranda is a place to be explored a unique combination of services and experiences unmatched along our
+              coastline.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery section py-5">
+      <div class="container">
+        <div class="row g-3">
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/STANDARD.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 1" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ST.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 2" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/TS.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 3" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/DRONE.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 4" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/STA.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 5" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/TSA.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 6" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/RECEPTION.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 7" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/Deluxe.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 8" loading="eager"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ocean Beach Section -->
+    <section id="stay-content" class="stay-content section py-5">
+      <div class="container section-title">
+        <h2>Ocean Beach Resort & SPA</h2>
+      </div>
+      <div class="container">
+        <div class="row align-items-center">
+          <!-- Logo -->
+          <div class="col-lg-4 mb-4 mb-lg-0 text-center">
+            <img src="{% static 'assets/img/oceanbeach.png' %}" alt="Ocean Beach Logo"
+                 class="img-fluid" style="max-height:180px; object-fit:contain;" loading="eager">
+          </div>
+          <!-- Content -->
+          <div class="col-lg-8">
+            <div class="content-box">
+              <p>
+                Welcome to Ocean Beach Resort & SPA, celebrated as one the best hotels on Kenyan Coast 
+                and a standout among beach hotels in Malindi. Nestled along the serene sandy beach just 
+                2 kilometers north of Malindi Town, our luxurious 5-star retreat offers elegantly designed 
+                accommodations surrounded by lush tropical gardens, creating a peaceful haven for our guests. 
+                Perfectly located near iconic attractions such as Hell’s Kitchen, Gede Ruins, and Watamu Marine Park, 
+                our resort is an ideal gateway for exploring Malindi’s cultural landmarks and Kenya’s captivating safaris.
+              </p>
+              <p>
+                The Semi-Olympic Pool invites guests to unwind with a leisurely swim or bask in the calming ambiance of 
+                Malindi’s radiant sun. Guests can also relax and rejuvenate at the Ocean Spa, renowned for its tranquil 
+                ambiance and revitalizing treatments. Delight your palate with exquisite dining options at Victoria 
+                Restaurant or enjoy a laid-back meal at the Dunes Beach Bar, each offering flavors that reflect the beauty.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PDF & Contact Section -->
+    <section id="pdf-contact" class="pdf-contact section py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <!-- Download PDF -->
+          <div class="col-lg-6 mb-4 mb-lg-0 text-center">
+        <a href="{% static 'assets/img/ocean/OBR.pdf' %}" 
+   download="OBR.pdf" 
+   class="btn px-4 py-2">
+   <i class="bi bi-file-earmark-pdf me-2"></i> RESORT FACT SHEET
+</a>
+
+          </div>
+          <!-- Contact Info -->
+          <div class="col-lg-6">
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <i class="bi bi-telephone-fill me-2"></i>
+                <a href="tel:+254705704590">+254 705704590</a>
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-envelope-fill me-2"></i>
+                <a href="mailto:info@oceanbeachkenya.com">info@oceanbeachkenya.com</a>
+              </li>
+              <li>
+                <i class="bi bi-geo-alt-fill me-2"></i> Lamu Road Off Malindi Golf course
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+        <!-- Gallery Section -->
+    <section id="gallery" class="gallery section py-5">
+      <div class="container">
+        <div class="row g-3">
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/35.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 1" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/60.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 2" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/03.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 3" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/04.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 4" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/05.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 5" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/06.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 6" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/07.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 7" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/29.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 8" loading="eager"></div>
+        </div>
+      </div>
+    </section>
+
+        <!-- Gallery Section -->
+    <section id="gallery" class="gallery section py-5">
+      <div class="container">
+      <div class="container section-title">
+        <h2>Chef x Food x Resraurant</h2>
+      </div>        
+        <div class="row g-3">
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/05.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 1" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/06.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 2" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/07.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 3" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/10.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 4" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/16.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 5" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/18.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 6" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/37.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 7" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Chef/38.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 8" loading="eager"></div>
+        </div>
+      </div>
+    </section>
+
+        <!-- Gallery Section -->
+    <section id="gallery" class="gallery section py-5">
+      <div class="container">
+      <div class="container section-title">
+        <h2>Conference Rooms</h2>
+      </div>        
+        <div class="row g-3">
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Rooms/01.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 1" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Rooms/02.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 2" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Rooms/03.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 3" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Rooms/04.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 4" loading="eager"></div>
+      </div>
+    </section>
+
+        <!-- Gallery Section -->
+    <section id="gallery" class="gallery section py-5">
+      <div class="container">
+      <div class="container section-title">
+        <h2>Pool & SPA</h2>
+      </div>        
+        <div class="row g-3">
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/01.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 1" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/02.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 2" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/03.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 3" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/04.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 4" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/05.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 5" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/06.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 6" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/07.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 7" loading="eager"></div>
+          <div class="col-6 col-md-3"><img src="{% static 'assets/img/ocean/Spa/08.jpg' %}" class="img-fluid rounded gallery-item" alt="Gallery Image 8" loading="eager"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsors Section with Swiper Autoplay -->
+    <section id="sponsors" class="sponsors section">
+      <div class="container section-title">
+        <h2>Partners</h2>
+      </div>
+      <div class="container">
+        <div class="swiper sponsors-slider">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="{% static 'assets/img/Consulate.jpg' %}" alt="Consulate" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/UG.jpg' %}" alt="Explore Uganda" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/Magical.png' %}" alt="Magical Kenya" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/Kilifi.jpg' %}" alt="Kilifi County" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/Mombasa.png' %}" alt="Mombasa" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/Taita.png' %}" alt="Taita" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/Kwale.png' %}" alt="Kwale" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/Riviera.jpg' %}" alt="Riviera" class="sponsor-logo" loading="eager"></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/oceanbeach.png' %}" alt="Ocean Beach" class="sponsor-logo" loading="eager"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="social-links d-flex mt-4">
+          <a href="https://x.com/UgandaMombasa" target="_blank"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61557768419729" target="_blank"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/uganda_consulate_msa/" target="_blank"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/ugketourism/" target="_blank"><i class="bi bi-linkedin"></i></a>
+          <a href="https://www.youtube.com/@ugketourism" target="_blank"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+   <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp</a> & <a href="">Mark</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Initialize Swiper Autoplay for Sponsor Logos -->
+  <script>
+    var swiper = new Swiper(".sponsors-slider", {
+      loop: true,
+      spaceBetween: 30,
+      speed: 3000,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false
+      },
+      breakpoints: {
+        320: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
+        480: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 15 },
+        768: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },
+        1024: { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 30 }
+      }
+    });
+  </script>
+
+</body>
+</html>

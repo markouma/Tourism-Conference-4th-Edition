@@ -1,0 +1,286 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conference Badge</title>
+
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+    <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+
+  <style>
+body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.disclaimer {
+  font-size: 23px;
+  font-weight: bold;
+  color: #d32f2f;
+  text-align: center;
+  margin-top: 12px;
+  font-style: italic;
+  padding-top: 50px;
+}
+
+
+
+    .badge-wrapper {
+      position: relative;
+      width: 396px;
+      height: 570px;
+      border: 2.5px solid #000;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .badge-wrapper .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("{{ tag }}") no-repeat center center;
+      background-size: cover;
+      z-index: 0;
+    }
+
+    .badge-wrapper .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.87);
+      z-index: 0.5;
+    }
+
+    .badge-wrapper .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      background: #2e7d32;
+      height: 175px;
+      border-bottom-left-radius: 100% 50px;
+      border-bottom-right-radius: 100% 50px;
+      padding: 4px 14px 0 14px;
+      text-align: center;
+    }
+
+    .header img.logo {
+      width: 150px;
+      margin: 0 auto 0px auto;
+      display: block;
+    }
+
+    .company-name {
+      color: black;
+      font-weight:900;
+      font-size: 12px;
+      line-height: 0.9; 
+    }
+
+    .subtitle {
+      color: black;
+      font-size: 9px;
+      line-height: 0.2;
+      margin-top: 4px;
+    }
+
+    .photo {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid black;
+      background: white;
+      padding: 2px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .details {
+      padding: 80px 16px 16px;
+      text-align: center;
+    }
+
+    .details h2 {
+      margin: 6px 0 0;
+      color: #FF5722;
+      font-size: 18px;
+    }
+
+    .details .role {
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .details .info-row {
+      text-align: left;
+      margin: 4px 0;
+      font-size: 13px;
+    }
+
+    .details .info-row span.label {
+      color: #FF5722;
+      font-weight: bold;
+      min-width: 90px;
+      display: inline-block;
+    }
+
+    .datetime-location {
+      background: black;
+      color: white;
+      border-radius: 8px;
+      margin: 10px auto;
+      padding: 8px 10px;
+      text-align: left;
+      width: 92%;
+      font-size: 11px;
+      font-weight: bold;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .datetime, .location {
+      display: flex;
+      align-items: center;
+      margin: 3px 0;
+    }
+
+    .datetime i,
+    .location i {
+      margin-right: 6px;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .datetime .text {
+      display: flex;
+      gap: 4px;
+    }
+
+    .datetime .year {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .qrcode {
+      margin: 12px auto 4px;
+      display: block;
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+    }
+
+    .website {
+      color: #FF5722;
+      font-size: 11px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    .exhibitor-role {
+  font-weight: bolder;
+  text-transform: uppercase;
+  color: white;
+  background: #2e7d32; /* Green = Exhibitors */
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+  </style>
+</head>
+<body>
+
+ <div class="page-wrapper">
+  <div class="badge-wrapper">
+    <div class="background"></div> <!-- Background image -->
+    <div class="overlay"></div>    <!-- Optional overlay -->
+
+
+    <div class="content">
+      <div class="header">
+         <img src="{{ logo_nobg }}" class="logo" alt="logo">
+ 
+        <div class="company-name">THE 4TH <br> UGANDA-KENYA COAST <br> TOURISM CONFERENCE <br> & EXHIBITION</div>
+        <div class="subtitle">
+          Leveraging Youth, Innovation & Technology for Responsive & Inclusive Tourism.
+        </div>
+      </div>
+
+      <div class="photo">
+        <img src="{{ attendee_photo }}" alt="Representative Photo">
+      </div>
+ 
+      <div class="details">
+        <h2>{{ rep_name }}</h2>
+   
+        
+      <div class="role">
+  <span class="exhibitor-role">
+    <small>Exhibitor for</small> {{ booth_number }}
+  </span>
+</div>
+
+        <div class="info-row"><span class="label">Company:</span> <span style="font-weight: bold;"> {{ company }}</span> </div>
+        <div class="info-row"><span class="label">Designation:</span> <span style="font-weight: bold;">Exhibition Representative</span></div>
+
+        <div class="datetime-location">
+          <div class="datetime">
+            <div class="text">
+              <span>DATE: 27TH - 28TH OCTOBER 2025</span>
+            </div>
+          </div>
+          <div class="location">
+            <span>LOCATION: OCEAN BEACH RESORT & SPA, MALINDI</span>
+          </div>
+        </div>
+
+
+        <img src="{{ qr_code }}" alt="QR Code" class="qrcode">
+        <div class="website">www.thetourismconference.org</div>
+      </div>
+    </div>
+  </div>
+  <div class="disclaimer">
+    ⚠️ Print this  tag and come with it!
+  </div>
+ </div>
+</body>
+</html>

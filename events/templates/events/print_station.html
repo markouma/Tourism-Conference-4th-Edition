@@ -1,0 +1,472 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Station</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff3742;
+            transform: translateY(-1px);
+        }
+
+        .status-bar {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-bar.connected {
+            border-left: 4px solid #2ed573;
+        }
+
+        .status-bar.error {
+            border-left: 4px solid #ff4757;
+        }
+
+        .status-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .scans-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .scans-header {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .scans-header h2 {
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .scan-count {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .scan-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scan-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .scan-item.new {
+            background: #d4edda;
+            border-left-color: #2ed573;
+        }
+
+        .scan-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .scan-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .scan-value {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .scan-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .scan-item {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .print-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Sound indicator */
+        .sound-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ed573;
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sound-indicator.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fa-solid fa-print"></i>
+                Print Station
+            </h1>
+            <a href="{% url 'logout' %}" class="logout-btn">
+                <i class="fa-solid fa-sign-out"></i> Logout
+            </a>
+        </div>
+
+        <div class="status-bar connected" id="statusBar">
+            <div class="status-text">
+                <i class="fa-solid fa-circle-check"></i>
+                <span id="statusText">Connected - Listening for scans...</span>
+            </div>
+        </div>
+
+        <div class="scans-container">
+            <div class="scans-header">
+                <h2><i class="fa-solid fa-list"></i> Recent Scans</h2>
+                <div class="scan-count">
+                    Total scans: <strong id="scanCount">0</strong>
+                </div>
+            </div>
+
+            <div id="scansList">
+                <div class="empty-state">
+                    <i class="fa-solid fa-inbox"></i>
+                    <p>Waiting for scans...</p>
+                    <small>New scans will appear here automatically</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound indicator -->
+    <div class="sound-indicator" id="soundIndicator">
+        <i class="fa-solid fa-bell"></i>
+    </div>
+
+    <!-- Audio for new scan alert -->
+    <audio id="newScanSound" src="{% static 'sounds/coin.mp3' %}" preload="auto"></audio>
+
+    <script>
+        let lastScanId = null;
+        let scans = [];
+
+        // Fetch scans from API
+        async function fetchScans() {
+            try {
+                const response = await fetch('/api/recent-scans/');
+                const data = await response.json();
+
+                if (data.success) {
+                    updateStatus('connected', 'Connected - Listening for scans...');
+                    
+                    // Check if there's a new scan
+                    if (data.scans.length > 0) {
+                        const latestScanId = data.scans[0].id;
+                        
+                        if (lastScanId !== null && latestScanId !== lastScanId) {
+                            // New scan detected!
+                            playNewScanAlert();
+                        }
+                        
+                        lastScanId = latestScanId;
+                    }
+                    
+                    scans = data.scans;
+                    renderScans();
+                } else {
+                    updateStatus('error', data.message || 'Error fetching scans');
+                }
+            } catch (error) {
+                console.error('Error fetching scans:', error);
+                updateStatus('error', 'Connection error - retrying...');
+            }
+        }
+
+        // Render scans list
+        function renderScans() {
+            const scansList = document.getElementById('scansList');
+            const scanCount = document.getElementById('scanCount');
+
+            if (scans.length === 0) {
+                scansList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox"></i>
+                        <p>No scans yet</p>
+                        <small>Scans will appear here automatically</small>
+                    </div>
+                `;
+                scanCount.textContent = '0';
+                return;
+            }
+
+            scanCount.textContent = scans.length;
+
+            let html = '';
+            scans.forEach((scan, index) => {
+                const isNew = index === 0; // First item is newest
+                html += `
+                    <div class="scan-item ${isNew ? 'new' : ''}" data-scan-id="${scan.id}">
+                        <div class="scan-info">
+                            <div class="scan-label">Name</div>
+                            <div class="scan-value">
+                                <i class="fa-solid fa-user"></i> ${scan.holder_name}
+                            </div>
+                        </div>
+                        
+                        <div class="scan-info">
+                            <div class="scan-label">Email</div>
+                            <div class="scan-value">
+                                <i class="fa-solid fa-envelope"></i> ${scan.holder_email}
+                            </div>
+                        </div>
+                        
+                        <div class="scan-info">
+                            <div class="scan-label">Phone</div>
+                            <div class="scan-value">
+                                <i class="fa-solid fa-phone"></i> ${scan.holder_phone}
+                            </div>
+                            <div class="scan-time">
+                                <i class="fa-solid fa-clock"></i> ${formatTime(scan.scanned_at)}
+                            </div>
+                        </div>
+                        
+                        <button class="print-btn" onclick="printTicket(${scan.ticket_id}, '${scan.ticket_number}')">
+                            <i class="fa-solid fa-download"></i>
+                            Print Tag
+                        </button>
+                    </div>
+                `;
+            });
+
+            scansList.innerHTML = html;
+
+            // Remove 'new' class after animation
+            setTimeout(() => {
+                document.querySelectorAll('.scan-item.new').forEach(item => {
+                    item.classList.remove('new');
+                });
+            }, 3000);
+        }
+
+        // Update status bar
+        function updateStatus(type, message) {
+            const statusBar = document.getElementById('statusBar');
+            const statusText = document.getElementById('statusText');
+            
+            statusBar.className = `status-bar ${type}`;
+            
+            const icon = type === 'connected' 
+                ? '<i class="fa-solid fa-circle-check"></i>' 
+                : '<i class="fa-solid fa-circle-exclamation"></i>';
+            
+            statusText.innerHTML = `${icon} ${message}`;
+        }
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min ago`;
+            
+            return date.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Play alert sound
+        function playNewScanAlert() {
+            const sound = document.getElementById('newScanSound');
+            const indicator = document.getElementById('soundIndicator');
+            
+            // Play sound
+            try {
+                sound.play();
+            } catch (e) {
+                console.log('Audio play failed:', e);
+            }
+            
+            // Show visual indicator
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 1000);
+        }
+
+        // Print ticket
+        // Print ticket - opens badge in exact print size
+function printTicket(ticketId, ticketNumber) {
+    // ✅ Correct path with /controlpanel/ prefix
+    const url = `/controlpanel/print-badge/${ticketId}/`;
+    window.open(url, '_blank');
+    
+    console.log(`Printing badge ${ticketNumber}`);
+}
+
+        // Start polling
+        function startPolling() {
+            fetchScans(); // Initial fetch
+            setInterval(fetchScans, 3000); // Poll every 3 seconds
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            startPolling();
+        });
+    </script>
+</body>
+</html>

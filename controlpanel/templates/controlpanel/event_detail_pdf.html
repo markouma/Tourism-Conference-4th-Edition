@@ -1,0 +1,294 @@
+<!-- event_detail_pdf.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Event Ticket Report - {{ event.name }}</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 1cm;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #007bff;
+        }
+        
+        .logo {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 10px 0;
+        }
+        
+        .report-title {
+            font-size: 18px;
+            color: #555;
+            margin: 5px 0;
+        }
+        
+        .event-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .meta-item {
+            text-align: center;
+        }
+        
+        .meta-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .meta-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 5px;
+        }
+        
+        .category-summary {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e9f7ff;
+            border-left: 4px solid #007bff;
+            border-radius: 5px;
+        }
+        
+        .category-summary h3 {
+            margin: 0 0 15px 0;
+            color: #007bff;
+            font-size: 16px;
+        }
+        
+        .category-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .category-item:last-child {
+            border-bottom: none;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 8px;
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .status-used {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .status-not-used {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+            text-align: center;
+            color: #666;
+            font-size: 10px;
+        }
+        
+        .total-row {
+            background-color: #28a745 !important;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="{{ company_logo_url }}" alt="Logo" class="logo">
+        <div class="company-name">The Tourism Conference</div>
+        <div class="report-title">Event Ticket Sales Report</div>
+        <div class="event-name">{{ event.name }}</div>
+    </div>
+    
+    <div class="meta-info">
+        <div class="meta-item">
+            <div class="meta-label">Total Tickets Sold</div>
+            <div class="meta-value">{{ total_tickets }}</div>
+        </div>
+        <div class="meta-item">
+            <div class="meta-label">Total Revenue</div>
+            <div class="meta-value">KES {{ grand_total|floatformat:2 }}</div>
+        </div>
+        <div class="meta-item">
+            <div class="meta-label">Generated On</div>
+            <div class="meta-value" style="font-size: 12px;">{{ generated_date }}</div>
+        </div>
+    </div>
+    
+    <div class="category-summary">
+        <h3>Sales by Category</h3>
+        {% for cat in tickets_per_category %}
+            <div class="category-item">
+                <span>
+                    <strong>{{ cat.category__name }}</strong>: 
+                    {{ cat.total_sold }} tickets × KES {{ cat.category__price|floatformat:2 }}
+                </span>
+                <span style="font-weight: bold; color: #28a745;">
+                    KES {{ cat.total_revenue|floatformat:2 }}
+                </span>
+            </div>
+        {% empty %}
+            <div class="category-item">
+                <span style="color: #999;">No tickets sold yet.</span>
+            </div>
+        {% endfor %}
+    </div>
+    
+
+    <div class="category-summary">
+    <h3>Sales by Category</h3>
+    {% for cat in tickets_per_category %}
+        <div class="category-item">
+            <span>
+                <strong>{{ cat.category__name }}</strong>: 
+                {{ cat.total_sold }} tickets × KES {{ cat.category__price|floatformat:2 }}
+            </span>
+            <span style="font-weight: bold; color: #28a745;">
+                KES {{ cat.total_revenue|floatformat:2 }}
+            </span>
+        </div>
+    {% empty %}
+        <div class="category-item">
+            <span style="color: #999;">No tickets sold yet.</span>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- ADD THIS NEW SECTION -->
+<div class="category-summary" style="background-color: #fff3cd; border-left: 4px solid #ffc107;">
+    <h3 style="color: #856404;">Tickets by Country</h3>
+    {% for country_data in tickets_per_country %}
+        <div class="category-item">
+            <span><strong>{{ country_data.country }}</strong></span>
+            <span style="font-weight: bold; color: #856404;">
+                {{ country_data.count }} ticket{{ country_data.count|pluralize }}
+            </span>
+        </div>
+    {% empty %}
+        <div class="category-item">
+            <span style="color: #999;">No country data available.</span>
+        </div>
+    {% endfor %}
+</div>
+
+    <table>
+        <thead>
+    <tr>
+        <th style="width: 4%;">#</th>
+        <th style="width: 15%;">Ticket Number</th>
+        <th style="width: 13%;">Buyer</th>
+        <th style="width: 10%;">Country</th>
+        <th style="width: 10%;">City</th>
+        <th style="width: 12%;">Category</th>
+        <th style="width: 10%;">Price</th>
+        <th style="width: 14%;">Purchase Date</th>
+        <th style="width: 12%;">Status</th>
+    </tr>
+</thead>
+
+
+<tbody>
+    {% for ticket in tickets %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td style="font-size: 9px;">{{ ticket.ticket_number }}</td>
+        <td>{{ ticket.buyer }}</td>
+        <td>{{ ticket.country|default:"N/A" }}</td>
+        <td>{{ ticket.city|default:"N/A" }}</td>
+        <td>{{ ticket.category }}</td>
+        <td>KES {{ ticket.price }}</td>
+        <td style="font-size: 9px;">{{ ticket.purchase_date }}</td>
+        <td>
+            {% if ticket.status == "Used" %}
+                <span class="status-used">✓ {{ ticket.status }}</span>
+            {% else %}
+                <span class="status-not-used">○ {{ ticket.status }}</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="9" style="text-align: center; color: #999; padding: 30px;">
+            No tickets found for this event.
+        </td>
+    </tr>
+    {% endfor %}
+    
+    {% if tickets %}
+    <tr class="total-row">
+        <td colspan="6" style="text-align: right; padding-right: 20px;">GRAND TOTAL:</td>
+        <td colspan="3">KES {{ grand_total|floatformat:2 }}</td>
+    </tr>
+    {% endif %}
+</tbody>
+    </table>
+    
+    <div class="footer">
+        <p>{{ event.name }} | Generated: {{ generated_date }}</p>
+        <p>This is a computer-generated report. For inquiries, contact: halloo@thetourismconference.org</p>
+        <br>
+        <p>By <a href="https://linktr.ee/polycarpdev">Polycarp Dev</a> & <a href="">Mark</a>
+      </p>
+    </div>
+</body>
+</html>

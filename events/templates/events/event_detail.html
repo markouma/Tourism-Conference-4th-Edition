@@ -1,0 +1,1128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>{{ event.name }}</title>
+  <meta http-equiv="refresh" content="60">
+  
+  <link href="{% static 'assets/img/logosi.png' %}" rel="icon">
+  <link href="{% static 'assets/img/logosi.png' %}" rel="apple-touch-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fafafa;
+    }
+
+    /* Event Header - Compact & Clean */
+    .event-header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 0;
+    }
+
+    .event-header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .event-title-section h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .event-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    .meta-item i {
+      color: #E83304;
+      font-size: 15px;
+    }
+
+    /* Main Container - Compact */
+    .main-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* Tickets Section - Streamlined */
+    .tickets-wrapper {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+
+    .tickets-header {
+      padding: 18px 24px;
+      background: linear-gradient(to right, #fef2f2, #ffffff);
+      border-bottom: 1px solid #fee2e2;
+    }
+
+    .tickets-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 2px;
+    }
+
+    .tickets-header p {
+      font-size: 13px;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    .tickets-list {
+      padding: 16px;
+    }
+
+    /* Ticket Card - Compact */
+    .ticket-card {
+      background: #fafafa;
+      border: 2px solid #f3f4f6;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .ticket-card:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .ticket-card:hover {
+      border-color: #E83304;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(232, 51, 4, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* Flash Sale Card Styles */
+    .flash-sale-card {
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 50%, #fff5f5 100%);
+      border: 2px solid #ff4444;
+      overflow: hidden;
+    }
+
+    .flash-sale-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 3s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .flash-sale-card:hover {
+      border-color: #ff0000;
+      box-shadow: 0 8px 32px rgba(255, 68, 68, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .flash-badge {
+      position: absolute;
+      top: -2px;
+      left: 20px;
+      background: linear-gradient(135deg, #ff0000, #ff4444);
+      color: white;
+      padding: 4px 16px;
+      border-radius: 0 0 8px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+      animation: pulse 2s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .flash-badge i {
+      margin-right: 4px;
+      animation: flash 1.5s ease-in-out infinite;
+    }
+
+    @keyframes flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .flash-sale-card .ticket-details {
+      padding-top: 16px;
+    }
+
+    .flash-sale-card .ticket-details h3 {
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    .price-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .original-price {
+      font-size: 16px;
+      color: #9ca3af;
+      text-decoration: line-through;
+      font-weight: 500;
+    }
+
+    .flash-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: #dc2626;
+      animation: priceGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes priceGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(220, 38, 38, 0.3); }
+      50% { text-shadow: 0 0 20px rgba(220, 38, 38, 0.5); }
+    }
+
+    .discount-badge {
+      background: #dc2626;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .countdown-timer {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 10px;
+      border-radius: 6px;
+      text-align: center;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .countdown-number {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: #dc2626;
+      line-height: 1;
+    }
+
+    .countdown-label {
+      display: block;
+      font-size: 9px;
+      color: #6b7280;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sale-ended-notice {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .sale-ended-notice i {
+      font-size: 14px;
+    }
+
+    .btn-coming-soon {
+      background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
+      cursor: not-allowed !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-coming-soon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: slide 2s infinite;
+    }
+
+    @keyframes slide {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .btn-coming-soon:hover {
+      transform: none !important;
+    }
+
+    .btn-flash-active {
+      background: linear-gradient(135deg, #dc2626, #ff4444) !important;
+      box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+      animation: buttonPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes buttonPulse {
+      0%, 100% { box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4); }
+      50% { box-shadow: 0 6px 24px rgba(220, 38, 38, 0.6); }
+    }
+
+    .btn-flash-active:hover {
+      background: linear-gradient(135deg, #b91c1c, #dc2626) !important;
+      transform: scale(1.08) !important;
+    }
+
+    .ticket-details {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-details h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ticket-price {
+      font-size: 22px;
+      font-weight: 700;
+      color: #059669;
+    }
+
+    .ticket-availability {
+      font-size: 12px;
+      color: #6b7280;
+      padding: 3px 8px;
+      background: #f3f4f6;
+      border-radius: 12px;
+    }
+
+    .ticket-availability.low {
+      background: #fef2f2;
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .ticket-action {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-action button {
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      background: #E83304;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .ticket-action button:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+
+    .ticket-action button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Free Accreditation Card - Compact */
+    .free-accreditation {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 2px dashed #f59e0b;
+      border-radius: 10px;
+      padding: 18px;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .free-badge {
+      display: inline-block;
+      background: #059669;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .free-accreditation h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .free-accreditation p {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .free-accreditation .btn {
+      width: 100%;
+      padding: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+
+    /* Sidebar - Compact */
+    .sidebar {
+      position: sticky;
+      top: 90px;
+    }
+
+    .poster-card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .poster-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 18px;
+    }
+
+    .info-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-card h3 i {
+      color: #E83304;
+    }
+
+    .info-card p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    /* Message Overlay */
+    .message-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .message-modal {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      max-width: 480px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .message-content {
+      padding: 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .message-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .message-success .message-icon { color: #059669; }
+    .message-warning .message-icon { color: #f59e0b; }
+    .message-error .message-icon { color: #dc2626; }
+    .message-info .message-icon { color: #3b82f6; }
+
+    .message-text {
+      flex: 1;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    .message-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #f3f4f6;
+      border: none;
+      font-size: 16px;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      transition: all 0.2s;
+    }
+
+    .message-close:hover {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { 
+        transform: translateY(-30px) scale(0.95);
+        opacity: 0;
+      }
+      to { 
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .sidebar {
+        position: static;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .poster-card {
+        max-width: 400px;
+        margin: 0 auto 16px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .event-header {
+        padding: 14px 0;
+      }
+
+      .event-title-section h1 {
+        font-size: 17px;
+      }
+
+      .event-meta {
+        gap: 16px;
+      }
+
+      .meta-item {
+        font-size: 12px;
+      }
+
+      .main-container {
+        margin: 16px auto;
+      }
+
+      .tickets-header {
+        padding: 16px 20px;
+      }
+
+      .tickets-list {
+        padding: 14px;
+      }
+
+      .ticket-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+
+      .price-row {
+        justify-content: space-between;
+      }
+
+      .ticket-action button {
+        width: 100%;
+        padding: 12px;
+      }
+
+      .countdown-timer {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .event-title-section h1 {
+        font-size: 15px;
+      }
+
+      .event-meta {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .ticket-details h3 {
+        font-size: 15px;
+      }
+
+      .ticket-price {
+        font-size: 20px;
+      }
+
+      .flash-price {
+        font-size: 20px;
+      }
+
+      .original-price {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Messages -->
+{% if messages %}
+  <div id="messageOverlay" class="message-overlay">
+    <div class="message-modal">
+      {% for message in messages %}
+        <div class="message-content message-{{ message.tags }}">
+          <div class="message-icon">
+            {% if 'warning' in message.tags %}
+              <i class="fas fa-exclamation-triangle"></i>
+            {% elif 'success' in message.tags %}
+              <i class="fas fa-check-circle"></i>
+            {% elif 'error' in message.tags %}
+              <i class="fas fa-times-circle"></i>
+            {% else %}
+              <i class="fas fa-info-circle"></i>
+            {% endif %}
+          </div>
+          <div class="message-text">
+            {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+          </div>
+          <button type="button" class="message-close" onclick="closeMessageOverlay()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+<!-- Header -->
+<header id="header" class="header d-flex align-items-center sticky-top">
+  <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+      <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+    </a>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="{% url 'index' %}">Home</a></li> 
+        <li><a href="{% url 'Forewords' %}">Forewords</a></li> 
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/1/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Gallery</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+        <li><a href="{% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a href="/event/1/" class="btn-getstarted active">Register</a>
+  </div>
+</header>
+
+<!-- Event Header -->
+<section class="event-header">
+  <hr>
+  <div class="event-header-content">
+    <div class="event-title-section">
+      <h1>THE 4TH UG - KE COAST TOURISM CONFERENCE & EXHIBITION</h1>
+      <div class="event-meta">
+        <div class="meta-item">
+          <i class="bi bi-calendar-event"></i>
+          <span>27th – 28th October 2025</span>
+        </div>
+        <div class="meta-item">
+          <i class="bi bi-geo-alt-fill"></i>
+          <span>Ocean Beach Resort & Spa, Malindi</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="main-container">
+  
+  <!-- Tickets Section -->
+  <div class="tickets-wrapper">
+    <div class="tickets-header">
+      <h2>Select Your Ticket Category</h2>
+      <p>Choose the ticket category that best suits your needs</p>
+    </div>
+
+    <div class="tickets-list">
+      {% for category in categories %}
+        {% if category.name != "Booth Representative" and category.name != "Paid Booth Representative" %}
+          
+          {% if category.name == "Flash Sale(Youth Under 30)" %}
+            <!-- Flash Sale Ticket -->
+            <div class="ticket-card flash-sale-card" id="flashSaleCard-{{ category.id }}" data-category-id="{{ category.id }}">
+              <div class="flash-badge">
+                <i class="fas fa-bolt"></i>
+                FLASH SALE
+              </div>
+
+              <div class="ticket-details">
+                <h3>{{ category.name }}</h3>
+                <div class="price-row">
+                  <div class="price-container" id="priceContainer-{{ category.id }}">
+                    <!-- Price will be injected by JavaScript -->
+                  </div>
+                  <div class="ticket-availability {% if category.remaining_tickets < 10 %}low{% endif %}">
+                    {{ category.remaining_tickets }} left
+                  </div>
+                </div>
+                
+                <!-- Countdown Timer -->
+                <div class="countdown-timer" id="countdownTimer-{{ category.id }}" style="display: none;">
+                  <div class="countdown-item">
+                    <span class="countdown-number" id="days-{{ category.id }}">00</span>
+                    <span class="countdown-label">Days</span>
+                  </div>
+                  <div class="countdown-item">
+                    <span class="countdown-number" id="hours-{{ category.id }}">00</span>
+                    <span class="countdown-label">Hours</span>
+                  </div>
+                  <div class="countdown-item">
+                    <span class="countdown-number" id="minutes-{{ category.id }}">00</span>
+                    <span class="countdown-label">Mins</span>
+                  </div>
+                  <div class="countdown-item">
+                    <span class="countdown-number" id="seconds-{{ category.id }}">00</span>
+                    <span class="countdown-label">Secs</span>
+                  </div>
+                </div>
+
+                <!-- Sale Ended Notice -->
+                <div class="sale-ended-notice" id="saleEndedNotice-{{ category.id }}" style="display: none;">
+                  <i class="fas fa-clock"></i>
+                  <span id="saleEndedText-{{ category.id }}"></span>
+                </div>
+              </div>
+
+              <div class="ticket-action">
+                {% if category.remaining_tickets > 0 %}
+                  <form method="post" action="{% url 'add_to_cart' event.id %}" id="flashSaleForm-{{ category.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="category_id" value="{{ category.id }}">
+                    <button type="submit" id="flashSaleBtn-{{ category.id }}">SELECT</button>
+                  </form>
+                {% else %}
+                  <button disabled>SOLD OUT</button>
+                {% endif %}
+              </div>
+            </div>
+
+          {% else %}
+            <!-- Regular Ticket -->
+            <div class="ticket-card">
+              <div class="ticket-details">
+                <h3>{{ category.name }}</h3>
+                <div class="price-row">
+                  <div class="ticket-price">KSh {{ category.price }}</div>
+                  <div class="ticket-availability {% if category.remaining_tickets < 10 %}low{% endif %}">
+                    {{ category.remaining_tickets }} left
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ticket-action">
+                {% if category.remaining_tickets > 0 %}
+                  <form method="post" action="{% url 'add_to_cart' event.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="category_id" value="{{ category.id }}">
+                    <button type="submit">SELECT</button>
+                  </form>
+                {% else %}
+                  <button disabled>SOLD OUT</button>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+
+        {% endif %}
+      {% endfor %}
+
+      <!-- Free Accreditation -->
+      <div class="free-accreditation">
+        <span class="free-badge">FREE</span>
+        <h3>Other Accreditations</h3>
+        <p>* Only invited persons(Moderators, Media, Speakers, VIPs) </p>
+        <a class="btn btn-danger" href="{% url 'staff_application' event.id %}">APPLY NOW</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="poster-card">
+      <img src="{% static 'assets/img/Tourism_Conference.jpg' %}" alt="Event Poster">
+    </div>
+    
+    <div class="info-card">
+      <h3><i class="bi bi-info-circle"></i> About This Event</h3>
+      <p>Leveraging youth, innovation and technology for responsive and inclusive tourism development in the region.</p>
+    </div>
+  </aside>
+
+</div>
+
+<!-- Footer -->
+<footer id="footer" class="footer position-relative light-background">
+  <div class="container footer-top">
+    <div class="row gy-4">
+      <div class="social-links d-flex mt-4">
+        <a href="https://x.com/UgandaMombasa" target="_blank"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61557768419729" target="_blank"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com/uganda_consulate_msa/" target="_blank"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/ugketourism/" target="_blank"><i class="bi bi-linkedin"></i></a>
+        <a href="https://www.youtube.com/@ugketourism" target="_blank"><i class="bi bi-youtube"></i></a>
+      </div>
+    </div>
+     <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp Dev</a> & <a href="">Mark</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Scripts -->
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+<script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+<script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+<script>
+  // Flash Sale Configuration
+  const FLASH_SALE_CONFIG = {
+    startDate: new Date('2025-10-10T00:00:00'),
+    endDate: new Date('2025-10-12T23:59:59'),
+    originalPrice: 2000,
+    flashPrice: 1000,
+    discountPercent: 50
+  };
+
+  let countdownIntervals = {};
+
+  function initFlashSale() {
+    const flashSaleCards = document.querySelectorAll('[id^="flashSaleCard-"]');
+    
+    flashSaleCards.forEach(card => {
+      const categoryId = card.dataset.categoryId;
+      updateFlashSaleUI(categoryId);
+    });
+  }
+
+  function updateFlashSaleUI(categoryId) {
+    const now = new Date();
+    const priceContainer = document.getElementById(`priceContainer-${categoryId}`);
+    const flashSaleBtn = document.getElementById(`flashSaleBtn-${categoryId}`);
+    const countdownTimer = document.getElementById(`countdownTimer-${categoryId}`);
+    const saleEndedNotice = document.getElementById(`saleEndedNotice-${categoryId}`);
+    const saleEndedText = document.getElementById(`saleEndedText-${categoryId}`);
+    
+    if (!priceContainer || !flashSaleBtn) return;
+
+    // Clear any existing interval
+    if (countdownIntervals[categoryId]) {
+      clearInterval(countdownIntervals[categoryId]);
+    }
+
+    // Before flash sale starts
+    if (now < FLASH_SALE_CONFIG.startDate) {
+      priceContainer.innerHTML = `
+        <span class="original-price">KSh ${FLASH_SALE_CONFIG.originalPrice.toLocaleString()}</span>
+        <span class="flash-price">KSh ${FLASH_SALE_CONFIG.flashPrice.toLocaleString()}</span>
+      `;
+      
+      flashSaleBtn.textContent = 'COMING SOON';
+      flashSaleBtn.className = 'btn-coming-soon';
+      flashSaleBtn.disabled = true;
+      flashSaleBtn.type = 'button';
+      
+      if (countdownTimer) {
+        countdownTimer.style.display = 'flex';
+        countdownTimer.style.opacity = '0.8';
+      }
+      
+      if (saleEndedNotice) {
+        saleEndedNotice.style.display = 'none';
+      }
+      
+      startCountdown(categoryId, FLASH_SALE_CONFIG.startDate);
+    }
+    // During flash sale
+    else if (now >= FLASH_SALE_CONFIG.startDate && now <= FLASH_SALE_CONFIG.endDate) {
+      priceContainer.innerHTML = `
+        <span class="original-price">KSh ${FLASH_SALE_CONFIG.originalPrice.toLocaleString()}</span>
+        <span class="flash-price">KSh ${FLASH_SALE_CONFIG.flashPrice.toLocaleString()}</span>
+        <span class="discount-badge">-${FLASH_SALE_CONFIG.discountPercent}%</span>
+      `;
+      
+      flashSaleBtn.textContent = 'GRAB NOW!';
+      flashSaleBtn.className = 'btn-flash-active';
+      flashSaleBtn.disabled = false;
+      flashSaleBtn.type = 'submit';
+      
+      if (countdownTimer) {
+        countdownTimer.style.display = 'flex';
+        countdownTimer.style.opacity = '1';
+      }
+      
+      if (saleEndedNotice) {
+        saleEndedNotice.style.display = 'none';
+      }
+      
+      startCountdown(categoryId, FLASH_SALE_CONFIG.endDate);
+    }
+    // After flash sale ends
+    else {
+      priceContainer.innerHTML = `
+        <span class="ticket-price">KSh ${FLASH_SALE_CONFIG.originalPrice.toLocaleString()}</span>
+      `;
+      
+      flashSaleBtn.textContent = 'SALE ENDED';
+      flashSaleBtn.className = '';
+      flashSaleBtn.disabled = true;
+      flashSaleBtn.type = 'button';
+      
+      if (countdownTimer) {
+        countdownTimer.style.display = 'none';
+      }
+      
+      // Calculate days since sale ended
+      const daysSinceEnd = Math.floor((now - FLASH_SALE_CONFIG.endDate) / (1000 * 60 * 60 * 24));
+      
+      if (saleEndedNotice && saleEndedText) {
+        saleEndedNotice.style.display = 'inline-flex';
+        
+        if (daysSinceEnd === 0) {
+          saleEndedText.textContent = '50% sale ended today';
+        } else if (daysSinceEnd === 1) {
+          saleEndedText.textContent = '50% sale ended yesterday';
+        } else {
+          saleEndedText.textContent = `50% sale ended ${daysSinceEnd} days ago`;
+        }
+      }
+    }
+  }
+
+  function startCountdown(categoryId, targetDate) {
+    const daysEl = document.getElementById(`days-${categoryId}`);
+    const hoursEl = document.getElementById(`hours-${categoryId}`);
+    const minutesEl = document.getElementById(`minutes-${categoryId}`);
+    const secondsEl = document.getElementById(`seconds-${categoryId}`);
+    
+    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+    
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+      
+      if (distance < 0) {
+        clearInterval(countdownIntervals[categoryId]);
+        updateFlashSaleUI(categoryId);
+        return;
+      }
+      
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      daysEl.textContent = String(days).padStart(2, '0');
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+    }
+    
+    updateCountdown();
+    countdownIntervals[categoryId] = setInterval(updateCountdown, 1000);
+  }
+
+  // Message overlay functions
+  function closeMessageOverlay() {
+    const overlay = document.getElementById('messageOverlay');
+    if (overlay) {
+      overlay.style.animation = 'fadeOut 0.2s ease';
+      setTimeout(() => overlay.remove(), 200);
+    }
+  }
+
+  setTimeout(() => {
+    const overlay = document.getElementById('messageOverlay');
+    if (overlay && overlay.querySelector('.message-success')) {
+      closeMessageOverlay();
+    }
+  }, 5000);
+
+  document.getElementById('messageOverlay')?.addEventListener('click', function(e) {
+    if (e.target === this) closeMessageOverlay();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeMessageOverlay();
+  });
+
+  // Mobile nav toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.querySelector('.mobile-nav-toggle');
+    const nav = document.querySelector('#navmenu');
+    
+    if (toggle) {
+      toggle.addEventListener('click', function() {
+        nav.classList.toggle('mobile-nav-active');
+        this.classList.toggle('bi-list');
+        this.classList.toggle('bi-x');
+      });
+
+      document.querySelectorAll('#navmenu a').forEach(link => {
+        link.addEventListener('click', function() {
+          if (nav.classList.contains('mobile-nav-active')) {
+            nav.classList.remove('mobile-nav-active');
+            toggle.classList.remove('bi-x');
+            toggle.classList.add('bi-list');
+          }
+        });
+      });
+    }
+
+    // Initialize flash sale
+    initFlashSale();
+  });
+</script>
+
+</body>
+</html>

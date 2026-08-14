@@ -1,0 +1,99 @@
+{% load static %}
+
+<link href="{% static 'assets/img/logosi.png' %}" rel="icon">
+<link href="{% static 'assets/img/logosi.png' %}" rel="apple-touch-icon">
+<title>4th Tourism Conference</title>
+
+<style>
+  body {
+    background: #f5f8ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .success-container {
+    max-width: 500px;
+    margin: 100px auto;
+    background: white;
+    border-radius: 16px;
+    padding: 30px 40px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  .success-container h2 {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 24px;
+  }
+
+  .success-container p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .countdown {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+    background: #e6f7ff;
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<div class="success-container">
+  <h2> Failed</h2>
+  <p>You already applied for a tag with this email.<br>Check your email for the tag or wait for approval from our team.</p>
+
+  <div class="countdown">
+    Redirecting to homepage in <span style="color: red;" id="countdown">15</span> seconds...
+  </div>
+</div>
+
+<script>
+  let seconds = 15;
+  const countdownEl = document.getElementById('countdown');
+
+  const interval = setInterval(() => {
+    seconds--;
+    countdownEl.textContent = seconds;
+
+    if (seconds <= 0) {
+      clearInterval(interval);
+      window.location.href = '/';
+    }
+  }, 1000);
+</script>
+
+
+
+<!-- clear cart -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("{% url 'clear_cart' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        "Content-Type": "application/json"
+      }
+    }).then(res => res.json()).then(data => {
+      console.log("Cart cleared:", data);
+    });
+  });
+</script>
+

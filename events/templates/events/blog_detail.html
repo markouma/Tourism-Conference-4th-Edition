@@ -1,0 +1,216 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>{{ blog.title }} - UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  {% if blog.meta_description %}
+  <meta name="description" content="{{ blog.meta_description }}">
+  {% endif %}
+  
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+  
+  <style>
+    .blog-header-img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .blog-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    .blog-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    .blog-meta-info {
+      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 1rem 0;
+      margin: 2rem 0;
+    }
+
+    .tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag-badge {
+      background: #f0f0f0;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .related-blog-card {
+      transition: transform 0.3s ease;
+    }
+
+    .related-blog-card:hover {
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+
+<body class="index-page">
+  <!-- Copy your header -->
+  
+  <main class="main">
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">{{ blog.title|truncatewords:10 }}</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'blog_list' %}">Blog</a></li>
+            <li class="current">{{ blog.title|truncatewords:5 }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Blog Content -->
+    <section class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            
+            <!-- Featured Image -->
+            {% if blog.featured_image %}
+            <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" class="blog-header-img mb-4">
+            {% endif %}
+
+            <!-- Title -->
+            <h1 class="mb-3">{{ blog.title }}</h1>
+
+            <!-- Meta Info -->
+            <div class="blog-meta-info">
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="mb-2">
+                    <i class="bi bi-calendar"></i> 
+                    Published: {{ blog.created_at|date:"F d, Y" }}
+                  </p>
+                  {% if blog.author %}
+                  <p class="mb-2">
+                    <i class="bi bi-person"></i> 
+                    By {{ blog.author.get_full_name|default:blog.author.username }}
+                  </p>
+                  {% endif %}
+                </div>
+                <div class="col-md-6 text-md-end">
+                  {% if blog.category %}
+                  <p class="mb-2">
+                    <i class="bi bi-folder"></i> 
+                    <a href="{% url 'blog_list' %}?category={{ blog.category.slug }}">{{ blog.category.name }}</a>
+                  </p>
+                  {% endif %}
+                  <p class="mb-2">
+                    <i class="bi bi-eye"></i> 
+                    {{ blog.views_count }} views
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="blog-content">
+              {{ blog.content|linebreaks }}
+            </div>
+
+            <!-- Tags -->
+            {% if blog.get_tags_list %}
+            <div class="mt-4">
+              <h5 class="mb-3">Tags:</h5>
+              <div class="tags-list">
+                {% for tag in blog.get_tags_list %}
+                <span class="tag-badge">{{ tag }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Back Button -->
+            <div class="mt-5 text-center">
+              <a href="{% url 'blog_list' %}" class="btn btn-primary">
+                <i class="bi bi-arrow-left"></i> Back to All Posts
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Posts -->
+    {% if related_blogs %}
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="mb-4 text-center">Related Posts</h2>
+        <div class="row g-4">
+          {% for related in related_blogs %}
+          <div class="col-md-4">
+            <div class="card related-blog-card h-100">
+              {% if related.featured_image %}
+              <img src="{{ related.featured_image.url }}" class="card-img-top" alt="{{ related.title }}" style="height: 200px; object-fit: cover;">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="{% url 'blog_detail' related.slug %}" style="text-decoration: none; color: #000;">
+                    {{ related.title }}
+                  </a>
+                </h5>
+                <p class="card-text">{{ related.excerpt|truncatewords:15 }}</p>
+                <a href="{% url 'blog_detail' related.slug %}" class="btn btn-sm btn-outline-primary">Read More</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+  </main>
+
+  <!-- Copy your footer -->
+     <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+     
+          <div class="social-links d-flex mt-4">
+                    <a href="https://x.com/UgandaMombasa"target="_blank"><i class="bi bi-twitter-x"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61557768419729"target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/uganda_consulate_msa/"target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ugketourism/"target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@ugketourism"target="_blank"><i class="bi bi-youtube"></i></a>                      
+          </div>
+        </div>
+
+   <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp Dev</a> & <a href="">Mark</a>
+      </div>
+    </div>
+
+  </footer>
+  
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+</html>

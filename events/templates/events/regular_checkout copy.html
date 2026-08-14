@@ -1,0 +1,568 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Add intl-tel-input CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+  <style>
+    button a{
+      text-decoration: none;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .card {
+      border-radius: 8px; 
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      background-color: #e9eaec; 
+      color: #000;
+    }
+    body {
+      background-color: #f4f4f4; 
+      padding-top: 30px;
+    }
+    .checkout-form-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .scrollable-forms {
+      overflow-y: auto;
+      flex-grow: 1;
+      max-height: calc(100vh - 300px);
+      padding-right: 5px;
+      margin-bottom: 20px;
+    }
+    .payment-section-fixed {
+      color: antiquewhite; 
+      background-color: #0f4405; 
+      padding: 20px; 
+      border-radius: 8px;
+      position: sticky;
+      bottom: 0;
+      z-index: 100;
+    }
+    @media (max-width: 768px) {
+      .scrollable-forms {
+        max-height: calc(100vh - 350px);
+      }
+    }
+    
+    /* Phone input specific styles */
+    .phone-input-container {
+      position: relative;
+      margin-bottom: 15px;
+    }
+    .phone-input-container label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    .iti {
+      width: 100%;
+    }
+    .iti__selected-flag {
+      padding: 0 10px;
+    }
+    .iti__selected-dial-code {
+      font-weight: bold;
+      margin-left: 5px;
+    }
+    .iti__flag {
+      background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/img/flags.png");
+    }
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .iti__flag {
+        background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/img/flags@2x.png");
+      }
+    }
+  </style>
+</head>
+<body>
+
+  
+
+
+<div class="container">
+  <div class="row">
+
+    <!-- Cart -->
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header"><h4>Your Tickets</h4></div>
+        <div class="card-body">
+          {% for item in cart_items %}
+            <div class="mb-3 cart-item" data-category-id="{{ item.category.id }}">
+              <h6>{{ item.event.name }} - {{ item.category.name }}</h6>
+              <p>Price: Ksh{{ item.category.price }}</p>
+              <p>Quantity: 
+                <button class="btn btn-sm btn-outline-secondary decrement" data-category-id="{{ item.category.id }}">-</button>
+                <span class="mx-2 quantity">{{ item.quantity }}</span>
+                <button class="btn btn-sm btn-outline-secondary increment" data-category-id="{{ item.category.id }}">+</button>
+              </p>
+              <p>Subtotal: <strong class="subtotal">Ksh {{ item.subtotal }}</strong></p>
+              <button class="btn btn-sm btn-danger remove" data-category-id="{{ item.category.id }}">Remove</button>
+              <hr>
+            </div>
+          {% empty %}
+            <p>Your cart is empty!</p>
+          {% endfor %}
+        </div>
+        <div class="card-footer">
+          <p><strong>Total:</strong> Kshs <span id="total">{{ total }}</span></p>
+          <span><a href="/event/1/" style="text-decoration: none; color: #f85d23; font-weight: bold;">Go back to Conference</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header"><h4>Checkout</h4></div>
+        <div class="card-body checkout-form-container">
+          <form method="post" enctype="multipart/form-data" id="checkoutForm">
+            {% csrf_token %}
+
+            <!-- Attendee Forms -->
+            <div class="scrollable-forms" id="attendee-forms-container">
+              {% for item in cart_items %}
+                {% for i in item.quantity|times %}
+                  <div class="attendee-form card mb-3 p-3">
+                    <h5>Ticket {{ forloop.counter }}</h5>
+                    <div class="mb-2"><label class="form-label">Full Name</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][name]" class="form-control" required>
+                    </div>
+                    <div class="mb-2"><label class="form-label">Email</label>
+                      <input type="email" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][email]" class="form-control" required>
+                    </div>
+                    <div class="mb-2 phone-input-container">
+                      <label class="form-label">Phone Number</label>
+                      <input type="tel" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][phone]" class="form-control attendee-phone" required>
+                    </div>
+                    <div class="mb-2"><label class="form-label">Company</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][company]" class="form-control" required>
+                    </div>
+                    <div class="mb-2"><label class="form-label">Designation</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][designation]" class="form-control" required>
+                    </div>
+                    <div class="mb-2"><label class="form-label">Photo</label>
+                      <input type="file" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][photo]" class="form-control attendee-photo" accept="image/*" required>
+                    </div>
+
+                    <!-- Country -->
+                    <div class="mb-2">
+                      <label class="form-label">Country</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][country]" class="form-control attendee-country" required>
+                        <option value="">-- Select --</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="Tanzania">Tanzania</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <!-- City -->
+                    <div class="mb-2">
+                      <label class="form-label">City</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][city]" class="form-control" required>
+                    </div>
+
+                    <!-- Age Range -->
+                    <div class="mb-2">
+                      <label class="form-label">Age Range</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][age_range]" class="form-control" required>
+                        <option value="">-- Select --</option>
+                        <option value="18-24">18-24</option>
+                        <option value="25-30">25-30</option>
+                        <option value="31-40">31-40</option>
+                        <option value="41+">41+</option>
+                      </select>
+                    </div>
+    
+                    <!-- tshirt_size -->
+                    <div class="mb-2">
+                      <label class="form-label">T-shirt Size</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][tshirt_size]" class="form-control" required>
+                        <option value="">-- Select --</option>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="XXXL">XXXL</option>
+                      </select>
+                    </div>
+
+                    <!-- Sector / Industry -->
+                    <div class="mb-2">
+                      <label class="form-label">Sector / Industry</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][sector]" class="form-control" required>
+                        <option value="">-- Select --</option>
+                        <option value="Tourism Tech">Tourism Tech</option>
+                        <option value="Education">Education</option>
+                        <option value="Health">Health</option>
+                        <option value="Government">Government</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <!-- How they heard -->
+                    <div class="mb-2">
+                      <label class="form-label">How did you hear about the summit?</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][referral_source]" class="form-control" required>
+                        <option value="">-- Select --</option>
+                        <option value="Referral">Referral</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Website">Website</option>
+                        <option value="Email">Email</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <!-- Consent Checkbox -->
+                    <div class="mb-2 form-check">
+                      <input type="checkbox" class="form-check-input" required
+                        name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][consent_given]" value="true" id="consent-{{ forloop.counter }}">
+                      <label class="form-check-label" for="consent-{{ forloop.counter }}">
+                        I agree to the data usage & photo/video release policy.
+                      </label>
+                    </div>
+
+                    <input type="hidden" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][category_id]" value="{{ item.category.id }}">
+                  </div>
+                {% endfor %}
+              {% endfor %}
+            </div>
+
+            <!-- Payment Section (unchanged) -->
+            <div class="payment-section-fixed" id="payment-section">
+              <h4>Payment Information</h4>
+              <div class="mb-3">
+                <label class="form-label">Phone Number (for payment)</label>
+                <input type="tel" name="phone" id="phoneNumber" class="form-control" placeholder="07XXXXXXXX" required>
+              </div>
+              <input type="hidden" name="payment_method" id="payment_method" value="">
+              <div class="d-grid gap-2 mt-3">
+                <button type="submit" id="mpesaBtn" class="btn btn-success w-100">Pay with M-Pesa</button>
+                <button type="submit" id="pesapalBtn" class="btn btn-primary w-100">Pay with Card (Pesapal)</button>
+                <button style="background-color: yellow;" id="" class="btn btn-success w-100"><a href="{% url 'paid_application' 1 %}"><a href="{% url 'paid_application' 1 %}"> MTN (Send Money) </a></button>
+                <!-- <button disabled type="" id="" class="btn btn-primary w-100">PayPal (Coming Soon...)</button> -->
+
+                <!-- <p>* Use <a href="{% url 'paid_application' 1 %}">this form</a>  if your payment process fails. </p> -->
+              </div>
+            </div> 
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let cartData = {
+    cart_items: [
+      {% for item in cart_items %}
+      {
+        category: { id: {{ item.category.id }}, name: "{{ item.category.name|escapejs }}", price: {{ item.category.price }} },
+        event: { name: "{{ item.event.name|escapejs }}" },
+        quantity: {{ item.quantity }},
+        subtotal: {{ item.subtotal }}
+      },
+      {% endfor %}
+    ],
+    total: {{ total }}
+  };
+
+  function bindPaymentButtons() {
+    const mpesaBtn = document.getElementById('mpesaBtn');
+    const pesapalBtn = document.getElementById('pesapalBtn');
+    const form = document.getElementById('checkoutForm');
+
+    if (!mpesaBtn || !pesapalBtn || !form) return;
+
+    function handlePaymentClick(method, clickedBtn) {
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      document.getElementById('payment_method').value = method;
+      mpesaBtn.disabled = true;
+      pesapalBtn.disabled = true;
+
+      const message = document.createElement('div');
+      message.className = 'text-center fw-bold mt-2 text-light';
+      message.innerText = 'Initiating payment prompt...';
+      clickedBtn.replaceWith(message);
+      
+      form.submit();
+    }
+
+    mpesaBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      handlePaymentClick('mpesa', mpesaBtn);
+    });
+
+    pesapalBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      handlePaymentClick('pesapal', pesapalBtn);
+    });
+  }
+
+  function updatePaymentButtons() {
+    const mpesaBtn = document.getElementById('mpesaBtn');
+    const pesapalBtn = document.getElementById('pesapalBtn');
+    const isDisabled = cartData.total < 1;
+    if (mpesaBtn) mpesaBtn.disabled = isDisabled;
+    if (pesapalBtn) pesapalBtn.disabled = isDisabled;
+  }
+
+  // Initialize phone inputs for attendees only
+  function initializeAttendeePhoneInputs() {
+    document.querySelectorAll('.attendee-phone').forEach(input => {
+      const iti = window.intlTelInput(input, {
+        initialCountry: "ke",
+        preferredCountries: ["ke", "ug", "tz"],
+        separateDialCode: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+      });
+
+      // Sync with country dropdown
+      const countrySelect = input.closest('.attendee-form').querySelector('.attendee-country');
+      if (countrySelect) {
+        // Set initial country based on dropdown
+        if (countrySelect.value) {
+          iti.setCountry(countrySelect.value.toLowerCase());
+        }
+        
+        // Update phone input when country changes
+        countrySelect.addEventListener('change', function() {
+          const countryCode = this.value.toLowerCase();
+          iti.setCountry(countryCode);
+          // Reset to just the country code
+          input.value = '+' + iti.getSelectedCountryData().dialCode;
+        });
+      }
+    });
+  }
+
+  function updateAttendeeForms() {
+    const container = document.getElementById('attendee-forms-container');
+    container.innerHTML = '';
+
+    cartData.cart_items.forEach((item, itemIndex) => {
+      for (let i = 0; i < item.quantity; i++) {
+        const formDiv = document.createElement('div');
+        formDiv.className = 'attendee-form card mb-3 p-3';
+        formDiv.innerHTML = `
+          <h5>Ticket ${i + 1}</h5>
+          <div class="mb-2"><label class="form-label">Full Name</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][name]" class="form-control" required>
+          </div>
+          <div class="mb-2"><label class="form-label">Email</label>
+            <input type="email" name="attendees[${itemIndex}][${i}][email]" class="form-control" required>
+          </div>
+          <div class="mb-2 phone-input-container">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" name="attendees[${itemIndex}][${i}][phone]" class="form-control attendee-phone" required>
+          </div>
+          <div class="mb-2"><label class="form-label">Company</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][company]" class="form-control" required>
+          </div>
+          <div class="mb-2"><label class="form-label">Designation</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][designation]" class="form-control" required>
+          </div>
+          <div class="mb-2"><label class="form-label">Country</label>
+            <select name="attendees[${itemIndex}][${i}][country]" class="form-control attendee-country" required>
+              <option value="">-- Select --</option>
+              <option value="Kenya">Kenya</option>
+              <option value="Uganda">Uganda</option>
+              <option value="Tanzania">Tanzania</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="mb-2"><label class="form-label">City</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][city]" class="form-control" required>
+          </div>
+          <div class="mb-2"><label class="form-label">Age Range</label>
+            <select name="attendees[${itemIndex}][${i}][age_range]" class="form-control" required>
+              <option value="">-- Select --</option>
+              <option value="18-24">18-24</option>
+              <option value="25-30">25-30</option>
+              <option value="31-40">31-40</option>
+              <option value="41+">41+</option>
+            </select>
+          </div>
+          <div class="mb-2"><label class="form-label">T-shirt Size</label>
+            <select name="attendees[${itemIndex}][${i}][tshirt_size]" class="form-control" required>
+              <option value="">-- Select --</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+              <option value="XXXL">XXXL</option>
+            </select>
+          </div>
+          <div class="mb-2"><label class="form-label">Sector / Industry</label>
+            <select name="attendees[${itemIndex}][${i}][sector]" class="form-control" required>
+              <option value="">-- Select --</option>
+              <option value="Tourism Tech">Tourism Tech</option>
+              <option value="Education">Education</option>
+              <option value="Health">Health</option>
+              <option value="Government">Government</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="mb-2"><label class="form-label">How did you hear about the summit?</label>
+            <select name="attendees[${itemIndex}][${i}][referral_source]" class="form-control" required>
+              <option value="">-- Select --</option>
+              <option value="Referral">Referral</option>
+              <option value="Social Media">Social Media</option>
+              <option value="Website">Website</option>
+              <option value="Email">Email</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="mb-2 form-check">
+            <input type="checkbox" class="form-check-input" name="attendees[${itemIndex}][${i}][consent_given]" value="true" id="consent-${itemIndex}-${i}" required>
+            <label class="form-check-label" for="consent-${itemIndex}-${i}">
+              I consent to data usage and photo/video release policy.
+            </label>
+          </div>
+          <div class="mb-2"><label class="form-label">Photo</label>
+            <input type="file" name="attendees[${itemIndex}][${i}][photo]" class="form-control attendee-photo" accept="image/*" required>
+          </div>
+          <input type="hidden" name="attendees[${itemIndex}][${i}][category_id]" value="${item.category.id}">
+        `;
+
+        container.appendChild(formDiv);
+      }
+    });
+    
+    // Initialize phone inputs after forms are created
+    initializeAttendeePhoneInputs();
+  }
+
+  document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+    // Validate payment phone number (unchanged)
+    const phoneInput = document.getElementById('phoneNumber');
+    if (phoneInput && !phoneInput.value.trim()) {
+      e.preventDefault();
+      alert('Please enter a phone number for payment.');
+      return false;
+    }
+
+    // Validate attendee phone numbers
+    const attendeePhones = document.querySelectorAll('.attendee-phone');
+    for (let input of attendeePhones) {
+      const iti = window.intlTelInputGlobals.getInstance(input);
+      if (!iti.isValidNumber()) {
+        e.preventDefault();
+        alert('Please enter valid phone numbers for all attendees.');
+        input.focus();
+        return false;
+      }
+    }
+
+    // Validate photos
+    const photos = document.querySelectorAll('.attendee-photo');
+    for (let photo of photos) {
+      if (photo.files.length > 0 && !photo.files[0].type.startsWith('image/')) {
+        e.preventDefault();
+        alert('Only image files are allowed for the passport photo.');
+        return false;
+      }
+    }
+  });
+
+  async function updateCart(categoryId, action) {
+    const response = await fetch(`/update_cart/${categoryId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+      body: JSON.stringify({ action: action })
+    });
+    const data = await response.json();
+    if (data.success) {
+      const itemIndex = cartData.cart_items.findIndex(item => item.category.id == categoryId);
+      if (itemIndex !== -1) {
+        if (action === 'increment') cartData.cart_items[itemIndex].quantity++;
+        else if (action === 'decrement') cartData.cart_items[itemIndex].quantity--;
+        cartData.cart_items[itemIndex].subtotal = cartData.cart_items[itemIndex].category.price * cartData.cart_items[itemIndex].quantity;
+      }
+      cartData.total = data.new_total;
+      document.querySelector(`.cart-item[data-category-id="${categoryId}"] .quantity`).textContent = data.new_quantity;
+      document.querySelector(`.cart-item[data-category-id="${categoryId}"] .subtotal`).textContent = `Ksh ${data.new_subtotal}`;
+      document.getElementById('total').textContent = data.new_total;
+      updateAttendeeForms();
+      updatePaymentButtons();
+    }
+  }
+
+  async function removeFromCart(categoryId) {
+    const response = await fetch(`/remove_from_cart/${categoryId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+      }
+    });
+    const data = await response.json();
+    if (data.success) {
+      cartData.cart_items = cartData.cart_items.filter(item => item.category.id != categoryId);
+      cartData.total = data.new_total;
+      document.querySelector(`.cart-item[data-category-id="${categoryId}"]`).remove();
+      document.getElementById('total').textContent = data.new_total;
+      updateAttendeeForms();
+      updatePaymentButtons();
+    }
+  }
+
+  document.querySelectorAll('.increment').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      updateCart(this.dataset.categoryId, 'increment');
+    });
+  });
+
+  document.querySelectorAll('.decrement').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      updateCart(this.dataset.categoryId, 'decrement');
+    });
+  });
+
+  document.querySelectorAll('.remove').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      removeFromCart(this.dataset.categoryId);
+    });
+  });
+
+  // Initialize everything
+  initializeAttendeePhoneInputs();
+  updateAttendeeForms();
+  bindPaymentButtons();
+  updatePaymentButtons();
+});
+</script>
+
+<!-- Add intl-tel-input JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</body>
+</html>

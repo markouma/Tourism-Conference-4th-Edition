@@ -1,0 +1,601 @@
+<!-- paid_reports.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paid Applications Report</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .page-header {
+            background: white;
+            color: #2c3e50;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2rem;
+            color: #667eea;
+        }
+        
+        .page-header p {
+            margin: 0.5rem 0 0 0;
+            color: #6c757d;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            color: white;
+        }
+        
+        .summary-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        }
+        
+        .summary-card.records {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .summary-card.amount {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .summary-card .card-body {
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .summary-card h5 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+        
+        .summary-card h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+        }
+        
+        .summary-card .icon {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 4rem;
+            opacity: 0.2;
+        }
+        
+        .data-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            background: white;
+        }
+        
+        .data-card .card-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border: none;
+            padding: 1.5rem 2rem;
+        }
+        
+        .data-card .card-header h5 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+        }
+        
+        .data-card .card-body {
+            padding: 2rem;
+            background: white;
+        }
+        
+        .table {
+            margin-bottom: 0;
+            width: 100%;
+        }
+        
+        .table thead th {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #2c3e50;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            border: none;
+            padding: 1.25rem 1rem;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .table thead th:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        }
+        
+        .table thead th.sortable::after {
+            content: ' ⇅';
+            opacity: 0.3;
+            font-size: 0.9rem;
+        }
+        
+        .table thead th.sorted-asc::after {
+            content: ' ▲';
+            opacity: 1;
+            color: #667eea;
+        }
+        
+        .table thead th.sorted-desc::after {
+            content: ' ▼';
+            opacity: 1;
+            color: #667eea;
+        }
+        
+        .table tbody tr {
+            transition: all 0.3s;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa !important;
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .table tbody td {
+            padding: 1.25rem 1rem;
+            vertical-align: middle;
+            color: #495057;
+        }
+        
+        .badge {
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            font-size: 0.7rem;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .badge.bg-success {
+            background-color: #10b981 !important;
+        }
+        
+        .badge.bg-warning {
+            background-color: #f59e0b !important;
+            color: white;
+        }
+        
+        .form-control-sm {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.6rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control-sm:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+            outline: none;
+        }
+        
+        .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .download-ticket-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        .download-ticket-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
+            color: white;
+        }
+        
+        .download-ticket-btn i {
+            font-size: 1rem;
+        }
+        
+        .empty-state {
+            padding: 4rem;
+            text-align: center;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+            color: #667eea;
+        }
+        
+        .empty-state h5 {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1rem 1.5rem;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0;
+            }
+            
+            .page-header {
+                padding: 1.5rem;
+            }
+            
+            .page-header h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            
+            .summary-card h2 {
+                font-size: 2rem;
+            }
+            
+            .data-card .card-body {
+                padding: 1rem;
+            }
+            
+            .table {
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <div>
+                    <h1>
+                        <i class="fas fa-file-invoice-dollar me-3"></i>
+                        Paid Applications Report
+                    </h1>
+                    <p class="mb-0 mt-2">Manage and track all paid ticket applications</p>
+                </div>
+                <a href="{% url 'controlpanel:download_paid_reports_pdf' %}" class="download-btn">
+                    <i class="fas fa-download me-2"></i>Download PDF Report
+                </a>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card summary-card records text-white">
+                    <div class="card-body position-relative">
+                        <h5 class="card-title">Total Records</h5>
+                        <h2 class="mb-0">{{ total_records }}</h2>
+                        <i class="fas fa-users icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card summary-card amount text-white">
+                    <div class="card-body position-relative">
+                        <h5 class="card-title">Total Amount</h5>
+                        <h2 class="mb-0">KES {{ total_amount|floatformat:2 }}</h2>
+                        <i class="fas fa-money-bill-wave icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+        <!-- ADD THIS NEW SECTION -->
+        <div class="card data-card mb-4">
+            <div class="card-header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <h5 class="mb-0">
+                    <i class="fas fa-globe-africa me-2"></i>Tickets by Country
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for country_data in tickets_per_country %}
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="p-3" style="background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%); border-radius: 10px; border-left: 4px solid #f59e0b;">
+                            <div style="font-size: 0.875rem; color: #92400e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                {{ country_data.country }}
+                            </div>
+                            <div style="font-size: 2rem; font-weight: 800; color: #d97706; margin-top: 5px;">
+                                {{ country_data.count }}
+                            </div>
+                            <div style="font-size: 0.75rem; color: #92400e; margin-top: 3px;">
+                                ticket{{ country_data.count|pluralize }}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted text-center mb-0">No country data available.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>{{ message }}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Report Table -->
+        <div class="card data-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-table me-2"></i>Ticket Holders Details
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%;" class="sortable" data-sort="approved">#</th>
+                                    <th style="width: 16%;" class="sortable" data-sort="name">Name</th>
+                                    <th style="width: 17%;" class="sortable" data-sort="email">Email</th>
+                                    <th style="width: 11%;" class="sortable" data-sort="phone">Phone</th>
+                                    <th style="width: 10%;" class="sortable" data-sort="country">Country</th>
+                                    <th style="width: 8%;">Ticket</th>
+                                    <th style="width: 8%;" class="sortable" data-sort="status">Status</th>
+                                    <th style="width: 12%;" class="sortable" data-sort="approved">Date Approved</th>
+                                    <th style="width: 10%;" class="sortable" data-sort="amount">Amount (KES)</th>
+                                    <th style="width: 10%; " class="sortable" data-sort="mpesa_message">MPesa Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in report_data %}
+                                <tr>
+                                    <td><strong>{{ forloop.counter }}</strong></td>
+                                    <td>
+                                        <span style="font-weight: 500;">{{ data.app.full_name }}</span>
+                                    </td>
+                                    <td><small style="color: #6c757d;">{{ data.app.email }}</small></td>
+                                    <td>{{ data.app.phone|default:"N/A" }}</td>
+                                    <td> {{ data.app.country|default:"Uganda"}} </td>
+                                    <td>
+                                        {% if data.ticket.pdf_ticket %}
+                                            <a href="{{ data.ticket.pdf_ticket.url }}" class="download-ticket-btn" download title="Download Ticket">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted small">No ticket</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if data.ticket.is_used %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle me-1"></i>{{ data.status_text }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-clock me-1"></i>{{ data.status_text }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td><small>{{ data.approved_date|default:"N/A" }}</small></td>
+                                    <td>
+                                        <input type="number" 
+                                               name="amount_{{ data.app.id }}" 
+                                               class="form-control form-control-sm" 
+                                               step="0.01" 
+                                               value="{{ data.app.amount|default:'' }}"
+                                               placeholder="0.00"
+                                               style="width: 110px;">
+                                    </td>
+                                    <td>
+                                        <input type="text" 
+                                               name="mpesa_message_{{ data.app.id }}" 
+                                               class="form-control form-control-sm" 
+                                               value="{{ data.app.mpesa_message|default:'' }}"
+                                               placeholder="MPesa confirmation"
+                                               style="min-width: 160px;">
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="9">
+                                        <div class="empty-state">
+                                            <i class="fas fa-inbox"></i>
+                                            <h5>No Paid Applications Found</h5>
+                                            <p class="text-muted mb-0">There are currently no approved paid applications to display.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    {% if report_data %}
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="save-btn">
+                            <i class="fas fa-save me-2"></i>Save All Changes
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sorting functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortableHeaders = document.querySelectorAll('th.sortable');
+            const currentSort = "{{ current_sort }}";
+            
+            // Mark current sorted column
+            sortableHeaders.forEach(header => {
+                const sortField = header.dataset.sort;
+                if (currentSort === sortField) {
+                    header.classList.add('sorted-asc');
+                } else if (currentSort === `-${sortField}`) {
+                    header.classList.add('sorted-desc');
+                }
+            });
+            
+            // Add click handlers
+            sortableHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const sortField = this.dataset.sort;
+                    let newSort = sortField;
+                    
+                    // Toggle sort direction if clicking same column
+                    if (currentSort === sortField) {
+                        newSort = `-${sortField}`;
+                    } else if (currentSort === `-${sortField}`) {
+                        newSort = sortField;
+                    }
+                    
+                    // Navigate to sorted URL
+                    const url = new URL(window.location);
+                    url.searchParams.set('sort', newSort);
+                    window.location.href = url.toString();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

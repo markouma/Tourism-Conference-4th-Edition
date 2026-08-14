@@ -1,0 +1,477 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>My tickets | UG - KE COAST TOURISM CONFERENCE</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+  
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+  
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Poppins&display=swap" rel="stylesheet">
+  
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  
+    <!-- Main CSS File -->
+    <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+    <style>
+      /* Dashboard Modal */
+      .dashboard-modal {
+        border-radius: 1rem;
+        background: #fff;
+        box-shadow: 0 0 25px rgba(0,0,0,0.2);
+        animation: slideUp 0.3s ease-out;
+      }
+
+      @keyframes slideUp {
+        from { transform: translateY(30px); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+      }
+
+      .dashboard-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .dashboard-btn.exhibitor {
+        background: linear-gradient(135deg, #007bff, #00d4ff);
+        color: #fff;
+      }
+      .dashboard-btn.delegate {
+        background: linear-gradient(135deg, #28a745, #85e085);
+        color: #fff;
+      }
+
+      .dashboard-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      }
+
+      /* Page Layout */
+      .main {
+        margin-top: 100px;
+        min-height: calc(100vh - 200px);
+      }
+
+      /* Info Section */
+      .info-section {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        border-left: 4px solid #007bff;
+      }
+
+      .info-section h5 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .info-section p {
+        color: #666;
+        margin-bottom: 0;
+      }
+
+      /* Tickets Header */
+      .tickets-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      }
+
+      .tickets-header h4 {
+        margin: 0;
+        color: #333;
+      }
+
+      .ticket-count {
+        background: #007bff;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      /* Toggle Button */
+      .toggle-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .toggle-btn:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+      }
+
+      .toggle-btn i {
+        transition: transform 0.3s ease;
+      }
+
+      .toggle-btn.collapsed i {
+        transform: rotate(180deg);
+      }
+
+      /* Tickets Container */
+      .tickets-container {
+        transition: all 0.3s ease;
+      }
+
+      .tickets-container.collapsed {
+        display: none;
+      }
+
+      /* Ticket Card */
+      .ticket-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: 2px solid #f0f0f0;
+      }
+
+      .ticket-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        transform: translateY(-3px);
+      }
+
+      .ticket-header {
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+      }
+
+      .ticket-header h4 {
+        color: #333;
+        margin: 0;
+        font-size: 1.25rem;
+      }
+
+      .ticket-status {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .ticket-status .valid {
+        color: #28a745;
+      }
+
+      .ticket-status .used {
+        color: #dc3545;
+      }
+
+      .ticket-details p {
+        margin-bottom: 10px;
+        color: #555;
+        font-size: 0.95rem;
+      }
+
+      .ticket-details strong {
+        color: #333;
+      }
+
+      .ticket-actions {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #f0f0f0;
+      }
+
+      .ticket-actions .btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .ticket-actions .btn-primary {
+        background: #007bff;
+        border: none;
+      }
+
+      .ticket-actions .btn-primary:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+      }
+
+      .ticket-actions .btn-secondary {
+        background: #6c757d;
+        border: none;
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        color: #ccc;
+        margin-bottom: 20px;
+      }
+
+      .empty-state p {
+        color: #999;
+        font-size: 1.1rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .tickets-header {
+          flex-direction: column;
+          gap: 15px;
+          text-align: center;
+        }
+
+        .main {
+          margin-top: 80px;
+        }
+
+        .info-section {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  
+<body>
+ 
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li> 
+          <li><a href="{% url 'Forewords' %}">Forewords</a></li> 
+          <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+          <li><a href="{% url 'golf' %}">Golf</a></li>
+          <li><a href="/events/1/booths/">Exhibitors</a></li>
+          <li><a href="{% url 'blog' %}">Blog</a></li>
+          <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+          <li><a href="{% url 'index' %}#contact">Contact Us</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a href="{% url 'logout' %}" class="btn-getstarted active">Log out</a>
+      <a href="#" class="btn-getstarted ms-2" data-bs-toggle="modal" data-bs-target="#dashboardModal">
+        Dashboard
+      </a>
+    </div>
+  </header>
+
+  <!-- Dashboard Modal -->
+  <div class="modal fade" id="dashboardModal" tabindex="-1" aria-labelledby="dashboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content dashboard-modal">
+        <div class="modal-header border-0">
+          <h5 class="modal-title fw-bold" id="dashboardModalLabel">Choose Your Dashboard</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="mb-4 text-muted"><strong>Select your role to continue.</strong><br>Who are you?</p>
+          <div class="d-grid gap-3">
+            <a href="{% url 'user_dashboard' %}" class="dashboard-btn delegate">
+              <i class="bi bi-person-badge me-2"></i> Delegate
+            </a>
+            <a href="{% url 'exhibitor_dashboard' %}" class="dashboard-btn exhibitor">
+              <i class="bi bi-shop me-2"></i> Exhibitor (If you have a booth)
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main">
+    <div class="container">
+      
+      <!-- Info Section -->
+      <div class="info-section">
+        <h5><i class="bi bi-info-circle me-2"></i>Leave a Review</h5>
+        <p>
+          Visit your 
+          <a href="#" data-bs-toggle="modal" data-bs-target="#dashboardModal" style="color: #007bff; font-weight: 600;">Dashboard</a> 
+          to leave reviews on booths you've visited or see reviews on your booth (for Exhibitors).
+        </p>
+      </div>
+
+      <!-- Tickets Header with Toggle -->
+      <div class="tickets-header">
+        <div class="d-flex align-items-center gap-3">
+          <h4>My Tickets</h4>
+          <span class="ticket-count">{{ tickets|length }} Ticket{% if tickets|length != 1 %}s{% endif %}</span>
+        </div>
+        
+        {% if tickets %}
+        <button class="toggle-btn" id="toggleTickets">
+          <span id="toggleText">Hide Tickets</span>
+          <i class="bi bi-chevron-up" id="toggleIcon"></i>
+        </button>
+        {% endif %}
+      </div>
+
+      <!-- Tickets Container -->
+      {% if tickets %}
+      <div class="tickets-container" id="ticketsContainer">
+        <div class="row">
+          {% for entry in tickets %}
+            {% with ticket=entry.ticket is_expired=entry.is_expired %}
+              <div class="col-md-6 col-lg-4">
+                <div class="ticket-card">
+    
+                  {# CASE 1: Event ticket #}
+                  {% if ticket.order and ticket.order.event %}
+                    <div class="ticket-header d-flex justify-content-between align-items-center">
+                      <h4>{{ ticket.order.event.name|default:"Unnamed Event" }}</h4>
+                      <span class="ticket-status">
+                        {% if ticket.is_used %}
+                          <span class="used">Used</span>
+                        {% else %}
+                          <span class="valid">Valid</span>
+                        {% endif %}
+                      </span>
+                    </div>
+                    <div class="ticket-details">
+                      <p><strong>Holder:</strong> {{ entry.owner_name }}</p>
+                      <p><strong>Location:</strong> {{ ticket.order.event.location }}</p>
+                    </div>
+    
+                  {# CASE 2: Staff ticket #}
+                  {% elif ticket.staff_application %}
+                    <div class="ticket-header d-flex justify-content-between align-items-center">
+                      <h4>Accreditation Tag</h4>
+                      <span class="ticket-status">
+                        {% if ticket.is_used %}
+                          <span class="used">Used</span>
+                        {% else %}
+                          <span class="valid">Valid</span>
+                        {% endif %}
+                      </span>
+                    </div>
+                    <div class="ticket-details">
+                      <p><strong>Holder:</strong> {{ ticket.staff_application.full_name }}</p>
+                      <p><strong>Role:</strong> {{ ticket.staff_application.role|default:"N/A" }}</p>
+                      <p><strong>Status:</strong> {{ ticket.staff_application.status|default:"Pending" }}</p>
+                    </div>
+    
+                  {# Fallback #}
+                  {% else %}
+                    <div class="ticket-details">
+                      <p class="text-warning">⚠️ Ticket info not available</p>
+                    </div>
+                  {% endif %}
+    
+                  <div class="ticket-actions">
+                    {% if is_expired %}
+                      <button class="btn btn-sm btn-secondary disabled">Event Past</button>
+                    {% elif ticket.pdf_ticket %}
+                      <a href="{% url 'download_ticket' ticket.id %}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-download me-1"></i> Download Ticket
+                      </a>
+                    {% else %}
+                      <p class="text-danger mb-0">Download unavailable</p>
+                    {% endif %}
+                  </div>
+    
+                </div>
+              </div>
+            {% endwith %}
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i class="bi bi-ticket-perforated"></i>
+        <p>You have no tickets yet.</p>
+      </div>
+      {% endif %}
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer dark-background mt-5">
+    <div class="container text-center mt-4">
+      <p>© <strong class="px-1 sitename">4th UGANDA–KENYA COAST TOURISM CONFERENCE</strong> All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <script>
+    // Toggle tickets visibility
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleBtn = document.getElementById('toggleTickets');
+      const ticketsContainer = document.getElementById('ticketsContainer');
+      const toggleText = document.getElementById('toggleText');
+      const toggleIcon = document.getElementById('toggleIcon');
+      
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+          ticketsContainer.classList.toggle('collapsed');
+          
+          if (ticketsContainer.classList.contains('collapsed')) {
+            toggleText.textContent = 'Show Tickets';
+            toggleIcon.classList.remove('bi-chevron-up');
+            toggleIcon.classList.add('bi-chevron-down');
+          } else {
+            toggleText.textContent = 'Hide Tickets';
+            toggleIcon.classList.remove('bi-chevron-down');
+            toggleIcon.classList.add('bi-chevron-up');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

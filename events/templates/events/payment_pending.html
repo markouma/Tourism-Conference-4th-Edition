@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verifying Payment...</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 50px; }
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 60px; height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+  <script>
+    async function pollStatus(orderId) {
+      try {
+        let resp = await fetch(`/check_payment_status/${orderId}/`);
+        let data = await resp.json();
+        if (data.status === "success") {
+          window.location.href = `/payment_success/?order_id=${orderId}`;
+        } else if (data.status === "failed") {
+          window.location.href = `/payment_failed/?order_id=${orderId}`;
+        } else {
+          setTimeout(() => pollStatus(orderId), 3000); // retry in 3s
+        }
+      } catch (err) {
+        console.error("Polling error", err);
+        setTimeout(() => pollStatus(orderId), 5000);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const orderId = "{{ order_id }}";
+      pollStatus(orderId);
+    });
+  </script>
+</head>
+<body>
+  <h2>We’re verifying your payment...</h2>
+  <div class="spinner"></div>
+  <p>This may take a few moments. Please don’t close this page.</p>
+</body>
+</html>

@@ -1,0 +1,194 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+    <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+
+</head>
+
+<body class="index-page">
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" >Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" >Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/1/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}" class="active">Gallery</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/1/"  class="btn-getstarted active">Register</a>
+    
+
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Gallery</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">Gallery</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <!-- End Page Title -->
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery section">
+
+      <div class="container" data-aos="fade-up">
+        <div class="row g-3">
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/01.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 1">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/02.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 2">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/03.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 3">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/04.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 4">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/05.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 5">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/06.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 6">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/07.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 7">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/08.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 8">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/09.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 8">
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/10.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 8">
+          </div>
+          
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/11.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 8">
+          </div>
+          
+          <div class="col-6 col-md-4 col-lg-3">
+            <img src="{% static 'assets/img/gal/12.jpg' %}" class="img-fluid rounded shadow-sm" alt="Gallery Image 8">
+          </div>          
+
+        </div>
+      </div>
+    </section>
+    <!-- End Gallery Section -->
+
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+
+        <div class="social-links d-flex mt-4">
+          <a href="https://x.com/UgandaMombasa" target="_blank"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61557768419729" target="_blank"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/uganda_consulate_msa/" target="_blank"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/ugketourism/" target="_blank"><i class="bi bi-linkedin"></i></a>
+          <a href="https://www.youtube.com/@ugketourism" target="_blank"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span>
+        <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong>
+        <span>All Rights Reserved</span>
+      </p>
+      <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp</a> & <a href="">Mark</a>
+      </div>
+    </div>
+
+  </footer>
+  <!-- End Footer -->
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

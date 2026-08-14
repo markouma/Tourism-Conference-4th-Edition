@@ -1,0 +1,32 @@
+<div class="container mt-4">
+    <h3>Scan Instances for {{ event.name }}</h3>
+
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" name="name" class="form-control" placeholder="e.g. Check-In, Meal 1" required>
+            <button type="submit" class="btn btn-primary">Add Instance</button>
+        </div>
+    </form>
+
+    {% if instances %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Instance Name</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inst in instances %}
+                <tr>
+                    <td>{{ inst.name }}</td>
+                    <td>{{ inst.created_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No scan instances yet.</p>
+    {% endif %}
+</div>

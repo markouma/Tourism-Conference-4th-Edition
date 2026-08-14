@@ -1,0 +1,10 @@
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm">
+      <h3 class="text-success">Order Created!</h3>
+      <p>You have reserved <strong>{{ order.booths.count }}</strong> booths for <strong>{{ order.total_amount }}</strong> KES.</p>
+      <p>(payment reserve page for pesapal redirect).</p>
+  
+  
+      <a href="{% url 'index' %}" class="btn btn-primary mt-3">Go Back Home</a>
+    </div>
+  </div>

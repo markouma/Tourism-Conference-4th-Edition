@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booth Application Status Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .content {
+            background: #f8f9fa;
+            padding: 30px 20px;
+            border-radius: 0 0 10px 10px;
+        }
+        .status-icon {
+            font-size: 48px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #dc3545;
+        }
+        .alternative-box {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .contact-info {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="status-icon">📋</div>
+        <h1>Booth Application Status Update</h1>
+    </div>
+    
+    <div class="content">
+        <p><strong>Dear {{ application.name }},</strong></p>
+        
+        <p>We received your application as booth representative (Booth {{ application.booth_number}}) at <b>The 4th UG-KE Conference</b>.</p>
+        
+        <div class="info-box">
+            <h3>📝 Application Status</h3>
+            <p>After careful review, we regret to inform you that we are unable to approve your booth application at this time.</p>
+            
+            {% if admin_message %}
+            <h4>💬 Additional Information:</h4>
+            <p><em>"{{ admin_message }}"</em></p>
+            {% endif %}
+        </div>
+        
+        <div class="info-box">
+            <h3>📋 Your Application Details:</h3>
+            <ul>
+                <li><strong>Company:</strong> {{ application.company }}</li>
+                <li><strong>Representative:</strong> {{ application.name }}</li>
+                <li><strong>Email:</strong> {{ application.email }}</li>
+                <li><strong>Phone:</strong> {{ application.phone_number }}</li>
+                <li><strong>Applied:</strong> {{ application.applied_at|date:"F d, Y" }}</li>
+            </ul>
+        </div>
+        
+        <div class="alternative-box">
+            <h3>🎟️ Alternative Participation Options</h3>
+            <p>While we cannot accommodate your booth request, we would still love to have you join us at the conference! Consider these alternatives:</p>
+            <ul>
+                <li><strong>Regular Attendance:</strong> Join us as a delegate via <a href="https://shorturl.at/V5hLf" target="_blank" ></a> this link.</li>
+                <li><strong>Future Events:</strong> We'll keep you informed about upcoming conferences</li>
+             </ul>
+        </div>
+        
+        <div class="contact-info">
+            <h3>📞 Questions or Concerns?</h3>
+            <p>If you have any questions about this decision or would like to discuss 
+                alternative participation options, please don't hesitate to contact Polycarp via 
+                <a href="https://wa.link/mwu6xk" target="_blank" rel="noopener noreferrer">WhatsApp</a> or call 0708487510!</p>
+        </div>
+        
+        <p>We appreciate your understanding and hope to see you at future events. Thank you for your interest in The 4th UG-KE Conference.</p>
+        
+        <div class="footer">
+            <p>Best regards,<br>
+            <strong>Conference Secretariat.</strong></p>
+            <p>This is an automated email. If you need assistance, please contact our support team.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,661 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static  'assets/css/main2.css' %}" rel="stylesheet">
+
+  <style>
+  
+  
+  
+    .section-title h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .sponsor-logo {
+      max-height: 100px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      padding: 5px;
+      display: block;
+      margin: auto;
+    }
+
+
+  
+    .speaker-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+    }
+  
+    .speaker-sidebar {
+      flex: 0 0 320px;
+      position: sticky;
+      top: 100px;
+      align-self: flex-start;
+    }
+  
+    .speaker-sidebar img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+  
+    .speaker-sidebar h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+    }
+  
+    .speaker-sidebar p {
+      font-size: 1rem;
+      color: #666;
+    }
+  
+    .speaker-content {
+      flex: 1 1 0;
+      max-width: 100%;
+    }
+  
+    .speaker-content p {
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+      color: #333;
+      text-align: justify;
+    }
+  
+    @media (max-width: 768px) {
+      .speaker-layout {
+        flex-direction: column;
+        padding: 20px;
+      }
+  
+      .speaker-sidebar {
+        position: static;
+        top: auto;
+        width: 100%;
+        text-align: center;
+      }
+  
+      .speaker-sidebar img {
+        max-width: 280px;
+        margin: 0 auto 20px auto;
+        display: block;
+      }
+    }
+  </style>
+  
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" >Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" class="active">Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/1/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Gallery</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/1/"  class="btn-getstarted active">Register</a>
+
+ 
+    </div>
+  </header>
+
+      <main class="main">
+
+        <!-- Page Title -->
+        <div class="page-title light-background">
+          <div class="container d-lg-flex justify-content-between align-items-center">
+            <h1 class="mb-2 mb-lg-0">Forewords</h1>
+            <nav class="breadcrumbs">
+              <ol>
+                <li><a href="index.html">Home</a></li>
+                <li class="current">Forewords</li>
+              </ol>
+            </nav>
+          </div>
+        </div><!-- End Page Title -->
+    
+        <!-- Starter Section Section -->
+        <section id="starter-section" class="starter-section section">
+
+          <style>
+            .speaker-layout {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 30px;
+              background-color: #fff;
+              border-radius: 10px;
+              padding: 30px;
+              box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+            }
+          
+            .speaker-sidebar {
+              flex: 0 0 320px;
+              position: sticky;
+              top: 100px;
+              align-self: flex-start;
+            }
+          
+            .speaker-sidebar img {
+              width: 100%;
+              height: auto;
+              border-radius: 12px;
+              margin-bottom: 20px;
+              box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            }
+          
+            .speaker-sidebar h3 {
+              font-size: 1.3rem;
+              margin-bottom: 0.3rem;
+              font-weight: 700;
+            }
+          
+            .speaker-sidebar p {
+              font-size: 1rem;
+              color: #666;
+            }
+          
+            .speaker-content {
+              flex: 1 1 0;
+              max-width: 100%;
+            }
+          
+            .speaker-content p {
+              font-size: 1rem;
+              line-height: 1.75;
+              margin-bottom: 1.2rem;
+              color: #333;
+              text-align: justify;
+            }
+          
+            @media (max-width: 768px) {
+              .speaker-layout {
+                flex-direction: column;
+                padding: 20px;
+              }
+          
+              .speaker-sidebar {
+                position: static;
+                top: auto;
+                width: 100%;
+                text-align: center;
+              }
+          
+              .speaker-sidebar img {
+                max-width: 280px;
+                margin: 0 auto 20px auto;
+                display: block;
+              }
+            }
+          </style>
+          
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/Mulimba.JPG' %}" alt="HON. JOHN MULIMBA">
+                <h3>HON. JOHN MULIMBA</h3>
+                <p><strong>MINISTER OF STATE FOR FOREIGN AFFAIRS/REGIONAL AFFAIRS OF THE REPUBLIC OF UGANDA</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>HON. JOHN MULIMBA</strong></p>
+                <p><strong>MINISTER OF STATE FOR FOREIGN AFFAIRS/REGIONAL AFFAIRS OF THE REPUBLIC OF UGANDA</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p> 
+                <p>It is with immense honour that I once again extend warm greetings to all delegates, stakeholders, and partners participating in the 4th Edition of Uganda and Kenya Coast Tourism Conference and Exhibition.  I thank the Uganda Consulate in Mombasa, our partners from Kenya and Uganda’s public and private tourism sectors, for the dedication and foresight that has taken the Tourism Sector a step further to the regional and global platforms.</p>
+                <p>Uganda and Kenya have complemented each other since 2022, and this founding bondage has developed into a vital platform for regional collaboration, mutual promotion, and cross-selling of our rich and diverse tourism products. The communities have given the sector a unique leverage to foster business-to-business networks, and significantly increase our visitor numbers, stay and spend time, thus turning the sector account for 7.7% contribution to the country’s GDP. Of the 1,371,895 visitors in 2024, at-least 466,000 were from Kenya as a result of Uganda's rich tourism tapestry as the "Pearl of Africa." This indeed underlines the region’s push for deeper integration and simplified cross–border movements.</p>
+                <p> As we delve into the theme of the 4th Edition <i><strong>“Leveraging Youth, Innovation and Technology for Responsive and Inclusive Tourism,”</i></strong> we are focusing on the current and future trajectory of global tourism where the Youths, are not merely travelers but global innovators, digital entrepreneurs, storytellers, and job creators. Their inventive use of technology, ranging from hospitality solutions to immersive virtual tourism experiences, is transforming how destinations are marketed and experienced.</p>
+                <p>Let us work within the objectives of this conference; as to reflect a vision to promote awareness of technological innovations that support sustainable tourism practices and collaborations based on inclusive, technology-driven solutions; so that our young Tourism Content Creators and Entrepreneurs flourish. I am happy that every year, familiarization trips add more attractions like the Uganda Kenya Coast Golf Tournament.</p>
+                <p>The Ministry of Foreign Affairs will continue supporting regional tourism initiatives that align with Uganda’s foreign policy aims of economic diplomacy, regional integration, and people-to-people cooperation while promoting the country’s 10-fold Growth Strategy anchoring on ATMs Sectoral Interventions.</p>
+                <p>Let us work together to ensure this 4th Edition ignites a renewed sense of pride and purpose so that the legacy built by previous 1st, 2nd and 3rd Editions viewed in prism of love for sustainable growth, youth empowerment, and shared prosperity for the people of our two brotherly countries.</p>
+                <p>I wish you all a successful conference and memorable experiences at the Kenya Coast, and finally, Uganda is waiting to welcome you soon.</p>
+                <p style="text-align: center;">Thank you.</p>
+                <p style="text-align: center;"><strong>For God and My Country</strong></p>
+              </div>
+            </div>
+          </div>
+          <br> <br>
+          
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/mugarra.jpg' %}" alt="HON. MARTIN MUGARRA BAHINDUKA">
+                <h3>HON. MARTIN MUGARRA BAHINDUKA</h3>
+                <p><strong>MINISTER OF STATE FOR TOURISM, WILDLIFE AND ANTIQUITIES REPUBLIC OF UGANDA</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>HON. MARTIN MUGARRA BAHINDUKA</strong></p>
+                <p><strong>MINISTER OF STATE FOR TOURISM, WILDLIFE AND ANTIQUITIES REPUBLIC OF UGANDA</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p> 
+                <p>I am honoured to extend warm greetings and best wishes to all participants attending the Fourth Uganda-Kenya Coast Tourism Conference in the vibrant coastal city of Malindi. This forum continues to be a pivotal platform for strengthening the regional tourism ecosystem, deepening collaboration, and expanding opportunities between our two sister nations, Uganda and Kenya.</p>
+                <p>Over the years, the Uganda-Kenya Coast Tourism Conferences have made tremendous strides in creating awareness of the rich and diverse attractions that both our countries possess—from Uganda’s wildlife, adventure and cultural heritage, to the Kenyan coast’s sun, sand and sea experiences. These conferences have highlighted the unique complementarity between our destinations and inspired stakeholders to build on our strategic strengths to offer integrated, value-added regional tourism products.</p>
+                <p>Through these annual gatherings, tourism players from both countries have learned from one another, exchanged ideas, and developed cross-border tour packages that enrich the foreign visitor experience while boosting regional tourism. We take pride in the successful hosting of the Third Uganda-Kenya Coast Tourism Conference in Uganda last year. The rotational hosting of this conference is not only symbolic of our unity but practical in reinforcing our shared vision for inclusive, innovative, and sustainable tourism growth in East Africa.</p>
+                <p>Notably, efforts to ease regional mobility—including the introduction of the Uganda Airlines route to the Kenyan coast and the much-anticipated rail linkage—are vital steps toward making the region more accessible to both domestic and international tourists. These infrastructure developments, alongside continued policy dialogue, are essential for unlocking the full potential of regional tourism.</p>
+                <p>This year’s theme, <i><strong>“Leveraging Youth Innovation and Technology for a Responsive and Inclusive Tourism”, </i></strong>is timely and relevant. It calls upon us to harness the creativity and digital fluency of our youth to solve emerging sector challenges, respond to changing traveller behaviours, and shape the future of tourism in ways that are equitable and resilient.</p>
+                <p>I am confident that this conference will not only foster deeper partnerships, but also address some of the longstanding constraints that have hindered the full realization of regional tourism cooperation. Let us continue to build a robust and inclusive tourism ecosystem that benefits communities, supports conservation, and empowers our youth to become drivers of transformation.</p>
+                <p>On behalf of the Government of Uganda, I wish all participants fruitful deliberations and productive engagements throughout the conference.</p>
+                <p><strong>Hon. Martin Mugarra Bahinduka</strong></p>
+                <p><strong>Minister of State for Tourism, Wildlife and Antiquities Republic of Uganda</strong></p>
+              </div>
+            </div>
+          </div>
+          <br> <br>
+          
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/Governor.jpeg' %}" alt="H.E. GIDEON MUNG’ARO, OGW">
+                <h3>H.E. GIDEON MUNG’ARO, OGW</h3>
+                <p><strong>GOVERNOR, KILIFI COUNTY.</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>H.E. GIDEON MUNG’ARO, OGW</strong></p>
+                <p><strong>GOVERNOR, KILIFI COUNTY</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p> 
+                <p>It is a great honour and privilege to welcome you all to the 4th Uganda–Kenyan Coast Tourism Conference, set to take place at the stunning Ocean Beach Resort in Malindi, right here in Kilifi County. This important event is a celebration of our shared vision—to grow regional tourism, enhance trade, and promote meaningful cultural exchange between Uganda and the Kenyan Coast.</p>
+                <p>Kilifi County has proudly participated in the previous three editions of this conference, and we are pleased to note the tangible results of this partnership. Uganda remains one of Kenya’s leading African tourism source markets, with visitor numbers rising from 93,060 in 2022, to 166,602 in 2023, and an impressive 225,559 in 2024. This growth is a clear reflection of the impact of collaborative tourism efforts such as this conference.</p>
+                <p>From our unspoiled beaches and historical Swahili towns, to vibrant marine life and top-tier hospitality, Kilifi is emerging as a favourite destination for Ugandan visitors. Whether it’s the lively Mtwapa–Vipingo coastline, the charm of Watamu, or the golden sands of Malindi and Mambrui, our county offers unforgettable experiences for every traveller.</p>
+                <p>We sincerely thank the Ugandan Consulate in Mombasa and all Ugandan diplomatic missions for their continued partnership and commitment. Your support has amplified Kilifi’s visibility and strengthened ties between our people.</p>
+                <p>As we gather in Malindi for this year’s edition, we are inspired to push boundaries and develop bold strategies that will deepen intra-African tourism. This conference is not only about numbers—it is about connection, community, and creating shared prosperity.</p>
+                <p><strong>Karibuni Kilifi – Kenya’s Coastal Jewel!</strong></p>
+                <p><strong>H.E. Gideon Mung’aro, OGW</strong></p>
+                <p><strong>Governor, Kilifi County,</strong></p>
+                <p><strong>County Government of Kilifi.</strong></p>
+              </div>
+            </div>
+          </div>
+          <br> <br>
+          
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/Mombasa.png' %}" alt="H.E. ABDULLSWAMAD SHERIFF NASSIR">
+                <h3>H.E. ABDULLSWAMAD SHERIFF NASSIR</h3>
+                <p><strong>GOVERNOR, MOMBASA COUNTY</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>H.E. ABDULLSWAMAD SHERIFF NASSIR</strong></p>
+                <p><strong>GOVERNOR, MOMBASA COUNTY</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p>
+                <p>On behalf of the people of Mombasa, I am honoured to extend warm greetings to all participants of the 4th Uganda-Kenya Coast Tourism Conference and Exhibition. This growing partnership between our two nations stands as a testament to the transformative power of regional collaboration and shared vision.</p>
+                <p>Mombasa’s tourism aspirations are deeply aligned with the theme of this year’s conference. We recognize that for tourism to remain relevant and resilient, it must reflect the energy of our youth, embrace the tools of innovation, and deploy technology to drive inclusion and sustainability. That is the path we are firmly on.</p>
+                <p>In Mombasa, we are positioning ourselves as a globally competitive destination. We are vigorously advocating for Open Skies to unlock the potential of the over 40,000 beds available across the Coast region. Air access remains the single most significant barrier to international growth, and we call on all our regional and national partners to walk with us in opening our skies to the world.</p>
+                <p>Additionally, we are investing in a future where Mombasa becomes a hub for business and knowledge tourism. The County is at an advanced stage of mobilizing financing for an ultramodern convention and conference facility in the heart of our Central Business District. This will not only attract high-impact convenings but also stimulate demand for accommodation, hospitality, and leisure offerings across the region.</p>
+                <p><i><strong>As Governor,</i></strong> I am proud to support platforms like this conference that build bridges, foster business, and create opportunities. Let us continue to innovate, integrate, and invest—together—for a more responsive and inclusive tourism sector that works for all.</p>
+                <p><strong>Karibuni Mombasa. Karibuni Kenya. Karibuni Afrika.</strong></p>
+                <p><strong>H.E. Abdullswamad Sheriff Nassir</strong></p>
+                <p><strong>Governor, Mombasa County</strong></p>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          
+
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/Taita.jpeg' %}" alt="H.E. DR. ANDREW MWADIME, E.G.H">
+                <h3>H.E. DR. ANDREW MWADIME, E.G.H</h3>
+                <p><strong>GOVERNOR, TAITA TAVETA COUNTY</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>H.E. DR. ANDREW MWADIME, E.G.H</strong></p>
+                <p><strong>GOVERNOR, TAITA TAVETA COUNTY</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p>
+                <p>It gives me immense pleasure and great pride to join fellow leaders, stakeholders, investors, and tourism practitioners from across the region at this Fourth Uganda–Kenya Coast Tourism Conference and Exhibition.</p>
+                <p>This timely gathering comes at a moment of extraordinary opportunity, when innovation, youthful energy, and cutting-edge technology are converging to redefine the future of tourism in our region. As we chart this new course, we are not only advancing the East African Community (EAC) agenda, but also bridging the gaps toward deeper integration, shared prosperity, and resilient development.</p>
+                <p>The theme of this year’s conference, “Leveraging Youth, Innovation, and Technology for Responsive and Inclusive Tourism,” is both timely and visionary. It captures the bold ambition of a future where young people are no longer passive beneficiaries, but active architects and disruptors leading in transforming how we promote, experience, and sustain tourism across our countries.</p>
+                <p>On behalf of the great people of Taita Taveta County, I extend my warmest greetings and heartfelt appreciation. I reaffirm our unwavering commitment to strengthening cross-border partnerships, particularly between Kenya and Uganda, and to anchoring sustainable, inclusive tourism as a cornerstone of regional economic growth and cohesion.</p>
+                <p>Together, let us unlock the full potential of tourism, not just as a driver of our Gross domestic product (GDP) but as a powerful tool for youth empowerment, cultural exchange, environmental stewardship, and regional unity.</p>
+                <p style="text-align: center;"><strong>Taita Taveta: Where Nature, Culture, and Opportunity Converge</strong></p>
+                <p>Strategically nestled between the coastal city of Mombasa and the Kenyan–Tanzanian border at Holili, Taita Taveta County serves as a vital bridge between inland and coastal tourism circuits. Blessed with breathtaking landscapes, rich biodiversity, and a rapidly evolving infrastructure network, our county is emerging as one of Kenya’s most promising tourism frontiers.</p>
+                <p>At the heart of our tourism identity lie Tsavo East and Tsavo West National Parks—two of the largest contiguous wildlife conservation areas in the world. Together, they cover over 60% of the county’s landmass and offer an unrivaled safari experience, blending sweeping savannahs, rugged hills, ancient lava flows, crystalline springs, and an abundance of wildlife, including elephants, lions, rhinos, leopards, and a vibrant array of birdlife.</p>
+                <p>This remarkable ecosystem positions Taita Taveta not as a peripheral attraction, but as a global tourism anchor, a destination that draws adventurers, conservationists, researchers, and filmmakers from every corner of the world. These parks are not only natural wonders; they are living classrooms, economic engines, and enduring symbols of Kenya’s unwavering commitment to biodiversity conservation.</p>
+                <p>Yet, Taita Taveta’s allure extends well beyond its parks. The county is a cultural melting pot, home to the Dawida, Tuweta, Duruma, Kamba, and other coastal and highland communities. Our people proudly uphold a rich heritage of music, dance, cuisine, attire, and oral traditions that form an integral thread in Kenya’s national cultural fabric.</p>
+                <p>Visitors can delve into ancient tales passed down through generations, walk among sacred Dawida forests, or enjoy homestay experiences in charming, mist-shrouded villages such as Kasigau, Mbololo, Wundanyi, Sagala, and Mghange, nestled within the majestic Taita Hills.</p>
+                <p>Today, this deep-rooted cultural identity is being reimagined through youthful creativity, digital storytelling, and entrepreneurship, bringing our heritage to life for a global audience and ensuring it thrives for generations to come.</p>
+                <p style="text-align: center;"><strong>Infrastructure: Opening Up a Tourism Gateway</strong></p>
+                <p>Tourism cannot thrive without robust infrastructure. In this regard, Taita Taveta County is strategically positioned and proudly served by two major international road corridors that enhance our accessibility and economic significance.</p>
+                <p>The Mombasa–Nairobi–Malaba–Kampala Highway, part of the iconic Great North Road (A109), runs through Voi town—our economic and administrative capital. This vital artery connects Kenya’s coast to the interior and the landlocked countries of the Great Lakes region, making it a cornerstone of East African connectivity.</p>
+                <p>The Holili–Taveta–Voi Road, linked via the Taveta–Holili One-Stop Border Post (OSBP), offers seamless cross-border access to northern Tanzania and the Port of Mombasa. It is a key conduit for regional trade and a growing pathway for transnational tourism.</p>
+                <p>These corridors are more than logistical routes, they are tourism superhighways, enabling overland travelers, regional tourists, and domestic visitors to explore the natural and cultural richness of Taita Taveta with ease.</p>
+                <p>Complementing our road infrastructure is the Ikanga Airstrip, which supports both scheduled domestic flights and private charters. It offers direct aerial access from Nairobi, Mombasa, Malindi, Lamu, and even Arusha and Zanzibar—positioning Taita Taveta as an air-linked tourism destination of choice.</p>
+                <p>Ikanga Airstrip is a game-changer—streamlining our tourism logistics and underscoring our county’s readiness for investment, growth, and global engagement.</p>
+                <p style="text-align: center;"><strong>Harnessing Youth, Technology, and Innovation</strong></p>
+                <p>True to this year’s conference theme, Taita Taveta County is intentionally building an inclusive tourism ecosystem—one that places young people at the center, leverages the power of digital tools, and fosters innovation-led enterprises.</p>
+                <p>We are empowering local youth groups to become storytellers of their own communities. Through creative expressions such as short films, drone photography, virtual tours, and podcasts in local languages, young people are bringing the rich culture, landscapes, and daily life of Taita Taveta to a global audience in fresh and compelling ways.</p>
+                <p>In partnership with national and international organizations, we are investing in capacity building for our youth. From tour guiding and eco-tourism management to digital marketing and climate-smart agribusiness linked to the tourism value chain, we are equipping young people with the skills they need to not only access opportunities but to create them. Our collaboration with local Community-Based Organizations (CBOs), tertiary institutions and Technical and Vocational Education and Training (TVET) centers ensures that youth are prepared to lead the future of sustainable tourism.</p>
+                <p>Our development agenda also embraces green and community-based tourism models that ensure women and youth are not just participants but beneficiaries. We are promoting homestay experiences, agro-tourism ventures in Sagalla, Wundanyi, and Kasigau, and cultural festivals that both preserve heritage and offer immersive, authentic experiences for visitors.</p>
+                <p>To guide and scale this vision, the County Government under my administration has a Tourism and Investment Blueprint. This strategic document outlines priority areas for private sector engagement, infrastructure development, and destination branding. It provides a clear roadmap for investors, supports public-private partnerships (PPPs), and aligns market opportunities with community aspirations.</p>
+                <p>In Taita Taveta, we believe that the future of tourism is not only sustainable and inclusive—but also youth-driven, tech-enabled, and locally rooted.</p>
+                <p style="text-align: center;"><strong>Taita Taveta County: East Africa’s Sole Battlefield Tourism Destination</strong></p>
+                <p>Taita Taveta County proudly stands as the only region in East Africa offering authentic battlefield tourism, owing to its profound yet often overlooked connection to the First World War. Situated in southern Kenya, this county was the site of the first shot fired in the East African Campaign of WWI on August 15, 1914. This marked the beginning of a grueling and protracted conflict between British and German colonial forces, drawing in tens of thousands of African soldiers and porters, including many from Uganda, then a British Protectorate.</p>
+                <p>As British troops engaged German forces across Taveta, Salaita Hill, and Mashoti Fort, Uganda played a pivotal role as a rear base, recruiting soldiers for the King’s African Rifles, mobilizing civilian porters, and supplying provisions, logistics, and medical aid. Taita Taveta and Uganda were thus the twin pillars of Britain’s East African military campaign, forming a joint epicenter of World War I on the continent. The graves of Ugandan soldiers in Taveta’s cemeteries and their presence in oral histories testify to this shared legacy.</p>
+                <p>This historical connection offers a unique opportunity to position battlefield heritage tourism as a flagship product of regional cooperation. As we gather for this year’s conference, we are reminded that our cross-border tourism future is anchored not only in nature and culture but also in shared sacrifice and common history.</p>
+                <p>Taita Taveta’s landscape still bears physical scars of the war trenches at Salaita Hill, fortifications at Mashoti, cemeteries in Taveta and Maktau maintained by the Commonwealth War Graves Commission, and relics preserved in museums and homesteads. These sites mirror Uganda’s own WWI-era landmarks, training camps, rail depots, and recruitment centers in Jinja and Entebbe. By linking these through curated travel packages, immersive storytelling, virtual heritage tours, and youth-led innovations, we  can develop a Uganda–Taita Taveta Battlefield Heritage Circuit that educates, heals, and inspires.</p>
+                <p>Together, our two regions are uniquely positioned to co-create a battlefield tourism product that is meaningful, pan-African, and globally marketable. It is time to transform this shared past into a powerful vehicle for regional unity, youth employment, and international cultural tourism. Let this conference be the springboard for realizing that vision.</p>
+                <p>By integrating this rich history with the Tsavo ecosystem and cultural experiences, Taita Taveta is poised to become a leading destination for meaningful, experience-driven travel. It is more than a county, it is a living museum, telling a powerful story of Africa’s role in shaping global events.</p>
+                <p style="text-align: center;"><strong>Taita Taveta County: A Bridge of Heritage, Hope, and Hospitality</strong></p>
+                <p>As Kenya and Uganda consolidate their bilateral cooperation in tourism and regional trade, Taita Taveta County emerges as a strategic buffer and connector—linking the Kenyan Coast, Northern Tanzania, and the Great Lakes region. We are more than a natural stopover for travelers. We are a destination in our own right.</p>
+                <p>Our aspiration is clear: to become a model county for sustainable, inclusive tourism, tourism that delivers tangible benefits to all stakeholders: local communities, investors, conservation actors, and government institutions alike.</p>
+                <p>It is in this spirit that I strongly support the institutionalization of the Uganda–Kenya Coast Tourism Conference as a standing platform for co-creation, policy dialogue, innovation exchange, and investment matchmaking. Let this forum be a space where our young people, artists, tech innovators, transporters, hoteliers, guides, and cultural custodians can meet, showcase, and build together.</p>
+                <p>Let this partnership serve as a model for wider regional cooperation, across the East African Community and the African Union—where borderless tourism becomes a tool for peace, people-to-people connection, and inclusive economic growth.</p>
+                <p><strong>Karibu Taita Taveta!</strong></p>
+                <p>I extend a heartfelt karibu sana to all our brothers and sisters from Uganda, from the coastal counties, from across Kenya, and beyond.</p>
+                <p>Come and experience the majestic Yatta Plateau escarpments, the spiritual calm of Wesu Hill, sacred caves and forests, the dramatic lava landscapes of Chyulu, and the hidden water springs of Mzima and Shetani. Hike the Dawida Hills, spend an afternoon by Lake Jipe watching hippos at the border, or immerse yourself in the vibrant spirit of our people during the Taita Taveta Cultural Festival.</p>
+                <p>Taita Taveta is not just a place on the map. It is a story, an ecosystem, and a promise, a promise of shared prosperity through tourism that is authentic, inclusive, and future-oriented.</p>
+                <p>Let us continue to walk this journey together.</p>
+                <p>Let us build partnerships that matter.</p>
+                <p>Let us make tourism work for everyone.</p>
+                <p>Asanteni sana. Karibuni Taita Taveta. Karibuni Kenya.</p>
+                <p><strong>H.E. DR. ANDREW MWADIME, EGH, (WAKUJAA)</strong></p>
+                <p><strong>GOVERNOR, TAITA TAVETA COUNTY</strong></p>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          
+
+
+
+
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/paul.png' %}" alt="AMB. PAUL MUKUMBYA">
+                <h3>AMB. PAUL MUKUMBYA</h3>
+                <p><strong>CONSUL GENERAL <br> Consulate of the Republic of Uganda in Mombasa</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>AMB. PAUL MUKUMBYA</strong></p>
+<p><strong>CONSUL GENERAL <br> Consulate of the Republic of Uganda in Mombasa</strong></p>
+<p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p>
+                <p>Ladies and Gentlemen</p>
+                <p>It is with great pleasure that I welcome you to the 4th Uganda- Kenya Coast Tourism Conference at the Ocean Beach Resort and Spa in Malindi. The 4th conference is being held under the theme: <strong>Leveraging Youth, Innovation and technology for Inclusive Tourism.</strong></p>
+                <p>The Uganda- Kenya Coast Tourism Conference has become an annual event on the tourism calendar in Uganda and at the Kenya Coast, where tourism stakeholders meet to discuss key issues that drive the tourism sector in the region. It has gained a lot of interest among key tourism stakeholders in Uganda and Kenya and this is reflected in the number of delegates attending the Conferences. In 2022 for instance, 200 delegates participated in the 1st Uganda- Kenya Coast Tourism Conference held at PrideInn Beach Resort and Spa in Mombasa. This number grew to 500 at the 2nd Uganda- Kenya Coast Tourism Conference in Diani and even further to over 600 when at the last Conference held in November 2025 at Speke Resort & Convention Centre Munyonyo.</p>
+                <p>The Conference has provided a platform for key industry players to meet and discuss the critical issues in the tourism sector. It has also provided a platform for B2B, where tourism stakeholders from both countries discuss business opportunities. A lot of networks have been built out of these interactions.</p>
+                <p>In terms of product awareness, the event has enabled tourism stakeholders from both countries to appreciate each other’s tourism products. Many are now selling the two destinations from a point of knowledge and experience. Over the last three years, we have facilitated one hundred and thirty (130) tourism stakeholders from Kenya to visit and experience Uganda’s niche tourism products such as Bwindi, Impenetrable National Park, Murchison Falls National Park, Kidepo National Park, Kibale National Park, Adventure Tourism on River Nile, Namugongo Martyrs Shrine, etc... On the other hand, over three hundred (300) Ugandan tourism players have been facilitated to visit tourism products at the Kenya Coast such as Fort Jesus and the old town, Vasco da Gama Pillar in Malindi, Gede Ruins, Wasini and Taita Taveta. Therefore, the Uganda- Kenya Coast partnership is a win- win situation for both countries. We are seeing the number of Kenyans visiting Uganda, and vice-versa, increasing. This is very important for the growth of regional tourism.</p>
+                <p>That said, we need to address the bottlenecks in the tourism sector in order to explore the full potential of the tourism products in the two destinations. When we last met in Kampala in November 2024 during the 3rd Uganda- Kenya Coast Tourism Conference, we identified a number of bottlenecks such as inadequate infrastructure, limited connectivity, insufficient marketing strategies, inconsistences in services standards in the industry, poaching and illegal wildlife trade. Addressing these challenges will ensure that we are able to enjoy the full benefits of the Uganda- Kenya Coast tourism partnership. We can use the partnerships and collaborations we have built over the past few years to resolve some of the challenges, including addressing standards.</p>
+                <p>At the 4th conference we shall build on the successes of the 1st, 2nd and 3rd Conferences, and emerging trends such as youth and technology, to build a strong and resilient tourism sector in the region. We hope that by the end of the Conference, we shall be able to come up with youth- led and tech- based solutions that benefit the two destinations.</p>
+                <p>Like in past conferences, the 4th Edition of the Uganda- Kenya Conference will also feature a golf tournament that be held on 25th October 2025 at Vipingo Ridge. This is going to be the 3rd tournament between Uganda and Kenya. We held the first tournament on 20th April 2024 at Vipingo and a return tournament on 9th November 2025 at Kitante Golf Club. We expect a number of golfers from both countries to participate in the event.</p>
+                <p>Karibuni Kilifi!!!</p>
+                <p>For God and my Country.</p>
+                <p><strong>Amb. Paul Mukumbya</strong></p>
+                <p><strong>Consul General</strong></p>
+                <p><strong>Consulate of the Republic of Uganda in Mombasa</strong></p>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          
+     
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/kaigua.jpeg' %}" alt="Fred Kaigua">
+                <h3>FRED KAIGUA</h3>
+                <p><strong>CEO, KATO</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>FRED KAIGUA</strong></p>
+                <p><strong>CEO, KATO</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p>
+                <P style="text-align: center;"><strong>Strengthening Regional Tourism Through Collaboration</strong></P>
+                <p>The long-awaited 4th Uganda-Kenya Coast Tourism Conference and Exhibition is Malindi is another edition of a key event with a significant milestone in Regional Tourism cooperation.</p>
+                <p>The Conference is a reflection on process and celebration of successes as it is increasingly positioning itself as a critical medium for conversation, invention and collaboration. It is clear that a lot of regional positioning in tourism marketing has to be done. The choice of the theme – Unlocking the Blue Economy through Regional Tourism is timely as aligned to regional overall goal of harnessing our coastal endowment for sustainable and inclusive economic growth.</p>
+                <p>The growing tourism between Kenya and Uganda is fast becoming a success story of collaboration and partnership. Uganda has continued to be a major source market for Kenyan tourism, especially along the Coast, and there is growing inclusion of Uganda as a tourism destination by Kenyan tour operators.</p>
+                <p>Kenya Association of Tour Operators (KATO) recognizes how uniquely placed we are as enablers of this partnership and the Conference serves to provide us with access to the networks we need for more effective operations.</p>
+                <p>On behalf of KATO members and the wider tourism fraternity in Kenya, it is my pleasure to welcome all Conference delegates to Malindi and trust that the event will continue to help us grow Regional tourism and to be more competitive globally.</p>
+                <p>Karibuni Malindi.</p>
+                <p><strong>Fred Kaigua</strong></p>
+                <p><strong>CEO, KATO</strong></p>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          
+
+
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/CECM.jpeg' %}" alt="HON. JOHN RAYMOND NGALA">
+                <h3>HON. JOHN RAYMOND NGALA</h3>
+                <p><strong>CECM OF TRADE, TOURISM, PROMOTION AND COOPERATIVE DEVELOPMENT, COUNTY GOVERNMENT OF KILIFI</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>HON. JOHN RAYMOND NGALA</strong></p>
+                <p><strong>CECM OF TRADE, TOURISM, PROMOTION AND COOPERATIVE DEVELOPMENT, COUNTY GOVERNMENT OF KILIFI</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p> 
+                <p>It is with great enthusiasm that I welcome all delegates, partners, and stakeholders to the upcoming <strong>4th Uganda–Kenyan Coast Tourism Conference and Fam trip 2025,</strong> set to take place at Kilifi County. This pivotal gathering is not only a testament to the deepening ties between Uganda and the Kenyan Coast but also a celebration of our shared vision for a vibrant, sustainable, and interconnected regional tourism sector.</p>
+                <p>The conference comes at a time when global and regional tourism dynamics are shifting toward collaboration, innovation, and inclusive growth. By bringing together public and private sector stakeholders from both Uganda and the Kenyan Coast, we open a new chapter of mutual understanding, marketing synergy, and investment potential across our tourism destinations.</p>
+                <p>For Kilifi County, this event reinforces our commitment to positioning the coast as a premier tourism hub, while highlighting our diverse offerings—from pristine beaches and Swahili heritage to emerging ecotourism and cultural experiences. Through this partnership, we aim to jointly promote multi-destination tourism, improve connectivity, and explore avenues for product development and cross-border tourism circuits.</p>
+                <p>As the host County, we extend our warmest hospitality and invite all participants to immerse themselves in the natural beauty, cultural richness, and warm spirit of Kilifi. I also extend our gratitude to our tourism stakeholders for their ongoing collaboration, and to the Ugandan delegation for walking this journey with us.</p>
+                <p>Let this conference be a catalyst for lasting partnerships, renewed strategies, and bold actions that will elevate East African tourism to new heights.</p>
+                <p><strong>Hon. <i>John Raymond Ngala</i></strong></p>
+                <p><strong>County Executive Committee Member</strong></p>
+                <p><strong>Trade, Tourism Promotion, Culture and Heritage & Cooperative Development</strong></p>
+                <p><strong>County Government of Kilifi.</strong></p>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          
+          <div class="container">
+            <div class="speaker-layout">
+              
+              <!-- Sidebar / Profile -->
+              <div class="speaker-sidebar">
+                <img src="{% static 'assets/img/CO.jpeg' %}" alt="HERBERT MWACHIRO">
+                <h3>HERBERT MWACHIRO</h3>
+                <p><strong>CHIEF OFFICER – DEPARTMENT OF TOURISM PROMOTION, CULTURE & HERITAGE, KILIFI COUNTY GOVERNMENT</strong></p>
+              </div>
+          
+              <!-- Main Content -->
+              <div class="speaker-content">
+                <p><strong>Foreword</strong></p>
+                <p><strong>HERBERT MWACHIRO</strong></p>
+                <p><strong>CHIEF OFFICER – DEPARTMENT OF TOURISM PROMOTION, CULTURE & HERITAGE, KILIFI COUNTY GOVERNMENT</strong></p>
+                <p><strong>UGANDA–KENYAN COAST TOURISM CONFERENCE | OCEAN BEACH RESORT, MALINDI</strong></p>
+                <p>It is with great pleasure, that I extend a warm welcome to all participants, partners, and stakeholders attending the upcoming <strong>4th Uganda-Kenyan Coast Tourism Conference</strong> in the iconic Kilifi.</p>
+                <p>This timely and strategic gathering signifies a new chapter in regional tourism collaboration between Uganda and the Kenyan Coast. This is anchored in shared aspirations for sustainable growth, cultural exchange and destination competitiveness. Kilifi County, as one of Kenya’s premier beach tourism destinations, is honored to co-host this important dialogue that seeks to enhance partnerships across borders and deepen synergies within the East African tourism landscape.</p>
+                <p>The Department of Tourism is particularly encouraged by the momentum behind this initiative — a product of joint efforts by public and private stakeholders who understand that tourism thrives through connection, innovation, and mutual promotion. Through this conference, we reaffirm our commitment to building stronger market linkages, diversifying our tourism products, incorporating ideas, technologies and artificial intelligence (AI) and creating memorable cross-border experiences for visitors.</p>
+                <p>As we convene under the coastal skies of Malindi, let this be a platform for shaping a new frontier of regional cooperation, where Uganda’s unique inland charm meets the magnetic allure of the Kenyan Coast. Together, we are laying the foundation for a resilient, inclusive, and globally competitive East African tourism bloc.</p>
+                <p>I wish all delegates a fruitful engagement and a memorable stay in the Kenyan Riviera, Kilifi County the Coastal jewel of Kenya.</p>
+                <p><strong>Herbert Mwachiro</strong></p>
+                <p><strong>Chief Officer – Department of Tourism promotion, Culture & Heritage.</strong></p>
+                <p><strong>Kilifi County Government</strong></p>
+              </div>
+            </div>
+          </div>
+          
+              </section><!-- /Starter Section Section -->
+          
+          
+          
+          
+              <!-- Sponsors Section -->
+<section id="sponsors" class="sponsors section">
+  <div class="container section-title">
+    <h2>Partners</h2>
+  </div>
+
+  <div class="container">
+    <!-- Swiper Container -->
+    <div class="swiper sponsors-slider">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="{% static 'assets/img/Consulate.jpg' %}" alt="Consulate" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/UG.jpg' %}" alt="Explore Uganda" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Magical.png' %}" alt="Magical Kenya" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Kilifi.jpg' %}" alt="Kilifi County" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Mombasa.png' %}" alt="Mombasa" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Taita.png' %}" alt="Taita" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Kwale.png' %}" alt="Kwale" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Riviera.jpg' %}" alt="Riviera" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/oceanbeach.png' %}" alt="Ocean Beach" class="sponsor-logo"></div>
+      </div>
+    </div>
+  </div>
+</section>
+          
+          
+          
+      </main>
+    
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+     
+          <div class="social-links d-flex mt-4">
+                    <a href="https://x.com/UgandaMombasa"target="_blank"><i class="bi bi-twitter-x"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61557768419729"target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/uganda_consulate_msa/"target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ugketourism/"target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@ugketourism"target="_blank"><i class="bi bi-youtube"></i></a>                      
+          </div>
+        </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp</a> & <a href="">Mark</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+
+
+    <script>
+      var swiper = new Swiper(".sponsors-slider", {
+        loop: true,
+        spaceBetween: 30,
+        speed: 3000, // scroll speed (3 seconds)
+        autoplay: {
+          delay: 3000, // wait 3 seconds before each scroll
+          disableOnInteraction: false,
+        },
+        breakpoints: {
+          320: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },  // Small phones
+          480: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 15 },  // Large phones
+          768: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },  // Tablets
+          1024: { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 30 }  // Desktops
+        }
+      });
+    </script>
+
+</body>
+
+</html>

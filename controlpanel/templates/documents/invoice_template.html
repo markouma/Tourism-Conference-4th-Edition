@@ -1,0 +1,362 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice - {{ document_number }}</title>
+<style>
+body {
+  background: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+.invoice {
+  background: #fff;
+  padding: 40px;
+  margin: 0 auto;
+  max-width: 800px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  position: relative;
+}
+
+/* PAID STAMP - Top Right Corner */
+.paid-stamp {
+  position: absolute;
+  top: 100px;
+  right: 50px;
+  transform: rotate(-15deg);
+  border: 8px solid #10b981;
+  color: #10b981;
+  font-size: 3rem;
+  font-weight: 900;
+  padding: 15px 40px;
+  opacity: 0.3;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  border-radius: 10px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  border-bottom: 4px solid #BF1F2F;
+  padding-bottom: 20px;
+}
+.invoice-header img {
+  height: 120px;
+  width: auto;
+}
+.company-info {
+  text-align: right;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.company-info strong {
+  font-size: 1.1rem;
+  color: #1d3557;
+}
+
+.invoice-title {
+  text-align: center;
+  font-weight: 900;
+  color: #BF1F2F;
+  margin: 20px 0;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.conference-info {
+  text-align: center;
+  margin-bottom: 30px;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+}
+.conference-info span {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #1d3557;
+  display: block;
+  margin-bottom: 5px;
+}
+.conference-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+.info-box {
+  flex: 1;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 4px solid #BF1F2F;
+}
+.info-box strong {
+  color: #1d3557;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+.info-box p {
+  margin: 0;
+  line-height: 1.8;
+  font-size: 0.9rem;
+}
+
+.document-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 15px;
+  background: #fff7ed;
+  border-radius: 5px;
+  border: 2px solid #f59e0b;
+}
+.document-meta div {
+  font-size: 0.95rem;
+}
+.document-meta strong {
+  color: #d97706;
+}
+
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+}
+.table th, .table td {
+  border: 1.5px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+.table th {
+  background-color: #1d3557;
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+.table tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+.table td.text-end {
+  text-align: right;
+}
+.table tfoot td {
+  font-weight: bold;
+  background-color: #f8f9fa;
+}
+.table tfoot tr:last-child td {
+  background-color: #BF1F2F;
+  color: white;
+  font-size: 1.2rem;
+  padding: 15px;
+}
+
+.payment-note {
+  background: #dcfce7;
+  border-left: 4px solid #10b981;
+  padding: 15px;
+  margin: 30px 0;
+  border-radius: 5px;
+}
+.payment-note strong {
+  color: #065f46;
+  display: block;
+  margin-bottom: 5px;
+}
+.payment-note p {
+  margin: 0;
+  color: #064e3b;
+  font-size: 0.9rem;
+}
+
+.terms {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+.terms strong {
+  color: #1d3557;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 2px solid #e9ecef;
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.signature-section {
+  margin-top: 50px;
+  text-align: right;
+}
+.signature-section p {
+  margin: 5px 0;
+}
+.signature-line {
+  border-top: 2px solid #333;
+  width: 250px;
+  display: inline-block;
+  margin-top: 40px;
+}
+</style>
+</head>
+<body>
+
+<div class="invoice">
+  <!-- PAID STAMP -->
+  <div class="paid-stamp">PAID</div>
+
+  <!-- Header with Logo and Company Info -->
+  <div class="invoice-header">
+    <img src="file://{{ buzz_logo_path }}" alt="Buzz AFRIQUE">
+    <div class="company-info">
+      <strong>BUZZ AFRIQUE LIMITED</strong><br>
+      P.O Box 81039-80100<br>
+      Mombasa, Kenya<br>
+      Tel: +254 722 274707<br>
+      Email: accounts@buzzafrique.co.ke<br>
+      PIN: {{ company_pin }}
+    </div>
+  </div>
+
+  <!-- Invoice Title -->
+  <div class="invoice-title">INVOICE</div>
+
+  <!-- Conference Info -->
+  <div class="conference-info">
+    <span>THE 4TH UGANDA - KENYA COAST TOURISM CONFERENCE & EXHIBITION</span>
+    <p>Venue: Ocean Beach Resort and Spa, Malindi | Dates: 27th - 28th October 2025</p>
+  </div>
+
+  <!-- Document Meta -->
+  <div class="document-meta">
+    <div>
+      <strong>Invoice No:</strong> {{ document_number }}
+    </div>
+    <div>
+      <strong>Invoice Date:</strong> {{ invoice_date }}
+    </div>
+    <div>
+      <strong>Ticket No:</strong> {{ ticket_number }}
+    </div>
+  </div>
+
+  <!-- Billed To / From -->
+  <div class="info-row">
+    <div class="info-box">
+      <strong>Billed From:</strong>
+      <p>
+        BUZZ AFRIQUE LIMITED<br>
+        P.O Box 81039-80100<br>
+        Mombasa, Kenya<br>
+        +254 722 274707<br>
+        accounts@buzzafrique.co.ke
+      </p>
+    </div>
+    <div class="info-box">
+      <strong>Billed To:</strong>
+      <p>
+        {{ customer_name }}<br>
+        {% if company_name %}{{ company_name }}<br>{% endif %}
+        Phone: {{ customer_phone }}<br>
+        Email: {{ customer_email }}<br>
+        {% if customer_country %}{{ customer_country }}{% endif %}
+      </p>
+    </div>
+  </div>
+
+  <!-- Items Table -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="text-align: left;">Description</th>
+        <th>Category</th>
+        <th>Event Date</th>
+        <th>Qty</th>
+        <th class="text-end">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>{{ event_name }}</strong><br>Delegate Ticket</td>
+        <td style="text-align: center;">{{ ticket_category }}</td>
+        <td style="text-align: center;">{{ event_date }}</td>
+        <td style="text-align: center;">1</td>
+        <td class="text-end">KES {{ ticket_price|floatformat:2 }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" style="text-align: right;">Subtotal:</td>
+        <td class="text-end">KES {{ ticket_price|floatformat:2 }}</td>
+      </tr>
+      <tr>
+        <td colspan="4" style="text-align: right;">VAT (0%):</td>
+        <td class="text-end">KES 0.00</td>
+      </tr>
+      <tr>
+        <td colspan="4" style="text-align: right;"><strong>TOTAL AMOUNT:</strong></td>
+        <td class="text-end"><strong>KES {{ ticket_price|floatformat:2 }}</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Payment Note -->
+  <div class="payment-note">
+    <strong>✓ Payment Confirmed</strong>
+    <p>This invoice has been fully paid. Transaction Reference: {{ transaction_reference }}</p>
+  </div>
+
+  <!-- Terms -->
+  <div class="terms">
+    <strong>Terms & Conditions:</strong>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+      <li>All ticket sales are final and non-refundable.</li>
+      <li>Tickets are non-transferable without prior written consent.</li>
+      <li>Please present this invoice and your ticket at the event entrance.</li>
+      <li>For any queries, contact us at accounts@buzzafrique.co.ke</li>
+    </ul>
+  </div>
+
+  <!-- Signature -->
+  <div class="signature-section">
+    <p><strong>Authorized By:</strong></p>
+    <div class="signature-line"></div>
+    <p>BUZZ AFRIQUE LIMITED</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Thank you for your business!</p>
+    <p>This is a computer-generated invoice and requires no signature.</p>
+  </div>
+</div>
+
+</body>
+</html>

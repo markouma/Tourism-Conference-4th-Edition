@@ -1,0 +1,157 @@
+{% extends 'controlpanel/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fafafa;
+    color: #222;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 2.4rem;
+    margin-bottom: 36px;
+    text-align: center;
+    color: #111;
+  }
+
+  .logout-container {
+    max-width: 960px;
+    margin: 0 auto 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .logout-button {
+    background-color: transparent;
+    border: 1.5px solid #dc3545;
+    color: #dc3545;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .logout-button:hover,
+  .logout-button:focus {
+    background-color: #dc3545;
+    color: white;
+    outline: none;
+  }
+
+  .dashboard-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .dashboard-link {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 24px 0;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+
+  .dashboard-link span {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 12px;
+    color: #555;
+    user-select: none;
+  }
+
+  .dashboard-link:hover,
+  .dashboard-link:focus {
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    color: #007bff;
+  }
+  .dashboard-link.disabled {
+  color: #aaa;
+  border-color: #ccc;
+  cursor: not-allowed;
+  pointer-events: none; /* Disable clicks */
+  user-select: none;
+  position: relative;
+}
+
+.dashboard-link.disabled span {
+  color: #bbb;
+}
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="logout-container">
+    <form method="POST" action="{% url 'controlpanel:controlpanel_logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="logout-button"> <span> Log Out <i  class="fa fa-sign-out"> </i> </span></button>
+    </form>
+  </div>
+
+  <h1>🎛 Admin Dashboard</h1>
+  <div class="dashboard-links">
+    <a class="dashboard-link" href="{% url 'controlpanel:event_list' %}">
+      <span>🎟</span>
+    Regular Tickets Sales
+    </a>
+    <a class="dashboard-link" href="{% url 'controlpanel:booth_sales' %}">
+      <span>🏬</span>
+      Booth Sales
+    </a>
+    <a class="dashboard-link" href="{% url 'controlpanel:manage_users' %}">
+      <span>👥</span>
+       Users  
+    </a>
+  
+    <a class="dashboard-link" href="{% url 'controlpanel:booth_visits_report' %}">
+      <span>📍</span>
+      Booth Visits Report
+    </a>
+  
+    <a class="dashboard-link" href="{% url 'controlpanel:booth_reviews_report' %}">
+      <span>📝</span>
+      Booth Reviews Report
+    </a>
+
+
+    <a class="dashboard-link" href="{% url 'controlpanel:traffic_report' %}">
+      <span>📊</span>
+      Traffic Report
+    </a>
+
+    <a class="dashboard-link" href="{% url 'controlpanel:paid_reports' %}">
+  <span>💳</span>
+  MTN- Delegates Tickets Report
+</a>
+    
+  </div>
+  
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // JS here
+</script>
+{% endblock %}

@@ -1,0 +1,1180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Scanner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .scanner-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0.75rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-btn {
+            float: right;
+            background: #ff4757;
+            color: white;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff3742;
+            transform: translateY(-1px);
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+        }
+
+        .event-name {
+            font-size: 0.8rem;
+            color: #857c7c;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info {
+            font-size: 0.75rem;
+            color: #857c7c;
+        }
+
+        .user-info strong {
+            color: #667eea;
+        }
+
+        .checkpoint-selector {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .checkpoint-selector h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+            text-align: center;
+            color: #444;
+        }
+
+        .checkpoint-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+        }
+
+        .checkpoint-option {
+            flex: 1;
+            min-width: 110px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.4rem 0.6rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkpoint-option:hover {
+            border-color: #667eea;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+        }
+
+        .checkpoint-option.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: #667eea;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .checkpoint-option input {
+            display: none;
+        }
+
+        .checkpoint-option label {
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            font-size: 0.85rem;
+        }
+
+        .current-checkpoint {
+            background: linear-gradient(135deg, #2ed573, #1e90ff);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 0.6rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);
+        }
+
+        .scanner-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        
+        #scanner {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #1a1a1a;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 0.6rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-message {
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .status-valid {
+            background: linear-gradient(135deg, #2ed573, #7bed9f);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);
+        }
+
+        .status-invalid {
+            background: linear-gradient(135deg, #ff4757, #ff6b7a);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .status-scanning {
+            background: linear-gradient(135deg, #3742fa, #5352ed);
+            color: white;
+            box-shadow: 0 4px 15px rgba(55, 66, 250, 0.3);
+        }
+
+        .ticket-details {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            animation: slideUp 0.4s ease;
+            font-size: 0.85rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ticket-details h3 {
+            color: #667eea;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .ticket-details p {
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+        }
+
+        .ticket-details strong {
+            color: #444;
+            font-weight: 600;
+        }
+
+        .ticket-details hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0.75rem 0;
+        }
+
+        .scan-history {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .scan-history h4 {
+            color: #495057;
+            margin-bottom: 0.6rem;
+            font-size: 0.9rem;
+        }
+
+        .scan-history-item {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 0.8rem;
+        }
+
+        .scan-history-item:last-child {
+            border-bottom: none;
+        }
+
+        .holder-photo {
+            max-width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            float: right;
+            margin-left: 0.75rem;
+        }
+
+        .spinner {
+            display: none;
+            width: 30px;
+            height: 30px;
+            margin: 0.5rem auto;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-instances {
+            background: linear-gradient(135deg, #ff4757, #ff6b7a);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 480px) {
+            .scanner-container {
+                padding: 0.5rem;
+            }
+
+            #scanner {
+                height: 160px;
+            }
+
+            .holder-photo {
+                float: none;
+                display: block;
+                margin: 0.5rem auto;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .ticket-details,
+            .checkpoint-selector,
+            .scanner-section,
+            .header {
+                background: rgba(30, 30, 30, 0.95);
+                color: #e9ecef;
+            }
+            
+            .ticket-details strong,
+            .checkpoint-selector h3,
+            .header h1 {
+                color: #f8f9fa;
+            }
+
+            .checkpoint-option {
+                background: #2a2a2a;
+                border-color: #444;
+            }
+
+            .scan-history {
+                background: #2a2a2a;
+            }
+        }
+
+
+
+
+
+        /* scan stats */
+
+        .checkpoint-stats {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.checkpoint-stats h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    text-align: center;
+    color: #444;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.stat-item {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateX(3px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-name {
+    font-weight: 600;
+    color: #667eea;
+    font-size: 0.85rem;
+}
+
+.stat-numbers {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.stat-scanned {
+    color: #2ed573;
+    font-weight: 700;
+}
+
+.stat-remaining {
+    color: #ff4757;
+    font-weight: 700;
+}
+
+.stat-total {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.stats-refresh {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.refresh-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.progress-bar {
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 0.4rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #2ed573, #7bed9f);
+    transition: width 0.5s ease;
+}
+
+
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.3s ease;
+    padding: 0.25rem;
+    border-radius: 8px;
+}
+
+.stats-header:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.stats-header h3 {
+    margin-bottom: 0;
+}
+
+.toggle-stats-icon {
+    color: #667eea;
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.toggle-stats-icon.rotated {
+    transform: rotate(180deg);
+}
+
+.stats-content {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 1;
+}
+
+.stats-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+
+
+/* Manual Search Section */
+.manual-search {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.manual-search h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    text-align: center;
+    color: #444;
+}
+
+.search-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.6rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.search-results {
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+}
+
+.search-results.show {
+    display: block;
+}
+
+.search-result-item {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.search-result-item:hover {
+    background: #e9ecef;
+    transform: translateX(3px);
+}
+
+.search-result-item.used {
+    border-left-color: #2ed573;
+    opacity: 0.7;
+}
+
+.search-result-name {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.search-result-details {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.search-result-status {
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+}
+
+.search-result-status.scanned {
+    color: #2ed573;
+    font-weight: 600;
+}
+
+.search-result-status.not-scanned {
+    color: #ff4757;
+    font-weight: 600;
+}
+
+.no-results {
+    text-align: center;
+    padding: 1.5rem;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+    </style>
+</head>
+<body>
+    <div class="scanner-container">
+        <div class="header">
+            <a class="logout-btn" href="{% url 'logout' %}">Log Out</a>
+            <h1><i class="fa-solid fa-ticket"></i> Ticket Scanner</h1>
+                        <!-- <div class="event-name">{{ event.name }}</div> -->
+ 
+            <div class="event-name">THE 4TH UG-KE TOURISM CONFERENCE</div>
+            <div class="user-info">
+                Logged in as <strong>{{ user.get_full_name|default:user.username }}</strong>
+            </div>
+        </div>
+
+        <!-- Checkpoint Selector -->
+        <div class="checkpoint-selector">
+            <h3><i class="fa-solid fa-door-open"></i> Select Checkpoint</h3>
+            {% if scan_instances %}
+                <div class="checkpoint-options">
+                    {% for instance in scan_instances %}
+                    <div class="checkpoint-option" data-instance-id="{{ instance.id }}">
+                        <input type="radio" name="scan_instance" value="{{ instance.id }}" id="instance_{{ instance.id }}">
+                        <label for="instance_{{ instance.id }}">{{ instance.name }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="current-checkpoint" id="currentInstance" style="display: none;">
+                    <i class="fa-solid fa-location-dot"></i> Scanning at: <span id="currentInstanceName"></span>
+                </div>
+            {% else %}
+                <div class="no-instances">
+                    No scan checkpoints available for this event. Please contact admin.
+                </div>
+            {% endif %}
+        </div>
+
+
+<!-- Manual Search Section -->
+<div class="manual-search">
+    <h3><i class="fa-solid fa-magnifying-glass"></i> Manual Search</h3>
+    <div class="search-form">
+        <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="Search by name, email, or ticket number..."
+            autocomplete="off"
+        >
+        <button class="search-btn" onclick="searchTickets()">
+            <i class="fa-solid fa-search"></i> Search
+        </button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+</div>
+
+
+
+        <!-- Scanner Section -->
+        <div class="scanner-section">
+            <video id="scanner" playsinline autoplay muted></video>
+            <div class="controls">
+                <button class="btn" id="scanNext">Scan Another Ticket</button>
+            </div>
+        </div>
+
+        <!-- Status and Results -->
+        <div class="status-message status-scanning">
+            Select a checkpoint to start scanning...
+        </div>
+        
+        <div class="spinner" id="loadingSpinner"></div>
+        <div class="ticket-details"></div>
+
+
+
+        <!-- Checkpoint Statistics -->
+<div class="checkpoint-stats">
+    <div class="stats-header" onclick="toggleStats()">
+        <h3><i class="fa-solid fa-chart-bar"></i> Checkpoint Statistics</h3>
+        <i class="fa-solid fa-chevron-down toggle-stats-icon" id="statsToggleIcon"></i>
+    </div>
+    
+    <div class="stats-content" id="statsContent">
+        <div class="stats-grid" id="checkpointStats">
+            <div style="text-align: center; color: #6c757d; padding: 1rem;">
+                Loading statistics...
+            </div>
+        </div>
+        <div class="stats-refresh">
+            <button class="refresh-btn" onclick="loadCheckpointStats()">
+                <i class="fa-solid fa-rotate"></i> Refresh Stats
+            </button>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+    <script>
+        const EVENT_ID = "{{ event.id }}";
+        const { BrowserQRCodeReader } = ZXing;
+        const codeReader = new BrowserQRCodeReader();
+
+        let isScanningActive = false;
+        let selectedScanInstance = null;
+
+        const statusEl = document.querySelector('.status-message');
+        const videoEl = document.getElementById('scanner');
+        const scanNextBtn = document.getElementById('scanNext');
+        const ticketDetailsEl = document.querySelector('.ticket-details');
+        const spinner = document.getElementById('loadingSpinner');
+        const currentInstanceEl = document.getElementById('currentInstance');
+        const currentInstanceNameEl = document.getElementById('currentInstanceName');
+
+        // Audio feedback
+        const soundValid = new Audio('{% static "sounds/coin.mp3" %}');
+        const soundAlreadyScanned = new Audio('{% static "sounds/buzzer.mp3" %}');
+        const soundInvalid = new Audio('{% static "sounds/cricket.mp3" %}');
+
+        // Handle scan instance selection
+        document.querySelectorAll('.checkpoint-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                const instanceId = this.dataset.instanceId;
+                const instanceName = this.querySelector('label').textContent;
+                
+                // Clear previous selections
+                document.querySelectorAll('.checkpoint-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Select this option
+                this.classList.add('selected');
+                radio.checked = true;
+                
+                selectedScanInstance = instanceId;
+                currentInstanceNameEl.textContent = instanceName;
+                currentInstanceEl.style.display = 'block';
+                
+                // Start scanner if not already active
+                if (!isScanningActive) {
+                    startScanner();
+                } else {
+                    updateStatus(`Ready to scan at ${instanceName} 🎥`, 'scanning');
+                }
+            });
+        });
+
+        function updateStatus(message, type) {
+            statusEl.textContent = message;
+            statusEl.className = `status-message status-${type}`;
+        }
+
+        async function startScanner() {
+            if (!selectedScanInstance) {
+                updateStatus("Please select a checkpoint first", 'invalid');
+                return;
+            }
+
+            updateStatus("Starting camera...", 'scanning');
+            ticketDetailsEl.innerHTML = '';
+            scanNextBtn.style.display = 'none';
+            isScanningActive = true;
+
+            try {
+                await codeReader.decodeFromVideoDevice(undefined, videoEl, async (result, error) => {
+                    if (result && isScanningActive) {
+                        isScanningActive = false;
+                        updateStatus("🔍 Validating ticket...", 'scanning');
+                        await validateAndMarkTicket(result.text);
+                    }
+                });
+                const instanceName = currentInstanceNameEl.textContent;
+                updateStatus(`Ready to scan at ${instanceName} 🎥`, 'scanning');
+            } catch (err) {
+                updateStatus("❌ Camera error. Please allow camera access.", 'invalid');
+                isScanningActive = false;
+            }
+        }
+
+        async function validateAndMarkTicket(ticketCode) {
+            if (!selectedScanInstance) {
+                updateStatus("Please select a checkpoint", 'invalid');
+                scanNextBtn.style.display = 'block';
+                return;
+            }
+
+            spinner.style.display = 'block';
+
+            try {
+                const url = `/api/validate-ticket/?code=${encodeURIComponent(ticketCode)}&event_id=${EVENT_ID}&scan_instance_id=${selectedScanInstance}`;
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (data.valid) {
+                    displayTicketInfo(data.ticket, data);
+                    updateStatus(data.message, data.scanned_before ? 'invalid' : 'valid');
+                    
+                    // Play appropriate sound
+                    try {
+                        (data.scanned_before ? soundAlreadyScanned : soundValid).play();
+                    } catch (e) {
+                        // Audio might fail on some devices, that's ok
+                    }
+                } else {
+                    updateStatus(data.message, 'invalid');
+                    try {
+                        soundInvalid.play();
+                    } catch (e) {}
+                }
+            } catch (err) {
+                updateStatus("⚠️ Network error. Please try again.", 'invalid');
+                try {
+                    soundInvalid.play();
+                } catch (e) {}
+            } finally {
+                spinner.style.display = 'none';
+                scanNextBtn.style.display = 'block';
+            }
+        } 
+
+        function displayTicketInfo(ticket, result) {
+            const scannedText = result.scanned_before ? '⚠️ Already scanned' : '✅ Scanned successfully';
+            const timeText = ticket.scanned_at_instance ? ` on ${ticket.scanned_at_instance}` : "";
+            const byText = ticket.scanned_by || 'Unknown';
+
+            let scanHistoryHtml = '';
+            if (ticket.scan_history && ticket.scan_history.length > 0) {
+                scanHistoryHtml = `
+                    <div class="scan-history">
+                        <h4>📝 Scan History</h4>
+                        ${ticket.scan_history.map(history => `
+                            <div class="scan-history-item">
+                                <strong>${history.instance_name}</strong> - ${history.scanned_at} by <em><strong>${history.scanned_by}</strong></em>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            ticketDetailsEl.innerHTML = `
+                ${ticket.holder_photo ? `<img class="holder-photo" src="${ticket.holder_photo}" alt="Holder Photo">` : ''}
+                <p><strong>Ticket No:</strong> ${ticket.ticket_number}</p>
+                <p><strong>Holder:</strong> ${ticket.holder_name}</p>
+                <p><strong>Contact:</strong> ${ticket.holder_email} | ${ticket.holder_phone || 'N/A'}</p>
+                <p><strong>Company:</strong> ${ticket.company_name || 'N/A'}</p>
+                <p><strong>Designation:</strong> ${ticket.designation || 'N/A'}</p>
+                <hr>
+                <p><strong>Checkpoint:</strong> ${ticket.scan_instance}</p>
+                <p><strong>Status:</strong> ${scannedText}${timeText} by <span style="color:#667eea;">${byText}</span></p>
+                ${scanHistoryHtml}
+            `;
+        }
+
+        function resumeScanning() {
+            if (!selectedScanInstance) {
+                updateStatus("Please select a checkpoint first", 'invalid');
+                return;
+            }
+
+            isScanningActive = true;
+            const instanceName = currentInstanceNameEl.textContent;
+            updateStatus(`Ready to scan at ${instanceName} 🎥`, 'scanning');
+            ticketDetailsEl.innerHTML = '';
+            scanNextBtn.style.display = 'none';
+        }
+
+        scanNextBtn.addEventListener('click', resumeScanning);
+
+
+
+
+        // Checkpoint Statistics
+async function loadCheckpointStats() {
+    const statsContainer = document.getElementById('checkpointStats');
+    
+    try {
+        statsContainer.innerHTML = '<div style="text-align: center; color: #6c757d; padding: 1rem;">Loading...</div>';
+        
+        const response = await fetch(`/api/checkpoint-stats/${EVENT_ID}/`);
+        const data = await response.json();
+        
+        if (data.checkpoints && data.checkpoints.length > 0) {
+            // Add the breakdown at the top
+            let html = `
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.75rem; text-align: center;">
+                    <strong style="font-size: 1rem;">📊 Total Tickets Overview</strong><br>
+                    <div style="margin-top: 0.5rem; font-size: 0.85rem;">
+                        Booths (${data.booth_tickets}) + Delegates (${data.delegate_tickets}) + MTN Money (${data.mtn_tickets}) = 
+                        <strong style="font-size: 1.1rem;">${data.total_tickets}</strong>
+                    </div>
+                </div>
+            `;
+            
+            data.checkpoints.forEach(checkpoint => {
+                const percentage = data.total_tickets > 0 
+                    ? (checkpoint.scanned / data.total_tickets * 100).toFixed(1) 
+                    : 0;
+                
+                html += `
+                    <div class="stat-item">
+                        <div class="stat-name">
+                            <i class="fa-solid fa-door-open"></i> ${checkpoint.name}
+                        </div>
+                        <div class="stat-numbers">
+                            <span class="stat-scanned" title="Scanned">
+                                <i class="fa-solid fa-check"></i> ${checkpoint.scanned}
+                            </span>
+                            <span class="stat-remaining" title="Remaining">
+                                <i class="fa-solid fa-clock"></i> ${checkpoint.remaining}
+                            </span>
+                            <span class="stat-total" title="Total">
+                                / ${checkpoint.total}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+            });
+            
+            statsContainer.innerHTML = html;
+        } else {
+            statsContainer.innerHTML = '<div style="text-align: center; color: #6c757d;">No statistics available</div>';
+        }
+    } catch (error) {
+        console.error('Error loading checkpoint stats:', error);
+        statsContainer.innerHTML = '<div style="text-align: center; color: #ff4757;">Failed to load statistics</div>';
+    }
+}
+
+
+// Load stats on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadCheckpointStats();
+    
+    // Auto-refresh stats every 30 seconds
+    setInterval(loadCheckpointStats, 30000);
+});
+
+// Also refresh stats after successful scan
+const originalValidateFunction = validateAndMarkTicket;
+validateAndMarkTicket = async function(ticketCode) {
+    await originalValidateFunction(ticketCode);
+    // Refresh stats after scan
+    setTimeout(loadCheckpointStats, 1000);
+};
+
+
+
+// Toggle stats visibility
+function toggleStats() {
+    const statsContent = document.getElementById('statsContent');
+    const toggleIcon = document.getElementById('statsToggleIcon');
+    
+    statsContent.classList.toggle('collapsed');
+    toggleIcon.classList.toggle('rotated');
+}
+
+// Optional: Start with stats collapsed on mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Collapse stats on mobile by default
+    if (window.innerWidth <= 480) {
+        const statsContent = document.getElementById('statsContent');
+        const toggleIcon = document.getElementById('statsToggleIcon');
+        statsContent.classList.add('collapsed');
+        toggleIcon.classList.add('rotated');
+    }
+    
+    loadCheckpointStats();
+    setInterval(loadCheckpointStats, 30000);
+});
+
+
+// Manual Search Functionality with Real-time Search
+let searchTimeout;
+
+function searchTickets() {
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const query = searchInput.value.trim();
+    
+    // Clear previous timeout
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+    
+    if (!query || query.length < 2) {
+        if (query.length === 0) {
+            searchResults.classList.remove('show');
+        } else {
+            searchResults.innerHTML = '<div class="no-results">Please enter at least 2 characters</div>';
+            searchResults.classList.add('show');
+        }
+        return;
+    }
+    
+    if (!selectedScanInstance) {
+        searchResults.innerHTML = '<div class="no-results" style="color: #ff4757;">Please select a checkpoint first</div>';
+        searchResults.classList.add('show');
+        return;
+    }
+    
+    // Show loading
+    searchResults.innerHTML = '<div class="no-results">Searching...</div>';
+    searchResults.classList.add('show');
+    
+    // Debounce search
+    searchTimeout = setTimeout(async () => {
+        try {
+            const response = await fetch(`/api/search-tickets/?query=${encodeURIComponent(query)}&event_id=${EVENT_ID}`);
+            const data = await response.json();
+            
+            if (data.success && data.tickets.length > 0) {
+                let html = '';
+                
+                data.tickets.forEach(ticket => {
+                    const isUsed = ticket.is_used ? 'used' : '';
+                    const statusClass = ticket.is_used ? 'scanned' : 'not-scanned';
+                    const statusText = ticket.is_used ? '✓ Already Scanned' : '○ Not Scanned';
+                    
+                    html += `
+                        <div class="search-result-item ${isUsed}" onclick='selectTicket(${JSON.stringify(ticket)})'>
+                            <div class="search-result-name">
+                                <i class="fa-solid fa-user"></i> ${ticket.holder_name}
+                            </div>
+                            <div class="search-result-details">
+                                📧 ${ticket.holder_email} | 📱 ${ticket.holder_phone || 'N/A'}
+                            </div>
+                            <div class="search-result-details">
+                                🎫 ${ticket.ticket_number} | ${ticket.category}
+                            </div>
+                            <div class="search-result-status ${statusClass}">
+                                ${statusText}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                searchResults.innerHTML = html;
+            } else {
+                searchResults.innerHTML = '<div class="no-results"><i class="fa-solid fa-inbox"></i><br>No tickets found matching your search</div>';
+            }
+        } catch (error) {
+            console.error('Search error:', error);
+            searchResults.innerHTML = '<div class="no-results" style="color: #ff4757;">Search failed. Please try again.</div>';
+        }
+    }, 300); // 300ms debounce
+}
+
+// Handle ticket selection from search results
+async function selectTicket(ticket) {
+    if (!selectedScanInstance) {
+        updateStatus("Please select a checkpoint first", 'invalid');
+        return;
+    }
+    
+    // Close search results
+    document.getElementById('searchResults').classList.remove('show');
+    document.getElementById('searchInput').value = '';
+    
+    // Mark as scanning
+    updateStatus("🔍 Validating and marking ticket...", 'scanning');
+    spinner.style.display = 'block';
+    
+    try {
+        // Use the proper ticket code format (TICKET:123|EVENT:456)
+        const url = `/api/validate-ticket/?code=${encodeURIComponent(ticket.ticket_code)}&event_id=${EVENT_ID}&scan_instance_id=${selectedScanInstance}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.valid) {
+            displayTicketInfo(data.ticket, data);
+            updateStatus(data.message, data.scanned_before ? 'invalid' : 'valid');
+            
+            // Play appropriate sound
+            try {
+                (data.scanned_before ? soundAlreadyScanned : soundValid).play();
+            } catch (e) {}
+            
+            // Refresh stats
+            setTimeout(loadCheckpointStats, 1000);
+        } else {
+            updateStatus(data.message, 'invalid');
+            try {
+                soundInvalid.play();
+            } catch (e) {}
+        }
+    } catch (error) {
+        console.error('Validation error:', error);
+        updateStatus("⚠️ Error marking ticket. Please try again.", 'invalid');
+        try {
+            soundInvalid.play();
+        } catch (e) {}
+    } finally {
+        spinner.style.display = 'none';
+        scanNextBtn.style.display = 'block';
+    }
+}
+
+// Real-time search on input
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        // Real-time search as user types
+        searchInput.addEventListener('input', function() {
+            searchTickets();
+        });
+        
+        // Also allow Enter key
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTickets();
+            }
+        });
+        
+        // Close results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !document.getElementById('searchResults').contains(e.target)) {
+                document.getElementById('searchResults').classList.remove('show');
+            }
+        });
+    }
+});
+
+   </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+</body>
+</html>

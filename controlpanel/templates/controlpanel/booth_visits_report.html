@@ -1,0 +1,506 @@
+{% load heatmap_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booth Review Heatmap</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #f5f7fa;
+      color: #2c3e50;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h2 {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #1a2a44;
+      text-align: center;
+    }
+    
+    /* Summary Stats */
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0d6efd;
+    }
+    
+    /* Top/Bottom Booths */
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .highlight-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .highlight-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: #334e68;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .booth-list-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.6rem;
+      margin-bottom: 0.5rem;
+      background: #f8f9fa;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    
+    .booth-list-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .booth-list-name {
+      font-weight: 500;
+    }
+    
+    .booth-list-count {
+      font-weight: 700;
+      color: #0d6efd;
+    }
+    
+    /* Accordion for detailed reviews */
+    .section-header {
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .section-header h3 {
+      font-size: 1.3rem;
+      color: #1a2a44;
+      margin: 0;
+    }
+    
+    .accordion-container {
+      margin-bottom: 2rem;
+    }
+    
+    .accordion-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .accordion-header {
+      background: #0d6efd;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.9rem 1.2rem;
+      width: 100%;
+      text-align: left;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+      border-radius: 8px;
+    }
+    
+    .accordion-header:hover,
+    .accordion-header[aria-expanded="true"] {
+      background: #0b5ed7;
+    }
+    
+    .accordion-icon {
+      font-size: 1.1rem;
+      transition: transform 0.3s;
+    }
+    
+    .accordion-header[aria-expanded="true"] .accordion-icon {
+      transform: rotate(180deg);
+    }
+    
+    .accordion-content {
+      padding: 1rem;
+    }
+    
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    
+    .accordion-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 700px;
+    }
+    
+    .accordion-table th,
+    .accordion-table td {
+      padding: 0.7rem 0.8rem;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+    
+    .accordion-table thead {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .accordion-table tbody tr:hover {
+      background: #f8f9fa;
+    }
+    
+    /* Full Heatmap - Collapsible */
+    .full-heatmap {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    
+    .full-heatmap-toggle {
+      background: #6c757d;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 1rem 1.5rem;
+      width: 100%;
+      text-align: left;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .full-heatmap-toggle:hover,
+    .full-heatmap-toggle[aria-expanded="true"] {
+      background: #5a6268;
+    }
+    
+    .full-heatmap-content {
+      padding: 2rem 1.5rem;
+    }
+    
+    .heatmap-legend {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .legend-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid #999;
+      flex-shrink: 0;
+    }
+    
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.8rem;
+    }
+    
+    .heatmap-card {
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-weight: 600;
+      text-align: center;
+      color: #1a2a44;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: all 0.2s;
+      cursor: default;
+      font-size: 0.85rem;
+    }
+    
+    .heatmap-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+    
+    .booth-name {
+      display: block;
+      margin-bottom: 0.3rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .booth-count {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: block;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+      font-style: italic;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      h2 {
+        font-size: 1.6rem;
+      }
+      
+      .summary-stats {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+      
+      .stat-value {
+        font-size: 1.6rem;
+      }
+      
+      .highlights {
+        grid-template-columns: 1fr;
+      }
+      
+      .heatmap-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 0.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📊 Booth Review Dashboard</h2>
+    
+    <!-- Summary Statistics -->
+    <div class="summary-stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Booths</div>
+        <div class="stat-value">{{ booths|length }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Reviews</div>
+        <div class="stat-value">{{ visits_by_booth.items|length }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Most Reviewed</div>
+        <div class="stat-value">{{ max_visits }}</div>
+      </div>
+    </div>
+    
+    <!-- Top & Bottom Performers -->
+    <div class="highlights">
+      <div class="highlight-box">
+        <h3>🔥 Top 5 Most Reviewed</h3>
+        {% for booth in booths|slice:":5" %}
+          <div class="booth-list-item">
+            <span class="booth-list-name">{{ booth.name }}</span>
+            <span class="booth-list-count">{{ booth.visit_count|default:"0" }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <div class="highlight-box">
+        <h3>💤 Bottom 5 Least Reviewed</h3>
+        {% for booth in booths|slice:"-5:" reversed %}
+          <div class="booth-list-item">
+            <span class="booth-list-name">{{ booth.name }}</span>
+            <span class="booth-list-count">{{ booth.visit_count|default:"0" }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <!-- Full Heatmap - Collapsible -->
+    <div class="full-heatmap">
+      <button class="full-heatmap-toggle" aria-expanded="false">
+        📈 View Full Booth Heatmap (All {{ booths|length }} Booths)
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="full-heatmap-content" hidden>
+        <div class="heatmap-legend">
+          <div class="legend-item">
+            <div class="legend-box" style="background: #d1e5f0;"></div>
+            <span>Least Reviewed</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box" style="background: #74a9cf;"></div>
+            <span>Moderate</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box" style="background: #0570b0;"></div>
+            <span>Most Reviewed</span>
+          </div>
+        </div>
+        
+        <div class="heatmap-grid">
+          {% for booth in booths %}
+            <div class="heatmap-card" 
+                 title="{{ booth.name }}: {{ booth.visit_count|default:0 }} reviews"
+                 style="background-color: {{ booth.visit_count|heatmap_color:max_visits }};">
+              <span class="booth-name">{{ booth.name }}</span>
+              <span class="booth-count">{{ booth.visit_count|default:"0" }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Detailed Reviews by Booth -->
+    <div class="section-header">
+      <h3>📝 Detailed Reviews by Booth</h3>
+    </div>
+    
+    {% if visits_by_booth %}
+      <div class="accordion-container">
+        {% for booth, reviews in visits_by_booth.items %}
+          <div class="accordion-item">
+            <button class="accordion-header" aria-expanded="false">
+              {{ booth.name }} ({{ reviews|length }} reviews)
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content" hidden>
+              <div class="table-wrapper">
+                <table class="accordion-table">
+                  <thead>
+                    <tr>
+                      <th>Reviewer</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Rating</th>
+                      <th>Content</th>
+                      <th>Created</th>
+                      <th>Edited</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for review in reviews %}
+                      <tr>
+                        <td>
+                          {% if review.reviewer %}
+                            {{ review.reviewer.get_full_name }}
+                          {% else %}
+                            Guest
+                          {% endif %}
+                        </td>
+                        <td>{{ review.name|default:"N/A" }}</td>
+                        <td>{{ review.email|default:"N/A" }}</td>
+                        <td>{{ review.phone_number|default:"N/A" }}</td>
+                        <td>{{ review.rating }}</td>
+                        <td>{{ review.content }}</td>
+                        <td>{{ review.created_at|date:"M d, Y H:i" }}</td>
+                        <td>
+                          {% if review.edited_at > review.created_at %}
+                            {{ review.edited_at|date:"M d, Y H:i" }}
+                          {% else %}
+                            Not edited
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="no-data">No booth reviews recorded yet.</p>
+    {% endif %}
+  </div>
+  
+  <script>
+    // Handle accordion for booth reviews
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const expanded = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-expanded', !expanded);
+        const content = header.nextElementSibling;
+        if (!expanded) {
+          content.removeAttribute('hidden');
+        } else {
+          content.setAttribute('hidden', '');
+        }
+      });
+    });
+    
+    // Handle full heatmap toggle
+    const heatmapToggle = document.querySelector('.full-heatmap-toggle');
+    if (heatmapToggle) {
+      heatmapToggle.addEventListener('click', () => {
+        const expanded = heatmapToggle.getAttribute('aria-expanded') === 'true';
+        heatmapToggle.setAttribute('aria-expanded', !expanded);
+        const content = heatmapToggle.nextElementSibling;
+        if (!expanded) {
+          content.removeAttribute('hidden');
+        } else {
+          content.setAttribute('hidden', '');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Event to Scan</title>
+
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+    }
+    h2 {
+        color: #1a2a44;
+        text-align: center;
+        margin-top: 20px;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+        max-width: 600px;
+        margin: 20px auto;
+    }
+    li {
+        background-color: #fff;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    li a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+    li a:hover {
+        text-decoration: underline;
+    }
+
+    
+    </style>
+
+</head>
+<body>
+    <h2>Select Event to Start Scanning</h2>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>{{ event.name }}</strong> — {{ event.date|date:"M d, Y H:i" }}
+                <a href="{% url 'scan_ticket' event.id %}">Start Scanning</a>
+            </li>
+        {% empty %}
+            <li>No active events available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

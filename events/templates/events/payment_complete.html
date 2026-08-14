@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        // Auto-close window after redirect
+        if(window.opener && !window.opener.closed) {
+            window.opener.location.href = "{% url 'payment_success' %}?" + window.location.search;
+            window.close();
+        } else {
+            window.location.href = "{% url 'payment_success' %}?" + window.location.search;
+        }
+    </script>
+</head>
+<body>
+    <h2>Payment completed! Redirecting...</h2>
+</body>
+</html> 

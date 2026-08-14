@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | UGANDA–KENYA COAST TOURISM CONFERENCE</title>
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body class="bg-light py-5">
+  <div class="container">
+    <h2 class="mb-4 text-center">🎟️ UGANDA–KENYA COAST TOURISM CONFERENCE Admin Dashboard</h2>
+
+    <!-- Event Creation/Editing Form -->
+    <div class="card mb-5">
+      <div class="card-header bg-primary text-white">
+        {% if editing_event %} Edit Event {% else %} Create New Event {% endif %}
+      </div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data" action="{% if edit_id %}?edit={{ edit_id }}{% endif %}">
+          {% csrf_token %}
+          {% if editing_event %}
+            <input type="hidden" name="event_id" value="{{ editing_event.id }}">
+          {% endif %}
+          <div class="row g-3">
+            <div class="col-md-6">{{ event_form.name.label }}{{ event_form.name }}</div>
+            <div class="col-md-6">{{ event_form.location.label }}{{ event_form.location }}</div>
+            <div class="col-md-6">{{ event_form.date.label }}{{ event_form.date }}</div>
+            <div class="col-md-6">
+              {{ event_form.poster.label }}{{ event_form.poster }}
+              {% if editing_event and editing_event.poster %}
+                <img src="{{ editing_event.poster.url }}" class="img-thumbnail mt-2" width="100">
+              {% endif %}
+            </div>
+            <div class="col-md-12">{{ event_form.description.label }}{{ event_form.description }}</div>
+          </div>
+
+          <hr>
+          <h5 class="mt-4">Add Ticket Categories</h5>
+          <div id="categories">
+            {{ formset.management_form }}
+            {% for form in formset %}
+              <div class="category-form border p-3 mb-3 position-relative">
+                {{ form.id }}
+                {% if form.DELETE %}
+                  {{ form.DELETE }}
+                {% endif %}
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 delete-btn">&times;</button>
+                <div class="row">
+                  <div class="col-md-4">{{ form.name.label }}{{ form.name }}</div>
+                  <div class="col-md-4">{{ form.price.label }}{{ form.price }}</div>
+                  <div class="col-md-4">{{ form.available_tickets.label }}{{ form.available_tickets }}</div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <button type="button" class="btn btn-outline-secondary mt-2" id="addCategoryBtn">+ Add Another Category</button>
+
+          <button class="btn btn-success mt-4">
+            {% if editing_event %}Update Event{% else %}Save Event{% endif %}
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Existing Events Table -->
+    <h4 class="mb-3">📅 All Events</h4>
+    <table class="table table-bordered table-striped bg-white">
+      <thead>
+        <tr>
+          <th>Poster</th>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Categories</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+        <tr>
+          <td><img src="{{ event.poster.url }}" width="80"></td>
+          <td>{{ event.name }}</td>
+          <td>{{ event.location }}</td>
+          <td>{{ event.date|date:"M d, Y H:i" }}</td>
+          <td>
+            {% for category in event.categories.all %}
+              <div>
+                <strong>{{ category.name }}</strong><br>
+                Price: Ksh{{ category.price }}<br>
+                Available: {{ category.available_tickets }}<br>
+                Remaining: {{ category.remaining_tickets }}<br>
+                <hr>
+              </div>
+            {% empty %}
+              <em>No categories yet</em>
+            {% endfor %}
+          </td>
+          <td>
+            <a href="?edit={{ event.id }}" class="btn btn-sm btn-warning">Edit</a>
+            <form method="post" action="{% url 'delete_event' event.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this event?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const formsetDiv = document.getElementById('categories');
+      const addBtn = document.getElementById('addCategoryBtn');
+      const totalForms = document.getElementById('id_ticketcategory_set-TOTAL_FORMS');
+      const emptyForm = formsetDiv.querySelector('.category-form')?.cloneNode(true);
+
+      function updateFormIndices() {
+        const forms = formsetDiv.querySelectorAll('.category-form');
+        forms.forEach((form, index) => {
+          form.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.name) input.name = input.name.replace(/-\d+-/, `-${index}-`);
+            if (input.id) input.id = input.id.replace(/-\d+-/, `-${index}-`);
+          });
+        });
+        totalForms.value = forms.length;
+      }
+
+      if (addBtn && emptyForm) {
+        addBtn.addEventListener('click', () => {
+          const newForm = emptyForm.cloneNode(true);
+          newForm.querySelectorAll('input').forEach(input => {
+            if (input.type !== 'hidden') input.value = '';
+          });
+          const delBtn = newForm.querySelector('.delete-btn');
+          delBtn.addEventListener('click', () => {
+            newForm.remove();
+            updateFormIndices();
+          });
+          formsetDiv.appendChild(newForm);
+          updateFormIndices();
+        });
+      }
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          if (formsetDiv.querySelectorAll('.category-form').length > 1) {
+            this.closest('.category-form').remove();
+            updateFormIndices();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

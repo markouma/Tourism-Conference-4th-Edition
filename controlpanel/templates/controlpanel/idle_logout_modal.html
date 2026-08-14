@@ -1,0 +1,103 @@
+<!-- templates/controlpanel/idle_logout_modal.html -->
+
+<div id="logout-warning-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+  <div style="background:#fff; padding:20px; border-radius:5px; width:300px; margin:200px auto; text-align:center;">
+    <h3>Session Timeout</h3>
+    <p>Logging out in <strong id="logout-countdown">10</strong> seconds due to inactivity.</p>
+    <button onclick="resetTimers()" style="padding:10px 20px; background:#007bff; color:white; border:none; border-radius:5px;">
+      I’m still here
+    </button>
+  </div>
+</div>
+
+<script>
+  // CSRF helper for Django POST
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  let lastActivity = Date.now();
+  const idleLimit = 1000*60*5; // Show modal at 1 secondx60x2(2 minutes)
+  const warningSeconds = 30; // 5-second countdown
+
+  let warningShown = false;
+  let logoutTimeout;
+  let countdownInterval;
+
+  function resetTimers() {
+    lastActivity = Date.now();
+    if (warningShown) {
+      hideWarningModal();
+    }
+
+    // ⏳ Backend Keep-Alive Call
+    fetch("{% url 'controlpanel:keep_alive' %}", {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ keep_alive: true }),
+      credentials: 'same-origin'
+    }).catch(() => {
+      console.warn("Keep-alive request failed.");
+    });
+  }
+
+  function showWarningModal() {
+    const modal = document.getElementById('logout-warning-modal');
+    const countdown = document.getElementById('logout-countdown');
+    modal.style.display = 'block';
+    warningShown = true;
+
+    let secondsLeft = warningSeconds;
+    countdown.innerText = secondsLeft;
+
+    countdownInterval = setInterval(() => {
+      secondsLeft--;
+      countdown.innerText = secondsLeft;
+      if (secondsLeft <= 0) clearInterval(countdownInterval);
+    }, 1000);
+
+    logoutTimeout = setTimeout(() => {
+      window.location.href = "{% url 'controlpanel:controlpanel_logout' %}";
+    }, warningSeconds * 1000);
+  }
+
+  function hideWarningModal() {
+    const modal = document.getElementById('logout-warning-modal');
+    modal.style.display = 'none';
+    clearInterval(countdownInterval);
+    clearTimeout(logoutTimeout);
+    warningShown = false;
+  }
+
+  function checkIdleTime() {
+    const now = Date.now();
+    const inactiveTime = now - lastActivity;
+
+    if (inactiveTime >= idleLimit && !warningShown) {
+      showWarningModal();
+    }
+  }
+
+  // Reset on any user activity
+  ['mousemove', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
+    document.addEventListener(event, () => {
+      if (!warningShown) resetTimers();
+    });
+  });
+
+  setInterval(checkIdleTime, 1000);
+</script>

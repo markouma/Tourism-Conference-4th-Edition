@@ -1,0 +1,559 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+  
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+    <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+  
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  
+    <!-- Main CSS File -->
+    <link href="{% static  'assets/css/main2.css' %}" rel="stylesheet">
+
+
+
+    
+  <!-- Custom Speaker Card Styling -->
+  <style>
+  
+  
+    .section-title h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .sponsor-logo {
+      max-height: 100px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      padding: 5px;
+      display: block;
+      margin: auto;
+    }
+
+
+    .speaker-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background-color: #fff;
+    }
+
+    .speaker-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .speaker-card-img {
+      height: 250px;
+      width: 100%;
+      object-fit: contain;
+      background-color: #f9f9f9;
+      padding: 10px;
+    }
+
+    .speaker-card-body {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .speaker-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .speaker-title {
+      font-size: 0.95rem;
+      color: #666;
+    }
+  </style>
+  </head>
+  
+<body class="index-page">
+
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" >Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" >Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}" class="active">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/1/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Gallery</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/1/"  class="btn-getstarted active">Register</a>
+
+ 
+    </div>
+  </header>
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Speakers Profile</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href=" {% url 'index' %}">Home</a></li>
+            <li class="current">Speakers Profile</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+
+    <!-- Speakers Section -->
+ <!-- Speakers Section -->
+<section class="starter-section section">
+  <div class="container" data-aos="fade-up">
+    <div class="row g-4">
+      
+      <!-- Speaker 1 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/back.png' %}" class="speaker-card-img" alt="HON. JOHN MULIMBA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">HON. JOHN MULIMBA</div>
+            <div class="speaker-title">MINISTER OF STATE FOR FOREIGN AFFAIRS/REGIONAL AFFAIRS OF THE REPUBLIC OF UGANDA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker 2 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/mugarra.jpg' %}" class="speaker-card-img" alt="HON. MARTIN MUGARRA BAHINDUKA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">HON. MARTIN MUGARRA BAHINDUKA</div>
+            <div class="speaker-title">MINISTER OF STATE FOR TOURISM, WILDLIFE AND ANTIQUITIES REPUBLIC OF UGANDA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker 3 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Governor.jpeg' %}" class="speaker-card-img" alt="H.E. GIDEON MUNG'ARO, OGW" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">H.E. GIDEON MUNG'ARO, OGW</div>
+            <div class="speaker-title">GOVERNOR, KILIFI COUNTY</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker 4 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Mombasa.png' %}" class="speaker-card-img" alt="H.E. ABDULLSWAMAD SHERIFF NASSIR" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">H.E. ABDULLSWAMAD SHERIFF NASSIR</div>
+            <div class="speaker-title">GOVERNOR, MOMBASA COUNTY</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker 5 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/paul.png' %}" class="speaker-card-img" alt="AMB. PAUL MUKUMBYA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">AMB. PAUL MUKUMBYA</div>
+            <div class="speaker-title">CONSUL GENERAL, <small>CONSULATE OF THE REPUBLIC OF UGANDA IN MOMBASA</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker 6 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Celestine.jpg' %}" class="speaker-card-img" alt="CELESTINE KATONGOLE, PhD" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">CELESTINE KATONGOLE, PhD</div>
+            <div class="speaker-title">SENIOR LECTURER AND HEAD OF TOURISM DEPARTMENT</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker 7 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/marloe.jpeg' %}" class="speaker-card-img" alt="MARLOES HERBER" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">MARLOES HERBER</div>
+            <div class="speaker-title">FOUNDER, KILIFI EDVENTURES</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 8 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/cathy.png' %}" class="speaker-card-img" alt="DR. CATHY IKIROR MBIDDE" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">DR. CATHY IKIROR MBIDDE</div>
+            <div class="speaker-title">MANAGER MAKERERE UNIVERSITY TECHNOLOGY AND INNOVATION CENTER (MUTIC)</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 9 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/MUBA.jpeg' %}" class="speaker-card-img" alt="DAVID MUBA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">DAVID MUBA</div>
+            <div class="speaker-title">GROUP HEAD OF DIGITAL STRATEGY, COMMERCIALIZATION & PARTNERSHIPS RADIO AFRICA GROUP</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 10 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Aisha.jpg' %}" class="speaker-card-img" alt="AISHA NABWANIKA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">AISHA NABWANIKA</div>
+            <div class="speaker-title">FOUNDER AND CHIEF EXECUTIVE ECO CULTURAL TOURISM CENTER</div>
+          </div>
+        </div>
+      </div> 
+      
+      <!-- Speaker 11 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Kelliher.jpg' %}" class="speaker-card-img" alt="BEN KELLIHER" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">BEN KELLIHER</div>
+            <div class="speaker-title">FOUNDER AND DIRECTOR TRIBE WATERSPORTS WATAMU</div>
+          </div>
+        </div>
+      </div> 
+      
+      <!-- Speaker 12 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/' %}" class="speaker-card-img" alt="DENNIS NTEGE" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">DENNIS NTEGE</div>
+            <div class="speaker-title">FOUNDER OF RAFT UGANDA</div>
+          </div>
+        </div>
+      </div>           
+
+      <!-- Speaker 13 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/sam.png' %}" class="speaker-card-img" alt="DR.SAM IKWAYE, PhD" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">DR.SAM IKWAYE, PhD</div>
+            <div class="speaker-title">EXECUTIVE OFFICER KENYA ASSOCIATION OF HOTELKEEPERS AND CATERERS (KAHC)</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 14 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Joseph.jpg' %}" class="speaker-card-img" alt="DR.JOSEPH KITHITU" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">DR.JOSEPH KITHITU</div>
+            <div class="speaker-title">MANAGING DIRECTOR HEMINGWAYS TRAVEL LIMITED</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 15 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Ms.png' %}" class="speaker-card-img" alt="Ms.CYNTHIA MUMBO" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">Ms.CYNTHIA MUMBO</div>
+            <div class="speaker-title">FOUNDER OF RAFT UGANDA</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 16 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/alex.jpeg' %}" class="speaker-card-img" alt="ALEX KAMUKAMA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">ALEX KAMUKAMA</div>
+            <div class="speaker-title">CO-FOUNDER AKRIGHT CITY</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 17 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/' %}" class="speaker-card-img" alt="LUCY BUNYENYEZI MULIRA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">LUCY BUNYENYEZI MULIRA</div>
+            <div class="speaker-title">FOUNDER FORKING AROUND KAMPALA</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 18 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Olivia.jpg' %}" class="speaker-card-img" alt="OLIVIA NAKALEMBE" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">OLIVIA NAKALEMBE</div>
+            <div class="speaker-title">JOURNALIST</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 19 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/moses.png' %}" class="speaker-card-img" alt="MOSES MATSIKO BARYAMUJURA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">MOSES MATSIKO BARYAMUJURA</div>
+            <div class="speaker-title">FOUNDER AND CEO OF PINNACLE HOLDINGS LIMITED</div>
+          </div>
+        </div>
+      </div> 
+      
+      <!-- Speaker 20 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Mubeezi.jpg' %}" class="speaker-card-img" alt="MR.DANIEL MUBEEZI" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">MR.DANIEL MUBEEZI</div>
+            <div class="speaker-title">OPERATIONS MANAGER KAYNELA FARMS</div>
+          </div>
+        </div>
+      </div> 
+      
+      <!-- Speaker 21 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/Nduva.jpg' %}" class="speaker-card-img" alt="PAULINE NDUVA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">PAULINE NDUVA</div>
+            <div class="speaker-title">CHAIRPERSON OF THE COAST DISPUTE COMMETTEE (CDC)</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 22 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/' %}" class="speaker-card-img" alt="HUDSON KARUME" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">HUDSON KARUME</div>
+            <div class="speaker-title">EXECUTIVE DIRECTOR AND FOUNDER OF VISION OF THE BLIND</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 23 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/mutua.png' %}" class="speaker-card-img" alt="PAUL M. MUTUA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">PAUL M. MUTUA</div>
+            <div class="speaker-title">FOUNDER, STRATEGY AND MARKETING DIRECTOR AT SPORTS TOURISM LIMITED</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 24 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/talam.png' %}" class="speaker-card-img" alt="NORBERT TALAM, MBA, CPA-K, CPS-K" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">NORBERT TALAM, MBA, CPA-K, CPS-K</div>
+            <div class="speaker-title">DIRECTOR GENERAL TOURISM REGULATORY AUTHORITY</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 25 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/John.jpg' %}" class="speaker-card-img" alt="JOHN HUNWICK" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">JOHN HUNWICK</div>
+            <div class="speaker-title">MANAGING DIRECTOR RWENZORI TREKKING AND ELGON TREKKING SERVICES</div>
+          </div>
+        </div>
+      </div> 
+      
+      <!-- Speaker 26 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/ron.png' %}" class="speaker-card-img" alt="RON KAZOOBA KAWAMALA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">RON KAZOOBA KAWAMALA</div>
+            <div class="speaker-title">FOUNDER AND CEO OF HUGAMARA</div>
+          </div>
+        </div>
+      </div> 
+      
+      <!-- Speaker 27 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/chiawo.jpg' %}" class="speaker-card-img" alt="DR.DAVID CHIAWO" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">DR.DAVID CHIAWO</div>
+            <div class="speaker-title">DEAN SCHOOL OF TOURISM AND HOSPITALITY, STRATHMORE UNIVERSITY</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 28 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/william.png' %}" class="speaker-card-img" alt="MPUNGU SEBYALA WILLIAM" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">MPUNGU SEBYALA WILLIAM</div>
+            <div class="speaker-title">LEAD SALES AND MARKETING LAKE VICTORIA SERENA GOLF RESORT AND SPA</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Speaker 29 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card speaker-card h-100">
+          <img src="{% static 'assets/img/CARO.png' %}" class="speaker-card-img" alt="CAROLYN AKARIZA MWENDA" />
+          <div class="speaker-card-body">
+            <div class="speaker-name">CAROLYN AKARIZA MWENDA</div>
+            <div class="speaker-title">CHARTERED MARKETER</div>
+          </div>    
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+    
+        <!-- Sponsors Section -->
+<section id="sponsors" class="sponsors section">
+  <div class="container section-title">
+    <h2>Partners</h2>
+  </div>
+
+  <div class="container">
+    <!-- Swiper Container -->
+    <div class="swiper sponsors-slider">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="{% static 'assets/img/Consulate.jpg' %}" alt="Consulate" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/UG.jpg' %}" alt="Explore Uganda" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Magical.png' %}" alt="Magical Kenya" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Kilifi.jpg' %}" alt="Kilifi County" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Mombasa.png' %}" alt="Mombasa" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Taita.png' %}" alt="Taita" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Kwale.png' %}" alt="Kwale" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/Riviera.jpg' %}" alt="Riviera" class="sponsor-logo"></div>
+        <div class="swiper-slide"><img src="{% static 'assets/img/oceanbeach.png' %}" alt="Ocean Beach" class="sponsor-logo"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+     
+          <div class="social-links d-flex mt-4">
+                    <a href="https://x.com/UgandaMombasa"target="_blank"><i class="bi bi-twitter-x"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61557768419729"target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/uganda_consulate_msa/"target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ugketourism/"target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@ugketourism"target="_blank"><i class="bi bi-youtube"></i></a>                      
+          </div>
+        </div>
+
+   <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    <div class="credits">
+        By <a href="https://linktr.ee/polycarpdev">Polycarp Dev</a> & <a href="">Mark</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+    <script>
+      var swiper = new Swiper(".sponsors-slider", {
+        loop: true,
+        spaceBetween: 30,
+        speed: 3000, // scroll speed (3 seconds)
+        autoplay: {
+          delay: 3000, // wait 3 seconds before each scroll
+          disableOnInteraction: false,
+        },
+        breakpoints: {
+          320: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },  // Small phones
+          480: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 15 },  // Large phones
+          768: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },  // Tablets
+          1024: { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 30 }  // Desktops
+        }
+      });
+    </script>
+    
+</body>
+
+</html>

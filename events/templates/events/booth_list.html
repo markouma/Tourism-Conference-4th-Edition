@@ -1,0 +1,35 @@
+<h2>Exhibition Booths - {{ event.name }}</h2>
+
+<div class="booths-grid">
+  {% for booth in booths %}
+    <div class="booth-card {% if booth.is_booked %}booked{% endif %}">
+      <h3>{{ booth.name }}</h3>
+      <p>Price: KES {{ booth.price }}</p>
+      {% if booth.is_booked %}
+        <button disabled>Booked</button>
+      {% else %}
+        <form action="{% url 'booth_checkout' booth.id %}" method="get">
+          <button type="submit">Book</button>
+        </form>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+.booths-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+.booth-card {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+}
+.booked {
+  background-color: #eee;
+  color: #888;
+}
+</style>

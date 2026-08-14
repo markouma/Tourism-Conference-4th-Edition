@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reports - Unified Dashboard</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 1rem 0;
+    }
+    
+    .main-container {
+        max-width: 1800px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+    
+    .page-header {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    .page-header h1 {
+        margin: 0;
+        font-weight: 800;
+        font-size: 1.75rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .page-header p {
+        margin: 0.5rem 0 0 0;
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+    
+    /* Grand Total Cards - PERFECT GRID */
+    .grand-totals-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .total-card {
+        padding: 1.5rem;
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .total-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+    
+    .total-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        opacity: 0.1;
+        font-size: 5rem;
+    }
+    
+    .total-card.delegates {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .total-card.mtn {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    
+    .total-card.booths {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
+    .total-card.countries {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+    }
+    
+    .total-card.grand {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        grid-column: 1 / -1;
+    }
+    
+    .total-card h3 {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 0.75rem;
+        opacity: 0.95;
+        font-weight: 600;
+        z-index: 2;
+        position: relative;
+    }
+    
+    .total-card .amount {
+        font-size: 2.2rem;
+        font-weight: 900;
+        margin: 0 0 0.5rem 0;
+        z-index: 2;
+        position: relative;
+    }
+    
+    .total-card .count {
+        font-size: 0.875rem;
+        opacity: 0.9;
+        margin-top: 0;
+        z-index: 2;
+        position: relative;
+    }
+
+    .vat-note {
+        font-size: 0.75rem;
+        opacity: 0.85;
+        margin-top: 0.5rem;
+        font-style: italic;
+        z-index: 2;
+        position: relative;
+    }
+    
+    /* COUNTRIES CARD - FULL NAMES, PERFECT FIT */
+.countries-main-stats {
+    margin-bottom: 0.5rem;
+}
+
+.countries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    gap: 0.3rem 0.25rem;
+    flex: 1;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+    margin-top: 0.25rem;
+    z-index: 2;
+    position: relative;
+    align-content: start;
+}
+
+.country-item {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 0.35rem 0.2rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    min-height: 55px;
+    font-size: 0.65rem;
+}
+
+.country-item:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.country-full-name {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 0.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    word-break: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.country-count {
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 0.1rem 0.3rem;
+    min-width: 20px;
+}
+
+.countries-grid::-webkit-scrollbar {
+    width: 3px;
+}
+
+.countries-grid::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+}
+
+.countries-grid::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.4);
+    border-radius: 2px;
+}
+
+.countries-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.6);
+}
+
+/* Mobile - Even more compact */
+@media (max-width: 768px) {
+    .countries-grid {
+        grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+        gap: 0.25rem 0.2rem;
+        max-height: 160px;
+    }
+    
+    .country-item {
+        padding: 0.3rem 0.15rem;
+        min-height: 48px;
+        font-size: 0.6rem;
+    }
+    
+    .country-full-name {
+        font-size: 0.6rem;
+    }
+    
+    .country-count {
+        font-size: 0.75rem;
+    }
+}
+    /* Section Cards */
+    .section-card {
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .section-header {
+        padding: 1.5rem;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.3s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    .section-header:hover {
+        background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0;
+    }
+    
+    .section-title i {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .section-toggle {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+    
+    .toggle-icon {
+        font-size: 1.25rem;
+        transition: transform 0.3s;
+    }
+    
+    .toggle-icon.rotated {
+        transform: rotate(180deg);
+    }
+    
+    .section-content {
+        padding: 1.5rem;
+        display: none;
+    }
+    
+    .section-content.show {
+        display: block;
+    }
+    
+    /* Metrics Grid */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .metric-box {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 1.25rem;
+        border-radius: 12px;
+        border-left: 4px solid;
+    }
+    
+    .metric-box.blue { border-left-color: #667eea; }
+    .metric-box.green { border-left-color: #10b981; }
+    .metric-box.orange { border-left-color: #f59e0b; }
+    
+    .metric-label {
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+    
+    .metric-value {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #2c3e50;
+        margin-top: 0.5rem;
+    }
+    
+    /* Table Styles */
+    .table-responsive {
+        overflow-x: auto;
+        margin-top: 1rem;
+        border-radius: 10px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        font-size: 0.875rem;
+    }
+    
+    th {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+        padding: 0.875rem 0.75rem;
+        text-align: left;
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    td {
+        padding: 0.875rem 0.75rem;
+        border-bottom: 1px solid #e9ecef;
+        color: #495057;
+    }
+    
+    tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .badge {
+        padding: 0.4rem 0.75rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+    
+    .badge-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+    
+    .badge-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+    
+    .badge-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    /* Country Grid */
+    .country-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.875rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .country-item.old-style {
+        background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+        padding: 0.875rem;
+        border-radius: 10px;
+        border-left: 4px solid #f59e0b;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .country-name {
+        font-weight: 600;
+        color: #92400e;
+        font-size: 0.875rem;
+    }
+    
+    .country-count.old-style-count {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #d97706;
+    }
+    
+    /* Event Subsection */
+    .event-subsection {
+        background: #f8f9fa;
+        padding: 1.25rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #0284c7;
+    }
+    
+    .event-subsection h4 {
+        color: #0c4a6e;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+    }
+    
+    .category-list {
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+    
+    .category-item {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.875rem;
+    }
+    
+    .category-item:last-child {
+        border-bottom: none;
+    }
+    
+    /* Expand All Button */
+    .control-buttons {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+    
+    .control-btn {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.875rem;
+    }
+    
+    .control-btn:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        body {
+            padding: 0.5rem 0;
+        }
+        
+        .page-header {
+            padding: 1rem;
+        }
+        
+        .page-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .grand-totals-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+        
+        .total-card .amount {
+            font-size: 1.75rem;
+        }
+        
+        .countries-grid {
+            max-height: 160px;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 0.3rem 0.2rem;
+        }
+        
+        .country-flag {
+            font-size: 0.65rem;
+        }
+        
+        .country-count {
+            font-size: 0.75rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+        }
+        
+        .section-toggle span {
+            display: none;
+        }
+        
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+        }
+        
+        table {
+            font-size: 0.75rem;
+        }
+        
+        th, td {
+            padding: 0.5rem 0.4rem;
+        }
+        
+        .country-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .control-buttons {
+            flex-direction: column;
+        }
+        
+        .control-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+    
+    @media print {
+        body {
+            background: white;
+        }
+        
+        .page-header, .section-card {
+            box-shadow: none;
+            page-break-inside: avoid;
+        }
+        
+        .section-content {
+            display: block !important;
+        }
+        
+        .section-toggle {
+            display: none;
+        }
+        
+        .control-buttons {
+            display: none;
+        }
+    }
+
+    /* Checkpoint Statistics */
+    .checkpoint-stats-card {
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .checkpoint-stats-header {
+        padding: 1.5rem;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.3s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+
+    .checkpoint-stats-header:hover {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+
+    .checkpoint-stats-header h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .checkpoint-stats-content {
+        padding: 1.5rem;
+        display: none;
+    }
+
+    .checkpoint-stats-content.show {
+        display: block;
+    }
+
+    .checkpoint-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .checkpoint-stat-item {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 12px;
+        padding: 1rem;
+        border-left: 5px solid #f59e0b;
+        transition: all 0.3s ease;
+    }
+
+    .checkpoint-stat-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
+    }
+
+    .checkpoint-stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .checkpoint-stat-name {
+        font-weight: 700;
+        color: #d97706;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .checkpoint-stat-event {
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-bottom: 0.75rem;
+    }
+
+    .checkpoint-numbers {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .checkpoint-number {
+        text-align: center;
+        padding: 0.5rem;
+        border-radius: 8px;
+        background: white;
+    }
+
+    .checkpoint-number-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+
+    .checkpoint-number-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+    }
+
+    .checkpoint-number.scanned .checkpoint-number-value {
+        color: #10b981;
+    }
+
+    .checkpoint-number.remaining .checkpoint-number-value {
+        color: #ef4444;
+    }
+
+    .checkpoint-number.total .checkpoint-number-value {
+        color: #6366f1;
+    }
+
+    .checkpoint-progress {
+        height: 6px;
+        background: #e5e7eb;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .checkpoint-progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        transition: width 0.5s ease;
+        border-radius: 3px;
+    }
+
+    @media (max-width: 768px) {
+        .checkpoint-stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .checkpoint-numbers {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .checkpoint-number-value {
+            font-size: 1.25rem;
+        }
+    }
+</style>
+
+
+
+
+<script>
+        function toggleSection(sectionId) {
+        const content = document.getElementById(sectionId + '-content');
+        const icon = document.getElementById(sectionId + '-icon');
+        
+        content.classList.toggle('show');
+        icon.classList.toggle('rotated');
+    }
+    
+    function expandAll() {
+        document.querySelectorAll('.section-content').forEach(content => {
+            content.classList.add('show');
+        });
+        document.querySelectorAll('.toggle-icon').forEach(icon => {
+            icon.classList.add('rotated');
+        });
+    }
+    
+    function collapseAll() {
+        document.querySelectorAll('.section-content').forEach(content => {
+            content.classList.remove('show');
+        });
+        document.querySelectorAll('.toggle-icon').forEach(icon => {
+            icon.classList.remove('rotated');
+        });
+    }
+</script>
+</head>
+<body>
+{% csrf_token %}
+{% load humanize %}
+
+<div class="main-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h1>
+                    <i class="fas fa-file-alt"></i>
+                    Complete Reports Dashboard
+                </h1>
+                <p class="mb-0 mt-1">All sales data and analytics in one place</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAND TOTALS GRID - COUNTRIES CARD WITH FULL NAMES! -->
+    <div class="grand-totals-grid">
+        <!-- Delegates Card -->
+        <div class="total-card delegates">
+            <h3>Delegates (Auto)</h3>
+            <div class="amount">KES {{ total_ticket_revenue|floatformat:2|intcomma }}</div>
+            <div class="count">{{ total_tickets_sold }} tickets sold</div>
+        </div>
+        
+        <!-- MTN Money Card -->
+        <div class="total-card mtn">
+            <h3>Delegates (Manually Appoved)</h3>
+            <div class="amount">KES {{ total_paid_amount|floatformat:2|intcomma }}</div>
+            <div class="count">{{ total_paid_apps }} tickets approved manually</div>
+        </div>
+        
+<!-- Booths Card with VAT -->
+<div class="total-card booths">
+    <h3>Booth Sales</h3>
+    <div class="amount">KES {{ total_booth_revenue|floatformat:2|intcomma }}</div>
+    <div class="count">{{ total_booths_booked }} booths booked</div>
+    <div class="vat-note" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.3);">
+        <strong>With 16% VAT:</strong><br>
+        <span style="font-size: 1.1rem; font-weight: 700;">KES {{ total_booth_revenue_with_vat|floatformat:2|intcomma }}</span>
+    </div>
+</div>
+        
+        <!-- COUNTRIES CARD - FULL NAMES, ALL VISIBLE! -->
+        <div class="total-card countries">
+            <h3>🌍 Delegates by Country</h3>
+            <div class="amount">{{ delegated_total_count }}</div>
+            <div class="count">{{ delegated_country_counts|length }} countries</div>
+            
+            <div class="countries-main-stats">
+                <div style="display: flex; justify-content: space-between; font-size: 0.7rem; opacity: 0.9; margin-top: 0.25rem;">
+                    <span>Live Distribution</span>
+                    <span style="font-weight: 700;">{{ delegated_total_count }} Total</span>
+                </div>
+            </div>
+            
+            <!-- FULL NAMES GRID - ALL COUNTRIES VISIBLE! -->
+            <div class="countries-grid">
+                {% for country, count in delegated_country_counts.items %}
+                <div class="country-item" title="{{ country }}: {{ count }} tickets">
+                    <div class="country-full-name">{{ country }}</div>
+                    <div class="country-count">{{ count }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+      <!-- Grand Total - Full Width with both totals -->
+<div class="total-card grand">
+    <h3>💰 Grand Total Revenue (All Sources)</h3>
+    <div class="amount" style="font-size: 2.5rem;">KES {{ grand_total_revenue|floatformat:2|intcomma }}</div>
+    <div class="count" style="font-size: 1rem; margin-top: 0.5rem; opacity: 1;">
+        <strong>With VAT (Booth Sales):</strong> KES {{ grand_total_revenue_with_vat|floatformat:2|intcomma }}
+    </div>
+    <div class="count" style="font-size: 1rem; margin-top: 1rem; opacity: 1;">
+        <strong>Total Tickets Sold:</strong> 
+        Booths ({{ total_booths_booked }}) + Delegates ({{ total_tickets_sold }}) + MTN Money ({{ total_paid_apps }}) = 
+        <strong style="font-size: 1.2rem; color: #fff;">{{ total_booths_booked|add:total_tickets_sold|add:total_paid_apps }}</strong>
+    </div>
+</div>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="control-buttons">
+        <button class="control-btn" onclick="expandAll()">
+            <i class="fas fa-expand-alt me-2"></i>Expand All Sections
+        </button>
+        <button class="control-btn" onclick="collapseAll()">
+            <i class="fas fa-compress-alt me-2"></i>Collapse All Sections
+        </button>
+    </div>
+
+
+
+    <!-- ==================== EVENT TICKETS SECTION ==================== -->
+    <div class="section-card">
+        <div class="section-header" onclick="toggleSection('event-tickets')">
+            <div class="section-title">
+                <i class="fas fa-ticket-alt"></i>
+                Delegates Tickets(Auto)
+            </div>
+            <div class="section-toggle">
+                <span>Click to expand</span>
+                <i class="fas fa-chevron-down toggle-icon" id="event-tickets-icon"></i>
+            </div>
+        </div>
+        
+        <div class="section-content" id="event-tickets-content">
+            <div class="metrics-grid">
+                <div class="metric-box blue">
+                    <div class="metric-label">Total Revenue</div>
+                    <div class="metric-value">KES {{ total_ticket_revenue|floatformat:2|intcomma }}</div>
+                </div>
+                <div class="metric-box green">
+                    <div class="metric-label">Total Tickets</div>
+                    <div class="metric-value">{{ total_tickets_sold }}</div>
+                </div>
+            </div>
+
+            {% for event_data in all_event_data %}
+            <div class="event-subsection">
+                <h4><i class="fas fa-calendar-check me-2"></i>{{ event_data.event.name }}</h4>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-2">
+                        <strong>Date:</strong> {{ event_data.event.date|date:"M d, Y" }}
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <strong>Total Revenue:</strong> KES {{ event_data.event_total|floatformat:2|intcomma }}
+                    </div>
+                </div>
+
+                <!-- Category Sales -->
+                <h5 style="font-weight: 700; margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">Sales by Category</h5>
+                <div class="category-list">
+                    {% for cat in event_data.tickets_per_category %}
+                    <div class="category-item">
+                        <span><strong>{{ cat.category__name }}</strong>: {{ cat.total_sold }} × KES {{ cat.category__price|floatformat:2|intcomma }}</span>
+                        <span style="color: #10b981; font-weight: 700;">KES {{ cat.total_revenue|floatformat:2|intcomma }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Country Breakdown -->
+                {% if event_data.event_countries %}
+                <h5 style="font-weight: 700; margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">Tickets by Country</h5>
+                <div class="country-grid">
+                    {% for country_data in event_data.event_countries %}
+                    <div class="country-item old-style">
+                        <span class="country-name">{{ country_data.country }}</span>
+                        <span class="country-count old-style-count">{{ country_data.count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Tickets Table -->
+                <h5 style="font-weight: 700; margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">All Tickets</h5>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ticket #</th>
+                                <th>Buyer</th>
+                                <th>Country</th>
+                                <th>City</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in event_data.tickets %}
+                            <tr>
+                                <td style="font-size: 0.75rem;">{{ ticket.ticket_number }}</td>
+                                <td>{{ ticket.buyer }}</td>
+                                <td>{{ ticket.country }}</td>
+                                <td>{{ ticket.city }}</td>
+                                <td>{{ ticket.category }}</td>
+                                <td>KES {{ ticket.price|floatformat:2|intcomma }}</td>
+                                <td style="font-size: 0.75rem;">{{ ticket.purchase_date|date:"M d, H:i" }}</td>
+                                <td>
+                                    {% if ticket.is_used %}
+                                        <span class="badge badge-success">✓ Used</span>
+                                    {% else %}
+                                        <span class="badge badge-warning">○ Not Used</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ==================== BOOTH SALES SECTION ==================== -->
+    <div class="section-card">
+        <div class="section-header" onclick="toggleSection('booth-sales')">
+            <div class="section-title">
+                <i class="fas fa-store"></i>
+                Booth Sales Report
+            </div>
+            <div class="section-toggle">
+                <span>Click to expand</span>
+                <i class="fas fa-chevron-down toggle-icon" id="booth-sales-icon"></i>
+            </div>
+        </div>
+        
+        <div class="section-content" id="booth-sales-content">
+          <div class="metrics-grid">
+    <div class="metric-box blue">
+        <div class="metric-label">Total Revenue (Base)</div>
+        <div class="metric-value">KES {{ total_booth_revenue|floatformat:2|intcomma }}</div>
+    </div>
+    <div class="metric-box orange">
+        <div class="metric-label">Total Revenue (with VAT)</div>
+        <div class="metric-value">KES {{ total_booth_revenue_with_vat|floatformat:2|intcomma }}</div>
+        <small style="display: block; margin-top: 0.5rem; color: #6c757d; font-size: 0.75rem;">
+            Base + 16% VAT - KES 16,000
+        </small>
+    </div>
+    <div class="metric-box green">
+        <div class="metric-label">Booked</div>
+        <div class="metric-value">{{ total_booths_booked }}</div>
+    </div>
+    <div class="metric-box orange">
+        <div class="metric-label">Available</div>
+        <div class="metric-value">{{ total_booths_available }}</div>
+    </div>
+</div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Booth</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Booked By</th>
+                            <th>Order ID</th>
+                            <th>Booked At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booth in booth_list %}
+                        <tr>
+                            <td><strong>{{ booth.name }}</strong></td>
+                            <td>{{ booth.price|floatformat:2|intcomma }}</td>
+                            <td>
+                                {% if booth.is_booked %}
+                                    <span class="badge badge-success">Booked</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">Available</span>
+                                {% endif %}
+                            </td>
+                           <td>{{ booth.booked_by }}</td>
+                           <td style="font-size: 0.75rem;">{{ booth.order_id }}</td>
+                            <td style="font-size: 0.75rem;">
+                                {% if booth.booked_at %}
+                                    {{ booth.booked_at|date:"Y-m-d H:i" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PAID APPLICATIONS SECTION ==================== -->
+    <div class="section-card">
+        <div class="section-header" onclick="toggleSection('paid-apps')">
+            <div class="section-title">
+                <i class="fas fa-file-invoice-dollar"></i>
+                Delegates Tickets<small>(Manually Appoved)</small>
+            </div>
+            <div class="section-toggle">
+                <span>Click to expand</span>
+                <i class="fas fa-chevron-down toggle-icon" id="paid-apps-icon"></i>
+            </div>
+        </div>
+        
+        <div class="section-content" id="paid-apps-content">
+            <div class="metrics-grid">
+                <div class="metric-box blue">
+                    <div class="metric-label">Total Amount</div>
+                    <div class="metric-value">KES {{ total_paid_amount|floatformat:2|intcomma }}</div>
+                </div>
+                <div class="metric-box green">
+                    <div class="metric-label">Applications</div>
+                    <div class="metric-value">{{ total_paid_apps }}</div>
+                </div>
+            </div>
+
+            {% if paid_per_country %}
+            <h5 style="font-weight: 700; margin-bottom: 1rem; font-size: 1rem;">Applications by Country</h5>
+            <div class="country-grid">
+                {% for country_data in paid_per_country %}
+                <div class="country-item old-style">
+                    <span class="country-name">{{ country_data.country }}</span>
+                    <span class="country-count old-style-count">{{ country_data.count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <h5 style="font-weight: 700; margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">All Paid Applications</h5>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Country</th>
+                            <th>Ticket #</th>
+                            <th>Status</th>
+                            <th>Approved</th>
+                            <th>Amount</th>
+                            <th>MPesa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in paid_app_list %}
+                        <tr>
+                            <td><strong>{{ forloop.counter }}</strong></td>
+                            <td>{{ app.full_name }}</td>
+                            <td style="font-size: 0.75rem;">{{ app.email }}</td>
+                            <td>{{ app.phone }}</td>
+                            <td>{{ app.country }}</td>
+                            <td style="font-size: 0.75rem;">{{ app.ticket_number }}</td>
+                            <td>
+                                {% if app.is_used %}
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-check-circle"></i> {{ app.status_text }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-clock"></i> {{ app.status_text }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td style="font-size: 0.75rem;">
+                                {% if app.approved_date %}
+                                    {{ app.approved_date|date:"Y-m-d H:i" }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if app.amount %}
+                                    KES {{ app.amount|floatformat:2|intcomma }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td style="font-size: 0.75rem;">{{ app.mpesa_message }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== CHECKPOINT STATISTICS SECTION ==================== -->
+    <div class="checkpoint-stats-card">
+        <div class="checkpoint-stats-header" onclick="toggleSection('checkpoint-stats')">
+            <h2>
+                <i class="fas fa-chart-bar"></i>
+                Checkpoint Scan Statistics
+            </h2>
+            <div class="section-toggle">
+                <span>Click to expand</span>
+                <i class="fas fa-chevron-down toggle-icon" id="checkpoint-stats-icon"></i>
+            </div>
+        </div>
+        
+        <div class="checkpoint-stats-content" id="checkpoint-stats-content">
+            {% if checkpoint_stats %}
+                <div class="checkpoint-stats-grid">
+                    {% for stat in checkpoint_stats %}
+                    <div class="checkpoint-stat-item">
+                        <div class="checkpoint-stat-header">
+                            <div class="checkpoint-stat-name">
+                                <i class="fas fa-door-open"></i>
+                                {{ stat.name }}
+                            </div>
+                        </div>
+                        
+                        <div class="checkpoint-stat-event">
+                            <i class="fas fa-calendar me-1"></i>{{ stat.event }}
+                        </div>
+                        
+                        <div class="checkpoint-numbers">
+                            <div class="checkpoint-number scanned">
+                                <div class="checkpoint-number-label">Scanned</div>
+                                <div class="checkpoint-number-value">{{ stat.scanned }}</div>
+                            </div>
+                            <div class="checkpoint-number remaining">
+                                <div class="checkpoint-number-label">Remaining</div>
+                                <div class="checkpoint-number-value">{{ stat.remaining }}</div>
+                            </div>
+                            <div class="checkpoint-number total">
+                                <div class="checkpoint-number-label">Total</div>
+                                <div class="checkpoint-number-value">{{ stat.total }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkpoint-progress">
+                            {% widthratio stat.scanned stat.total 100 as percentage %}
+                            <div class="checkpoint-progress-fill" style="width: {{ percentage }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 2rem; color: #6c757d;">
+                    <i class="fas fa-info-circle" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                    <p style="font-size: 1.1rem; margin: 0;">No checkpoint statistics available</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ==================== ALL TICKET HOLDERS SECTION ==================== -->
+<div class="section-card">
+    <div class="section-header" onclick="toggleSection('all-holders')">
+        <div class="section-title">
+            All Ticket Holders
+            <small class="ms-2 text-muted">(Auto + Manually Approved)</small>
+        </div>
+        <div class="section-toggle">
+            <span>Click to expand</span>
+            <i class="fas fa-chevron-down toggle-icon" id="all-holders-icon"></i>
+        </div>
+    </div>
+
+    <div class="section-content" id="all-holders-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div><strong>{{ all_ticket_holders|length }}</strong> unique delegates</div>
+            <a href="{% url 'controlpanel:all_holders_csv' %}" class="btn btn-success btn-sm">
+                Download CSV
+            </a>
+        </div>
+
+       <div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Company</th>        
+                <th>Country</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Amount</th>  
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for h in all_ticket_holders %}
+            <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ h.name }}</td>
+    <td>{{ h.company|default:"—" }}</td>
+    <td>{{ h.country }}</td>
+    <td style="font-size:0.85rem;">{{ h.email|default:"—" }}</td>
+    <td style="font-size:0.85rem;">{{ h.phone|default:"—" }}</td>
+    <td style="font-size:0.85rem; white-space:nowrap;">
+        {% if h.date %}
+            {{ h.date|date:"M d, Y H:i" }}
+        {% else %}
+            <span class="text-muted">—</span>
+        {% endif %}
+    </td>
+    <td style="font-weight:600; color:#16a34a;">
+        {% if h.amount and h.amount > 0 %}
+            KES {{ h.amount|floatformat:2|intcomma }}
+        {% else %}
+            <span class="text-muted">—</span>
+        {% endif %}
+    </td>
+    <td>
+      {% if h.email and h.email != '—' %}
+        <button class="btn btn-sm btn-outline-success send-invoice"
+        data-holder-id="{{ h.holder_id }}"
+        {% if not h.email or h.email == '—' %}disabled{% endif %}>
+  Send Invoice
+</button>
+      {% else %}
+        <span class="text-muted">—</span>
+      {% endif %}
+    </td>
+</tr>
+            {% empty %}
+            <tr><td colspan="7" class="text-center text-muted">No delegates found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    
+    // TABLE SORTING FUNCTIONALITY
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('table thead th').forEach((header, index) => {
+            header.style.cursor = 'pointer';
+            header.style.userSelect = 'none';
+            header.title = 'Click to sort';
+            
+            const span = document.createElement('span');
+            span.className = 'sort-indicator ms-2';
+            span.style.opacity = '0.3';
+            span.innerHTML = '⇅';
+            header.appendChild(span);
+            
+            header.addEventListener('click', function() {
+                const table = this.closest('table');
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const headerIndex = Array.from(this.parentElement.children).indexOf(this);
+                
+                const currentDirection = this.dataset.sortDirection || 'asc';
+                const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+                
+                table.querySelectorAll('thead th').forEach(th => {
+                    th.dataset.sortDirection = '';
+                    const indicator = th.querySelector('.sort-indicator');
+                    if (indicator) {
+                        indicator.innerHTML = '⇅';
+                        indicator.style.opacity = '0.3';
+                    }
+                });
+                
+                this.dataset.sortDirection = newDirection;
+                span.innerHTML = newDirection === 'asc' ? '▲' : '▼';
+                span.style.opacity = '1';
+                
+                rows.sort((a, b) => {
+                    const aValue = a.children[headerIndex].textContent.trim();
+                    const bValue = b.children[headerIndex].textContent.trim();
+                    
+                    const aNum = parseFloat(aValue.replace(/[^0-9.-]/g, ''));
+                    const bNum = parseFloat(bValue.replace(/[^0-9.-]/g, ''));
+                    
+                    const aDate = new Date(aValue);
+                    const bDate = new Date(bValue);
+                    
+                    let comparison = 0;
+                    
+                    if (!isNaN(aNum) && !isNaN(bNum)) {
+                        comparison = aNum - bNum;
+                    } else if (!isNaN(aDate.getTime()) && !isNaN(bDate.getTime())) {
+                        comparison = aDate - bDate;
+                    } else {
+                        comparison = aValue.localeCompare(bValue);
+                    }
+                    
+                    return newDirection === 'asc' ? comparison : -comparison;
+                });
+                
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+</script>
+
+
+
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = getCookie('csrftoken');
+
+    // MARK ALREADY SENT
+    document.querySelectorAll('.send-invoice').forEach(btn => {
+        const holderId = btn.dataset.holderId;
+        if (!holderId) return;
+
+        fetch(`/controlpanel/check-sent/${holderId}/`, {
+            method: 'GET',
+            headers: { 'X-CSRFToken': csrfToken }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.sent) {
+                btn.innerHTML = 'Sent!';
+                btn.classList.replace('btn-outline-success', 'btn-success');
+                btn.disabled = true;
+            }
+        })
+        .catch(() => {}); // Silent fail
+    });
+
+    // SEND INVOICE
+    document.querySelectorAll('.send-invoice').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const holderId = this.dataset.holderId;
+            if (!holderId) return;
+
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Sending...';
+
+            fetch(`/controlpanel/send-invoice/${holderId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({}) // Empty body OK
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('403');
+                return r.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    this.innerHTML = 'Sent!';
+                    this.classList.replace('btn-outline-success', 'btn-success');
+                    this.disabled = true;
+                } else {
+                    alert('Error: ' + (data.error || 'Try again'));
+                    this.disabled = false;
+                    this.innerHTML = 'Send Invoice';
+                }
+            })
+            .catch(err => {
+                console.error('Send failed:', err);
+                alert('Failed to send. Check login or try again.');
+                this.disabled = false;
+                this.innerHTML = 'Send Invoice';
+            });
+        });
+    });
+});
+</script>
+</body>
+</html>

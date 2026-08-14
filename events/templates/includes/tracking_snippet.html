@@ -1,0 +1,17 @@
+<script>
+    (function() {
+      fetch("/log-visit/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+          path: window.location.pathname,
+          referrer: document.referrer,
+          user_agent: navigator.userAgent
+        })
+      });
+    })();
+  </script>
+  

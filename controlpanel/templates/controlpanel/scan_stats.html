@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkpoint Scan Statistics</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f8f9fa; padding: 2rem; }
+    .card { border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .checkpoint-stat-item { background: #fff; border-radius: 12px; padding: 1rem; border-left: 5px solid #f59e0b; }
+    .scanned { color: #10b981; }
+    .remaining { color: #ef4444; }
+    .total { color: #6366f1; }
+    .progress { height: 6px; }
+    .checkpoint-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+    @media (max-width: 768px) {
+        .checkpoint-stats-grid { grid-template-columns: 1fr; }
+    }
+    #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .login-box { background: white; padding: 2rem; border-radius: 15px; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; }
+    .login-box h3 { margin-bottom: 1.5rem; color: #1f2937; }
+    .form-control { margin-bottom: 1rem; }
+    .btn-login { background: #f59e0b; color: white; font-weight: 600; }
+    .btn-login:hover { background: #d97706; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal">
+  <div class="login-box">
+    <h3>Login Required</h3>
+    <input type="text" id="username" class="form-control" placeholder="Username" autocomplete="off">
+    <input type="password" id="password" class="form-control" placeholder="Password" autocomplete="off">
+    <button class="btn btn-login w-100" onclick="checkLogin()">Login</button>
+    <p class="text-danger mt-2" id="error-msg" style="display:none;">Invalid credentials!</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT (HIDDEN UNTIL LOGIN) -->
+<div id="main-content" style="display:none;">
+  <div class="container">
+    <div class="card p-4 mb-4">
+      <h2>Checkpoint Scan Statistics</h2>
+      <p class="text-muted">Total Scannable Tickets: <strong>{{ total_scannable_tickets }}</strong></p>
+    </div>
+    <div class="checkpoint-stats-grid">
+      {% for stat in checkpoint_stats|dictsort:"sort_key" %}
+      <div class="checkpoint-stat-item">
+        <h5 class="mb-1">{{ stat.name }}</h5>
+        <small class="text-muted">{{ stat.event }}</small>
+        <div class="d-flex justify-content-between mt-3 mb-2">
+          <span><strong class="scanned">{{ stat.scanned }}</strong> Scanned</span>
+          <span><strong class="remaining">{{ stat.remaining }}</strong> Remaining</span>
+          <span><strong class="total">{{ stat.total }}</strong> Total</span>
+        </div>
+        <div class="progress">
+          {% widthratio stat.scanned stat.total 100 as percentage %}
+          <div class="progress-bar bg-success" style="width: {{ percentage }}%"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+function checkLogin() {
+  const user = document.getElementById('username').value.trim();
+  const pass = document.getElementById('password').value;
+  const error = document.getElementById('error-msg');
+
+  if (user === 'eric' && pass === 'eric') {
+    document.getElementById('login-modal').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+  } else {
+    error.style.display = 'block';
+    setTimeout(() => error.style.display = 'none', 2000);
+  }
+}
+
+// Allow Enter key
+document.getElementById('password').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') checkLogin();
+});
+</script>
+
+</body>
+</html>

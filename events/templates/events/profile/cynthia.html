@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static  'assets/css/main2.css' %}" rel="stylesheet">
+
+  <style>
+    /* Upper Section Compact Style */
+    .speaker-profile .top-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .speaker-profile .speaker-img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .speaker-profile .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding-top: 1rem;
+    }
+
+    @media (min-width: 992px) {
+      .speaker-profile .info {
+        text-align: left;
+        padding-left: 30px;
+        padding-top: 0;
+      }
+    }
+
+    .speaker-profile h2 {
+      font-size: 1.4rem; /* ↓ reduced */
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+    }
+
+    .speaker-profile h5 {
+      font-size: 1.2rem; /* ↑ increased */
+      margin-bottom: 0;
+      font-weight: 500;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body class="index-page">
+
+  <!-- Header -->
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" class="active">Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" >Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/1/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Gallery</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/1/"  class="btn-getstarted active">Register</a>
+    <a class="btn-getstarted" href="{% url 'all_tickets' %}" style="margin-left: 1px; padding: 8px 12px; font-size: 0.9rem;">
+      <i class="bi bi-person-fill" ></i>
+    </a>
+    
+
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Profile</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="current">Profile</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Speaker Profile Section -->
+    <section id="speaker-profile" class="speaker-profile py-5">
+      <div class="container" data-aos="fade-up">
+
+<!-- Top Section: Image + Info -->
+<div class="row align-items-center mb-4">
+  <!-- Image -->
+  <div class="col-lg-4 text-center mb-3 mb-lg-0">
+    <img src="{% static 'assets/img/Ms.png' %}" alt="Speaker Name"
+         class="img-fluid rounded-circle shadow"
+         style="width: 220px; height: 220px; object-fit: cover;">
+  </div>
+
+  <!-- Info -->
+  <div class="col-lg-8 d-flex flex-column justify-content-center text-center text-lg-start">
+    <h2 class="fw-bold mb-2" style="font-size: 1.8rem;">Ms.CYNTHIA MUMBO</h2>
+    <h5 class="mb-0" style="font-size: 1.1rem; font-weight: 600; line-height: 1.5;">
+      FOUNDER AND CEO, SPORTS CONNECT AFRICA
+    </h5>
+  </div>
+</div>
+
+        <!-- Horizontal Divider -->
+        <hr class="my-4">
+
+        <!-- Words Spoken -->
+        <div class="row">
+          <div class="col-12">
+            <div class="p-4 bg-light rounded shadow-sm" style="text-align: justify;">
+              <p>Cynthia Mumbo is a distinguished leader in Africa’s sports industry, with a strong track record in driving strategic
+transformation, international partnerships, and sustainable development across the continent’s sports ecosystem.
+She is the Founder and Chief Executive Officer of Sports Connect Africa, a Nairobi-based sports consultancy that
+works with a wide range of stakeholders—including international organizations such as NBA Africa, FIFA,
+Olympique Lyonnais, and Crystal Palace FC—to build capacity, foster collaboration, and grow Africa’s sports
+economy.</p>
+              <p>With over 15 years of experience across corporate marketing, sales, and sports management, Cynthia brings a
+unique commercial and strategic lens to her work. Her corporate background includes leadership roles at major
+Kenyan companies such as Diageo, Sameer Africa Ltd, and Menengai Oil Refineries, enabling her to bridge the
+gap between sport and business with purpose and precision.</p>
+              <p>Cynthia is a graduate of the Chartered Institute of Marketing (CIM), where she ranked as the top student in
+Kenya. She has furthered her leadership development through executive programs at Wits University, the FIBA
+Academy, and the Babson College Launch and Grow Fellowship, the FHI360 program supported by the U.S.
+State Department and Vital Voices to empower women entrepreneurs globally.</p>
+<p>Her leadership and influence span both national and continental platforms. She previously served on the
+Executive Committee of the Kenya Basketball Federation and currently holds board and advisory roles with
+several high-impact organizations, including the World Football Summit, AfroSport Summit (Ghana), Hype Sports
+Innovation, and the Africa Women in Sports Initiative. In Kenya, she is a Board Member of the Kenya Academy of
+Sports Council and contributes to national sports development through her role on the Strategy and Performance
+Commission of the National Olympic Committee of Kenya.</p>
+<h4 class="fw-bold mt-4">Key Highlights:</h4>
+<ul>
+  <li>Founder &amp; CEO, Sports Connect Africa</li>
+  <li>Strategic partnerships with global organizations, including NBA Africa, FIFA, Betika, Kenya Rugby Union, and Africa Centric Entertainment</li>
+  <li>Championship Director - Bingwafest (Africa’s number 1 grassroots tournament, USD 150,000 in prize money)</li>
+  <li>Top graduate, Chartered Institute of Marketing (Kenya)</li>
+  <li>Launch and Grow Fellow, Babson College</li>
+  <li>First African woman recipient of the Leaders in Sport Under 40 Award</li>
+  <li>Founder, She Drives Sports: Rewriting the Sports Code - Leadership Program for Women in Sports</li>
+  <li>Launched and executed inaugural Kenya Academy of Sports Career Expo and Symposium (A first in Africa)</li>
+</ul>
+<p>Cynthia Mumbo is a passionate advocate for inclusive leadership, youth development, and women’s empowerment
+through sport. Her work aligns closely with global efforts to leverage sport as a tool for diplomacy, education, and
+social impact—making her a trusted voice and effective partner in shaping the future of sport across Africa.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- End Speaker Profile Section -->
+
+  </main>
+ <!-- Footer -->
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="social-links d-flex mt-4">
+          <a href="https://x.com/UgandaMombasa" target="_blank"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61557768419729" target="_blank"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/uganda_consulate_msa/" target="_blank"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/ugketourism/" target="_blank"><i class="bi bi-linkedin"></i></a>
+          <a href="https://www.youtube.com/@ugketourism" target="_blank"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="container copyright text-center mt-4">
+        <p>© <span>Copyright 2025</span>
+          <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong>
+          <span>All Rights Reserved</span>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Swiper JS for sponsors -->
+  <script>
+    var swiper = new Swiper(".sponsors-slider", {
+      loop: true,
+      spaceBetween: 30,
+      speed: 3000,
+      autoplay: { delay: 3000, disableOnInteraction: false },
+      breakpoints: {
+        320: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
+        480: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 15 },
+        768: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },
+        1024: { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 30 }
+      }
+    });
+  </script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+</html>

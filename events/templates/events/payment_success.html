@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>4th UG-KE Conference|Payment Successful</title>
+
+  
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+    <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f8fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #28a745;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .info {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .info p {
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background-color: #E83304;
+      color: white;
+      padding: 10px;
+      margin: 16px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background-color: #c92b03;
+    }
+
+    .form-section {
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+      margin-top: 20px;
+    }
+
+    .form-section p.bold {
+      font-size: 15px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      margin-bottom: 3px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .small-text {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Payment Successful</h1>
+
+    <div class="info">
+      <p>The ticket has been sent to your email, along with a sign-up link </p>
+      <p>Sign Up via that link to retrieve your ticket(s) if lost.</p>
+
+
+      {% if order %}
+        <p>Event Name: <span class="bold">{{ order.event.name }}</span></p>
+        <p>Order Number: <span class="bold">#{{ order.id }}</span></p>
+        <p>Amount: <span class="bold">KES {{ order.total_amount }}</span></p>
+      {% endif %}
+    </div>
+
+    {% if tickets %}
+    <h4 class="mt-4">Download Your Ticket(s)</h4>
+    <ul class="list-group mb-3">
+      {% for ticket in tickets %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Ticket #{{ ticket.id }} - {{ ticket.category.name }} ({{ ticket.order.event.name }})
+          <a href="{% url 'download_ticket' ticket.id %}" class="button btn-sm btn-primary">
+            Download
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-danger">No tickets available to download.</p>
+  {% endif %}
+  
+
+    <div class="form-section">
+      <p class="bold">Create an account to save your tickets</p>
+      <form method="post" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" value="{{ user_details.email }}" readonly />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+
+        <button type="submit" class="button">Create Account</button>
+      </form>
+     <div class="info">
+        <button style=" text-align: center;"> <a href="{% url 'index' %}" style="text-decoration: none;">GO BACK TO HOMEPAGE</a></button>
+
+     </div>
+      <p class="small-text">By creating an account, you agree to our <a href="">Terms of Service</a>.</p>
+    </div>
+  </div>
+</body>
+</html>
+

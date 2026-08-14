@@ -1,0 +1,1206 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      padding-top: 30px;
+    }
+
+    .container {
+      max-width: 1400px;
+    }
+
+    /* Card Styling */
+    .card {
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow: visible;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #E83304 0%, #dc2626 100%);
+      color: white;
+      padding: 20px 24px;
+      border: none;
+    }
+
+    .card-header h4 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .card-body {
+      padding: 20px 24px;
+    }
+
+    .card-footer {
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+      padding: 20px 24px;
+    }
+
+    /* Cart Item Styling */
+    .cart-item {
+      background: #fafafa;
+      border: 2px solid #f3f4f6;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .cart-item:hover {
+      border-color: #E83304;
+      box-shadow: 0 4px 16px rgba(232, 51, 4, 0.1);
+    }
+
+    /* Main Row: Name+Price LEFT, Quantity RIGHT */
+    .cart-item-main-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Left side: Name and Price stacked */
+    .cart-item-info {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .cart-item h6 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 8px 0;
+    }
+
+    .cart-item-price {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .price-label {
+      font-size: 12px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .price-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #059669;
+    }
+
+    /* Right side: Quantity controls */
+    .cart-item-quantity-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quantity-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .quantity-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .quantity-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f3f4f6;
+      color: #374151;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quantity-btn:hover:not(:disabled) {
+      background: #E83304;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .quantity-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .quantity-display {
+      min-width: 40px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    /* Stock info below quantity */
+    .stock-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .stock-info.low-stock {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .stock-info.good-stock {
+      background: #f0fdf4;
+      color: #059669;
+    }
+
+    .stock-info i {
+      font-size: 13px;
+    }
+
+    /* Max Stock Alert */
+    .max-stock-alert {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      color: #dc2626;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 8px;
+      animation: shake 0.5s ease;
+    }
+
+    .max-stock-alert.show {
+      display: flex;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .max-stock-alert i {
+      font-size: 16px;
+    }
+
+    /* Footer: Subtotal and Remove */
+    .cart-item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .subtotal-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    .subtotal-label {
+      font-size: 13px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .subtotal-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    /* Remove Button */
+    .btn-remove {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-remove:hover {
+      background: #dc2626;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-remove i {
+      font-size: 14px;
+    }
+
+    /* Total Section */
+    .total-section {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 2px solid #86efac;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #166534;
+    }
+
+    .total-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #059669;
+    }
+
+    /* Back Link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #E83304;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: #dc2626;
+      gap: 10px;
+    }
+
+    .back-link i {
+      font-size: 16px;
+    }
+
+    /* Checkout Form - DYNAMIC HEIGHT */
+    .checkout-form-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    .scrollable-forms {
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-grow: 1;
+      padding-right: 10px;
+      padding-bottom: 20px;
+    }
+
+    .scrollable-forms::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .scrollable-forms::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .scrollable-forms::-webkit-scrollbar-thumb {
+      background: #E83304;
+      border-radius: 10px;
+    }
+
+    /* Attendee Form */
+    .attendee-form {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .attendee-form:hover {
+      border-color: #E83304;
+      box-shadow: 0 4px 12px rgba(232, 51, 4, 0.08);
+    }
+
+    .attendee-form h5 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #E83304;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #fee2e2;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .form-control, .form-select {
+      border: 2px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #E83304;
+      box-shadow: 0 0 0 3px rgba(232, 51, 4, 0.1);
+      outline: none;
+    }
+
+    /* Payment Section - FIXED POSITIONING */
+    .payment-section-fixed {
+      background: linear-gradient(135deg, #0f4405 0%, #166534 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      position: fixed;
+      bottom: 20px;
+      z-index: 1000;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2), 0 0 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .payment-section-fixed h4 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .btn-payment {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-payment:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-payment:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-mpesa {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .btn-pesapal {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .btn-mtn {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #111827;
+      margin-bottom: 0;
+    }
+
+    .btn-mtn a {
+      color: #111827;
+      text-decoration: none;
+    }
+
+    /* Phone Input */
+    .phone-input-container {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .iti {
+      width: 100%;
+    }
+
+    .iti__selected-flag {
+      padding: 0 10px;
+    }
+
+    /* Empty Cart */
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+    }
+
+    .empty-cart i {
+      font-size: 64px;
+      color: #e5e7eb;
+      margin-bottom: 16px;
+    }
+
+    .empty-cart p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cart-item {
+        padding: 16px;
+      }
+
+      .quantity-controls {
+        flex-wrap: wrap;
+      }
+
+      .total-value {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="row">
+
+    <!-- Cart -->
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fas fa-shopping-cart"></i> Your Tickets</h4>
+        </div>
+        <div class="card-body">
+          {% if cart_items %}
+            {% for item in cart_items %}
+              <div class="cart-item" data-category-id="{{ item.category.id }}" 
+                   data-remaining="{{ item.category.remaining_tickets }}"
+                   data-quantity="{{ item.quantity }}">
+                
+                <!-- Main Row: Name+Price LEFT, Quantity RIGHT -->
+                <div class="cart-item-main-row">
+                  <!-- LEFT: Name and Price stacked -->
+                  <div class="cart-item-info">
+                    <h6>{{ item.event.name }} - {{ item.category.name }}</h6>
+                    <div class="cart-item-price">
+                      <span class="price-label">Price:</span>
+                      <span class="price-value">Ksh {{ item.category.price }}</span>
+                    </div>
+                  </div>
+
+                  <!-- RIGHT: Quantity controls with stock below -->
+                  <div class="cart-item-quantity-section">
+                    <div class="quantity-controls">
+                      <span class="quantity-label">Qty:</span>
+                      <div class="quantity-buttons">
+                        <button class="quantity-btn decrement" data-category-id="{{ item.category.id }}">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="quantity-display quantity">{{ item.quantity }}</span>
+                        <button class="quantity-btn increment" data-category-id="{{ item.category.id }}">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="stock-info {% if item.category.remaining_tickets < 10 %}low-stock{% else %}good-stock{% endif %}">
+                      <i class="fas fa-info-circle"></i>
+                      <span>{{ item.category.remaining_tickets }} available</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="max-stock-alert" id="maxAlert-{{ item.category.id }}">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <span>No more tickets available for this category!</span>
+                </div>
+
+                <!-- Footer: Subtotal and Remove -->
+                <div class="cart-item-footer">
+                  <div class="subtotal-row">
+                    <span class="subtotal-label">Subtotal:</span>
+                    <span class="subtotal-value subtotal">Ksh {{ item.subtotal }}</span>
+                  </div>
+                  <button class="btn-remove remove" data-category-id="{{ item.category.id }}">
+                    <i class="fas fa-trash"></i>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-cart">
+              <i class="fas fa-shopping-cart"></i>
+              <p>Your cart is empty!</p>
+              <a href="/event/1/" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Browse Tickets
+              </a>
+            </div>
+          {% endif %}
+        </div>
+        
+        {% if cart_items %}
+        <div class="card-footer">
+          <div class="total-section">
+            <div class="total-row">
+              <span class="total-label">Total Amount:</span>
+              <span class="total-value">Ksh <span id="total">{{ total }}</span></span>
+            </div>
+          </div>
+          <a href="/event/1/" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Continue Shopping
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Checkout -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header">
+          <h4><i class="fas fa-user-edit"></i> Checkout</h4>
+        </div>
+        <div class="card-body checkout-form-container">
+          <form method="post" enctype="multipart/form-data" id="checkoutForm">
+            {% csrf_token %}
+
+            <!-- Attendee Forms -->
+            <div class="scrollable-forms" id="attendee-forms-container">
+              {% for item in cart_items %}
+                {% for i in item.quantity|times %}
+                  <div class="attendee-form">
+                    <h5><i class="fas fa-ticket-alt"></i> Ticket {{ forloop.counter }} - {{ item.category.name }}</h5>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Full Name *</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][name]" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Email *</label>
+                      <input type="email" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][email]" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3 phone-input-container">
+                      <label class="form-label">Phone Number *</label>
+                      <input type="tel" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][phone]" class="form-control attendee-phone" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Company *</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][company]" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Designation *</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][designation]" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Country *</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][country]" class="form-select attendee-country" required>
+                        <option value="">-- Select Country --</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="Tanzania">Tanzania</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">City *</label>
+                      <input type="text" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][city]" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Age Range *</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][age_range]" class="form-select" required>
+                        <option value="">-- Select Age Range --</option>
+                        <option value="18-24">18-24</option>
+                        <option value="25-30">25-30</option>
+                        <option value="31-40">31-40</option>
+                        <option value="41+">41+</option>
+                      </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">T-shirt Size *</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][tshirt_size]" class="form-select" required>
+                        <option value="">-- Select Size --</option>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="XXXL">XXXL</option>
+                      </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Sector / Industry *</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][sector]" class="form-select" required>
+                        <option value="">-- Select Sector --</option>
+                        <option value="Tourism Tech">Tourism Tech</option>
+                        <option value="Education">Education</option>
+                        <option value="Health">Health</option>
+                        <option value="Government">Government</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">How did you hear about the Conference? *</label>
+                      <select name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][referral_source]" class="form-select" required>
+                        <option value="">-- Select Source --</option>
+                        <option value="Referral">Referral</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Website">Website</option>
+                        <option value="Email">Email</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Passport Photo *</label>
+                      <input type="file" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][photo]" class="form-control attendee-photo" accept="image/*" required>
+                    </div>
+                    
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][consent_given]" value="true" id="consent-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}" required>
+                      <label class="form-check-label" for="consent-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                        I agree to the data usage & photo/video release policy *
+                      </label>
+                    </div>
+                    
+                    <input type="hidden" name="attendees[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}][category_id]" value="{{ item.category.id }}">
+                  </div>
+                {% endfor %}
+              {% endfor %}
+            </div>
+
+            <!-- Payment Section -->
+            <div class="payment-section-fixed" id="payment-section">
+              <h4><i class="fas fa-credit-card"></i> Payment Information</h4>
+              <div class="mb-3">
+                <label class="form-label">Phone Number (for payment) *</label>
+                <input type="tel" name="phone" id="phoneNumber" class="form-control" placeholder="07XXXXXXXX" required>
+              </div>
+              <input type="hidden" name="payment_method" id="payment_method" value="">
+              <div class="d-grid gap-2">
+                <button type="submit" id="mpesaBtn" class="btn-payment btn-mpesa">
+                  <i class="fas fa-mobile-alt"></i>
+                  Pay with M-Pesa
+                </button>
+                <button type="submit" id="pesapalBtn" class="btn-payment btn-pesapal">
+                  <i class="fas fa-credit-card"></i>
+                  Pay with Card (Pesapal)
+                </button>
+                <button type="button" class="btn-payment btn-mtn">
+                  <a href="{% url 'paid_application' 1 %}">
+                    <i class="fas fa-money-bill-wave"></i>
+                    MTN (Send Money)
+                  </a>
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let cartData = {
+    cart_items: [
+      {% for item in cart_items %}
+      {
+        category: { 
+          id: {{ item.category.id }}, 
+          name: "{{ item.category.name|escapejs }}", 
+          price: {{ item.category.price }},
+          remaining_tickets: {{ item.category.remaining_tickets }}
+        },
+        event: { name: "{{ item.event.name|escapejs }}" },
+        quantity: {{ item.quantity }},
+        subtotal: {{ item.subtotal }}
+      },
+      {% endfor %}
+    ],
+    total: {{ total }}
+  };
+
+  // DYNAMIC HEIGHT CALCULATION FOR PAYMENT SECTION
+  function adjustPaymentSectionPosition() {
+    const paymentSection = document.getElementById('payment-section');
+    const scrollableForms = document.querySelector('.scrollable-forms');
+    const checkoutCard = document.querySelector('.col-lg-6:last-child .card');
+    
+    if (!paymentSection || !scrollableForms || !checkoutCard) return;
+    
+    const cardRect = checkoutCard.getBoundingClientRect();
+    const cardBody = checkoutCard.querySelector('.card-body');
+    const cardBodyRect = cardBody.getBoundingClientRect();
+    const paymentHeight = paymentSection.offsetHeight;
+    const isLargeScreen = window.innerWidth >= 992;
+    
+    if (isLargeScreen) {
+      paymentSection.style.left = `${cardRect.left}px`;
+      paymentSection.style.width = `${cardRect.width - 48}px`;
+      paymentSection.style.right = 'auto';
+    } else {
+      paymentSection.style.left = '20px';
+      paymentSection.style.right = '20px';
+      paymentSection.style.width = 'auto';
+    }
+    
+    const availableHeight = window.innerHeight - cardBodyRect.top - paymentHeight - 60;
+    scrollableForms.style.maxHeight = `${availableHeight}px`;
+    scrollableForms.style.marginBottom = `${paymentHeight + 40}px`;
+  }
+
+  adjustPaymentSectionPosition();
+  window.addEventListener('resize', adjustPaymentSectionPosition);
+  window.addEventListener('scroll', adjustPaymentSectionPosition);
+
+  function updateIncrementButtons() {
+    document.querySelectorAll('.cart-item').forEach(cartItem => {
+      const categoryId = cartItem.dataset.categoryId;
+      const remaining = parseInt(cartItem.dataset.remaining);
+      const quantity = parseInt(cartItem.dataset.quantity);
+      const incrementBtn = cartItem.querySelector('.increment');
+      const maxAlert = document.getElementById(`maxAlert-${categoryId}`);
+      
+      if (quantity >= remaining) {
+        incrementBtn.disabled = true;
+        if (maxAlert) maxAlert.classList.add('show');
+      } else {
+        incrementBtn.disabled = false;
+        if (maxAlert) maxAlert.classList.remove('show');
+      }
+    });
+  }
+
+  function bindPaymentButtons() {
+    const mpesaBtn = document.getElementById('mpesaBtn');
+    const pesapalBtn = document.getElementById('pesapalBtn');
+    const form = document.getElementById('checkoutForm');
+
+    if (!mpesaBtn || !pesapalBtn || !form) return;
+
+    function handlePaymentClick(method, clickedBtn) {
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      document.getElementById('payment_method').value = method;
+      mpesaBtn.disabled = true;
+      pesapalBtn.disabled = true;
+
+      const message = document.createElement('div');
+      message.className = 'text-center fw-bold mt-2';
+      message.style.color = 'white';
+      message.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initiating payment...';
+      clickedBtn.replaceWith(message);
+      
+      form.submit();
+    }
+
+    mpesaBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      handlePaymentClick('mpesa', mpesaBtn);
+    });
+
+    pesapalBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      handlePaymentClick('pesapal', pesapalBtn);
+    });
+  }
+
+  function updatePaymentButtons() {
+    const mpesaBtn = document.getElementById('mpesaBtn');
+    const pesapalBtn = document.getElementById('pesapalBtn');
+    const isDisabled = cartData.total < 1;
+    if (mpesaBtn) mpesaBtn.disabled = isDisabled;
+    if (pesapalBtn) pesapalBtn.disabled = isDisabled;
+  }
+
+  function initializeAttendeePhoneInputs() {
+    document.querySelectorAll('.attendee-phone').forEach(input => {
+      const iti = window.intlTelInput(input, {
+        initialCountry: "ke",
+        preferredCountries: ["ke", "ug", "tz"],
+        separateDialCode: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+      });
+
+      const countrySelect = input.closest('.attendee-form').querySelector('.attendee-country');
+      if (countrySelect) {
+        if (countrySelect.value) {
+          iti.setCountry(countrySelect.value.toLowerCase());
+        }
+        
+        countrySelect.addEventListener('change', function() {
+          const countryCode = this.value.toLowerCase();
+          iti.setCountry(countryCode);
+          input.value = '+' + iti.getSelectedCountryData().dialCode;
+        });
+      }
+    });
+  }
+
+  function updateAttendeeForms() {
+    const container = document.getElementById('attendee-forms-container');
+    container.innerHTML = '';
+
+    let ticketCounter = 1;
+    cartData.cart_items.forEach((item, itemIndex) => {
+      for (let i = 0; i < item.quantity; i++) {
+        const formDiv = document.createElement('div');
+        formDiv.className = 'attendee-form';
+        formDiv.innerHTML = `
+          <h5><i class="fas fa-ticket-alt"></i> Ticket ${ticketCounter} - ${item.category.name}</h5>
+          
+          <div class="mb-3">
+            <label class="form-label">Full Name *</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][name]" class="form-control" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Email *</label>
+            <input type="email" name="attendees[${itemIndex}][${i}][email]" class="form-control" required>
+          </div>
+          
+          <div class="mb-3 phone-input-container">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" name="attendees[${itemIndex}][${i}][phone]" class="form-control attendee-phone" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Company *</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][company]" class="form-control" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Designation *</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][designation]" class="form-control" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Country *</label>
+            <select name="attendees[${itemIndex}][${i}][country]" class="form-select attendee-country" required>
+              <option value="">-- Select Country --</option>
+              <option value="Kenya">Kenya</option>
+              <option value="Uganda">Uganda</option>
+              <option value="Tanzania">Tanzania</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">City *</label>
+            <input type="text" name="attendees[${itemIndex}][${i}][city]" class="form-control" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Age Range *</label>
+            <select name="attendees[${itemIndex}][${i}][age_range]" class="form-select" required>
+              <option value="">-- Select Age Range --</option>
+              <option value="18-24">18-24</option>
+              <option value="25-30">25-30</option>
+              <option value="31-40">31-40</option>
+              <option value="41+">41+</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">T-shirt Size *</label>
+            <select name="attendees[${itemIndex}][${i}][tshirt_size]" class="form-select" required>
+              <option value="">-- Select Size --</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+              <option value="XXXL">XXXL</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Sector / Industry *</label>
+            <select name="attendees[${itemIndex}][${i}][sector]" class="form-select" required>
+              <option value="">-- Select Sector --</option>
+              <option value="Tourism Tech">Tourism Tech</option>
+              <option value="Education">Education</option>
+              <option value="Health">Health</option>
+              <option value="Government">Government</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">How did you hear about the summit? *</label>
+            <select name="attendees[${itemIndex}][${i}][referral_source]" class="form-select" required>
+              <option value="">-- Select Source --</option>
+              <option value="Referral">Referral</option>
+              <option value="Social Media">Social Media</option>
+              <option value="Website">Website</option>
+              <option value="Email">Email</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Passport Photo *</label>
+            <input type="file" name="attendees[${itemIndex}][${i}][photo]" class="form-control attendee-photo" accept="image/*" required>
+          </div>
+          
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="attendees[${itemIndex}][${i}][consent_given]" value="true" id="consent-${itemIndex}-${i}" required>
+            <label class="form-check-label" for="consent-${itemIndex}-${i}">
+              I agree to the data usage & photo/video release policy *
+            </label>
+          </div>
+          
+          <input type="hidden" name="attendees[${itemIndex}][${i}][category_id]" value="${item.category.id}">
+        `;
+
+        container.appendChild(formDiv);
+        ticketCounter++;
+      }
+    });
+    
+    initializeAttendeePhoneInputs();
+    setTimeout(adjustPaymentSectionPosition, 100);
+  }
+
+  document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+    const phoneInput = document.getElementById('phoneNumber');
+    if (phoneInput && !phoneInput.value.trim()) {
+      e.preventDefault();
+      alert('Please enter a phone number for payment.');
+      return false;
+    }
+
+    const attendeePhones = document.querySelectorAll('.attendee-phone');
+    for (let input of attendeePhones) {
+      const iti = window.intlTelInputGlobals.getInstance(input);
+      if (iti && !iti.isValidNumber()) {
+        e.preventDefault();
+        alert('Please enter valid phone numbers for all attendees.');
+        input.focus();
+        return false;
+      }
+    }
+
+    const photos = document.querySelectorAll('.attendee-photo');
+    for (let photo of photos) {
+      if (photo.files.length > 0 && !photo.files[0].type.startsWith('image/')) {
+        e.preventDefault();
+        alert('Only image files are allowed for the passport photo.');
+        return false;
+      }
+    }
+  });
+
+  async function updateCart(categoryId, action) {
+    const cartItem = document.querySelector(`.cart-item[data-category-id="${categoryId}"]`);
+    const remaining = parseInt(cartItem.dataset.remaining);
+    const currentQty = parseInt(cartItem.dataset.quantity);
+    
+    if (action === 'increment' && currentQty >= remaining) {
+      const maxAlert = document.getElementById(`maxAlert-${categoryId}`);
+      if (maxAlert) {
+        maxAlert.classList.add('show');
+        setTimeout(() => maxAlert.classList.remove('show'), 3000);
+      }
+      return;
+    }
+
+    const response = await fetch(`/update_cart/${categoryId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+      body: JSON.stringify({ action: action })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      const itemIndex = cartData.cart_items.findIndex(item => item.category.id == categoryId);
+      if (itemIndex !== -1) {
+        if (action === 'increment') {
+          cartData.cart_items[itemIndex].quantity++;
+        } else if (action === 'decrement') {
+          cartData.cart_items[itemIndex].quantity--;
+        }
+        cartData.cart_items[itemIndex].subtotal = cartData.cart_items[itemIndex].category.price * cartData.cart_items[itemIndex].quantity;
+      }
+      
+      cartData.total = data.new_total;
+      
+      const cartItemEl = document.querySelector(`.cart-item[data-category-id="${categoryId}"]`);
+      cartItemEl.dataset.quantity = data.new_quantity;
+      cartItemEl.querySelector('.quantity').textContent = data.new_quantity;
+      cartItemEl.querySelector('.subtotal').textContent = `Ksh ${data.new_subtotal}`;
+      
+      document.getElementById('total').textContent = data.new_total;
+      
+      updateAttendeeForms();
+      updatePaymentButtons();
+      updateIncrementButtons();
+    } else if (data.error) {
+      alert(data.error);
+    }
+  }
+
+  async function removeFromCart(categoryId) {
+    if (!confirm('Are you sure you want to remove this ticket from your cart?')) {
+      return;
+    }
+
+    const response = await fetch(`/remove_from_cart/${categoryId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      cartData.cart_items = cartData.cart_items.filter(item => item.category.id != categoryId);
+      cartData.total = data.new_total;
+      
+      document.querySelector(`.cart-item[data-category-id="${categoryId}"]`).remove();
+      document.getElementById('total').textContent = data.new_total;
+      
+      if (cartData.cart_items.length === 0) {
+        location.reload();
+      }
+      
+      updateAttendeeForms();
+      updatePaymentButtons();
+      updateIncrementButtons();
+    }
+  }
+
+  document.querySelectorAll('.increment').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      updateCart(this.dataset.categoryId, 'increment');
+    });
+  });
+
+  document.querySelectorAll('.decrement').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      updateCart(this.dataset.categoryId, 'decrement');
+    });
+  });
+
+  document.querySelectorAll('.remove').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      removeFromCart(this.dataset.categoryId);
+    });
+  });
+
+  initializeAttendeePhoneInputs();
+  bindPaymentButtons();
+  updatePaymentButtons();
+  updateIncrementButtons();
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</body>
+</html>

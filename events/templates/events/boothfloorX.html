@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/logo.jpg" rel="icon">
+  <link href="assets/img/logo.jpg" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main2.css" rel="stylesheet">
+
+  <style>
+    /* Floor Plan Styling */
+    .floorplan {
+      display: grid;
+      grid-template-columns: repeat(11, 60px);
+      grid-auto-rows: 50px;
+      gap: 0px;
+      justify-content: center;
+      margin: 0px auto;
+      max-width: 550px;
+      position: relative;
+    }
+    .booth {
+      background: #5cb6f7;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 1px solid #333;
+      border-radius: 1px;
+      position: relative;
+      z-index: 2;
+    }
+    .performance {
+      position: absolute;
+      top: 40%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: #2a9d8f;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      z-index: 10;
+    }
+    .side-label {
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .conference {
+      position: absolute;
+      left: -120px;
+      top: 40%;
+      transform: translateY(-50%);
+    }
+    .dining {
+      position: absolute;
+      right: -120px;
+      top: 40%;
+      transform: translateY(-50%);
+    }
+    .entrance {
+      grid-column: 5 / span 3;
+      grid-row: 11;
+      background: #f85d23;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 5px;
+      font-size: 16px;
+      position: relative;
+    }
+    .entrance::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: #000;
+      border-radius: 50% 50% 0 0;
+    }
+    .conference::before {
+      content: "⮜⮜ ";
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+    .dining::after {
+      content: " ⮞⮞";
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 6px;
+    }
+    .floorplan::before,
+    .floorplan::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 0.8px;
+      background: #333;
+      z-index: 1;
+    }
+    .floorplan::before { top: 0px; }
+    .floorplan::after { bottom: 50px; }
+    .booth.selected {
+      background: gray !important;
+      color: #fff;
+    }
+    .booth.paid {
+      background: darkred !important;
+      color: #fff;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .legend-box {
+      display:inline-block;
+      width:20px;
+      height:20px;
+      margin-right:5px;
+      border:1px solid #333;
+      vertical-align:middle;
+    }
+  </style>
+</head>
+<body class="index-page">
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="index.html" class="logo d-flex align-items-center me-auto">
+         <img src="assets/img/inca.png" alt=""> 
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="forewords.html">Forewords</a></li>           
+          <li><a href="speakers.html">Speaker Profile</a></li>
+          <li><a href="golf.html">Golf</a></li>
+          <li><a href="exhibitors.html">Exhibitors</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="stay.html">Where To Stay</a></li> 
+          <li><a href="index.html#contact">Contact Us</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <a class="btn-getstarted" href="conference.html">Register</a>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Floor Plan Section -->
+    <section class="section">
+      <div class="floorplan">
+        <!-- ✅ Your booths remain unchanged -->
+        <div class="booth" style="grid-column:1; grid-row:1;">1</div>
+        <div class="booth" style="grid-column:1; grid-row:2;">2</div>
+        <div class="booth" style="grid-column:1; grid-row:3;">3</div>
+        <div class="booth" style="grid-column:1; grid-row:4;">4</div>
+        <div class="booth" style="grid-column:1; grid-row:6;">24</div>
+        <div class="booth" style="grid-column:1; grid-row:7;">25</div>
+        <div class="booth" style="grid-column:1; grid-row:8;">26</div>
+        <div class="booth" style="grid-column:1; grid-row:9;">27</div>
+        <div class="booth" style="grid-column:1; grid-row:10;">28</div>
+
+        <!-- Second Column -->
+        <div class="booth" style="grid-column:3; grid-row:1;">5</div>
+        <div class="booth" style="grid-column:3; grid-row:2;">6</div>
+        <div class="booth" style="grid-column:3; grid-row:3;">7</div>
+        <div class="booth" style="grid-column:4; grid-row:3;">8</div>
+        <div class="booth" style="grid-column:4; grid-row:1;">10</div>
+        <div class="booth" style="grid-column:4; grid-row:2;">9</div>
+        <div class="booth" style="grid-column:3; grid-row:4;">38</div>
+        <div class="booth" style="grid-column:4; grid-row:4;">41</div>
+        <div class="booth" style="grid-column:3; grid-row:6;">32</div>
+        <div class="booth" style="grid-column:4; grid-row:6;">33</div>
+        <div class="booth" style="grid-column:3; grid-row:7;">31</div>
+        <div class="booth" style="grid-column:4; grid-row:7;">34</div>
+        <div class="booth" style="grid-column:3; grid-row:8;">30</div>
+        <div class="booth" style="grid-column:4; grid-row:8;">35</div>
+        <div class="booth" style="grid-column:3; grid-row:9;">29</div>
+        <div class="booth" style="grid-column:4; grid-row:9;">36</div>
+
+        <!-- Center Left -->
+        <div class="booth" style="grid-column:6; grid-row:1;">11</div>
+        <div class="booth" style="grid-column:6; grid-row:2;">12</div>
+        <div class="booth" style="grid-column:6; grid-row:3;">13</div>
+        <div class="booth" style="grid-column:7; grid-row:1;">14</div>
+        <div class="booth" style="grid-column:7; grid-row:2;">15</div>
+        <div class="booth" style="grid-column:7; grid-row:3;">16</div>
+
+        <!-- Center Bottom -->
+        <div class="booth" style="grid-column:6; grid-row:7;">39</div>
+        <div class="booth" style="grid-column:7; grid-row:7;">40</div>
+
+        <!-- Center Right -->
+        <div class="booth" style="grid-column:9; grid-row:1;">17</div>
+        <div class="booth" style="grid-column:9; grid-row:2;">18</div>
+        <div class="booth" style="grid-column:9; grid-row:3;">19</div>
+        <div class="booth" style="grid-column:9; grid-row:4;">37</div>
+        <div class="booth" style="grid-column:9; grid-row:6;">42</div>
+        <div class="booth" style="grid-column:9; grid-row:7;">45</div>
+        <div class="booth" style="grid-column:9; grid-row:8;">44</div>
+        <div class="booth" style="grid-column:9; grid-row:9;">43</div>
+
+        <!-- Right Column -->
+        <div class="booth" style="grid-column:11; grid-row:1;">23</div>
+        <div class="booth" style="grid-column:11; grid-row:2;">22</div>
+        <div class="booth" style="grid-column:11; grid-row:3;">21</div>
+        <div class="booth" style="grid-column:11; grid-row:4;">20</div>
+        <div class="booth" style="grid-column:11; grid-row:6;">46</div>
+        <div class="booth" style="grid-column:11; grid-row:7;">47</div>
+        <div class="booth" style="grid-column:11; grid-row:8;">48</div>
+        <div class="booth" style="grid-column:11; grid-row:9;">49</div>
+        <div class="booth" style="grid-column:11; grid-row:10;">50</div>
+
+        <!-- Performance Area -->
+        <div class="performance">Performance<br>Area</div>
+        <div class="side-label conference">Conference Area</div>
+        <div class="side-label dining">Dining Area</div>
+        <div class="entrance">Entrance</div>
+      </div>
+    </section>
+
+    <!-- Legend + Pay button -->
+    <section class="section text-center" style="margin-top:-80px;">
+      <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+        <div><span class="legend-box" style="background:#5cb6f7;"></span> Available</div>
+        <div><span class="legend-box" style="background:gray;"></span> Selected</div>
+        <div><span class="legend-box" style="background:darkred;"></span> Booked</div>
+        <div id="selected-count">Selected: none</div>
+        <button id="pay-btn" class="btn btn-success ms-3">Pay</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="social-links d-flex mt-4">
+          <a href="https://x.com/UgandaMombasa" target="_blank"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61557768419729" target="_blank"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/uganda_consulate_msa/" target="_blank"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/ugketourism/" target="_blank"><i class="bi bi-linkedin"></i></a>
+          <a href="https://www.youtube.com/@ugketourism" target="_blank"><i class="bi bi-youtube"></i></a>                      
+        </div>
+      </div>
+    </div>
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2025</span> <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong> <span>All Rights Reserved</span></p>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+<!-- ✅ Checkout Sidebar -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="checkoutSidebar">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Selected Booths</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+
+  <!-- Scrollable body -->
+  <div class="offcanvas-body d-flex flex-column">
+    <!-- Forms will be injected here -->
+    <div id="checkout-forms-container" class="flex-grow-1 overflow-auto"></div>
+
+<!-- ✅ Static Payment Section (covers Total + Payments) -->
+<div class="p-3 border-top text-white" style="background-color:#0f4405;">
+  <!-- Total (functional one, centered) -->
+  <div class="fw-bold mb-3 text-center" id="checkout-total">Total: Ksh 0</div>
+
+  <!-- Phone Number for Payment -->
+  <div class="mb-3">
+    <label class="form-label fw-bold text-white">Phone Number</label>
+    <input type="tel" class="form-control" placeholder="07XX XXX XXX" required>
+  </div>
+
+  <!-- Payment Buttons (Vertical Stack) -->
+  <div class="d-grid gap-2">
+    <button type="button" class="btn w-100 text-white" style="background-color:#a81414;">Pay with Pesapal</button>
+    <button type="button" class="btn w-100 text-white" style="background-color:#198754;">Pay with M-PESA</button>
+    <button type="button" class="btn w-100 text-dark" style="background-color:#ffff00;">Pay with MTN</button>
+  </div>
+</div>
+
+
+  <!-- Booth selection + Pay behavior -->
+<script>
+(function(){
+  const booths = document.querySelectorAll('.floorplan .booth');
+  booths.forEach(booth => {
+    booth.setAttribute('role', 'button');
+    booth.setAttribute('tabindex', '0');
+    booth.addEventListener('click', function () {
+      if (booth.classList.contains('paid')) return;
+      booth.classList.toggle('selected');
+      updateSelectedBooths();
+    });
+    booth.addEventListener('keydown', function (e) {
+      if (booth.classList.contains('paid')) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        booth.classList.toggle('selected');
+        updateSelectedBooths();
+      }
+    });
+  });
+
+  const selectedCountDiv = document.getElementById('selected-count');
+
+  function updateSelectedBooths() {
+    const selectedBooths = Array.from(document.querySelectorAll('.booth.selected'))
+                                .map(b => b.textContent.trim());
+    selectedCountDiv.textContent = selectedBooths.length > 0 ? 
+                                   'Selected: Booth ' + selectedBooths.join(', Booth ') : 
+                                   'Selected: none';
+  }
+
+  // ✅ Generate checkout forms dynamically
+  function renderCheckoutForms() {
+    const container = document.getElementById("checkout-forms-container");
+    container.innerHTML = "";
+    const selectedBooths = Array.from(document.querySelectorAll('.booth.selected'))
+                                .map(b => b.textContent.trim());
+    const boothPrice = 1000;
+
+    selectedBooths.forEach(boothNumber => {
+      const form = document.createElement("form");
+      form.className = "border rounded p-3 mb-3";
+      form.innerHTML = `
+        <h6 class="mb-3">Booth ${boothNumber} — Ksh ${boothPrice.toLocaleString()}</h6>
+        <div class="mb-3">
+          <label class="form-label">Full Names</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Company</label>
+            <input type="text" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Designation</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Country</label>
+            <select class="form-select" required>
+              <option value="">Select country</option>
+              <option value="Kenya">Kenya</option>
+              <option value="Uganda">Uganda</option>
+              <option value="Tanzania">Tanzania</option>
+              <option value="Rwanda">Rwanda</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Passport Photo</label>
+          <input type="file" class="form-control">
+        </div>
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" required>
+          <label class="form-check-label">
+            I consent to the use of my data and media for event purposes.
+          </label>
+        </div>
+      `;
+      container.appendChild(form);
+    });
+
+    // Update total
+    const total = selectedBooths.length * boothPrice;
+    document.getElementById("checkout-total").textContent = 
+      "Total: Ksh " + total.toLocaleString();
+  }
+
+  // Open sidebar on "Pay"
+  document.getElementById("pay-btn").addEventListener("click", function () {
+    const selectedBooths = document.querySelectorAll('.booth.selected');
+    if (selectedBooths.length === 0) {
+      alert("Please select a booth before paying.");
+      return;
+    }
+    renderCheckoutForms();
+    new bootstrap.Offcanvas(document.getElementById("checkoutSidebar")).show();
+  });
+
+})();
+</script>
+</body>
+</html>

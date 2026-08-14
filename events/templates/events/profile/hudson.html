@@ -1,0 +1,257 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UGANDA-KENYA COAST TOURISM CONFERENCE</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="icon">
+  <link href="{% static 'assets/img/logo.jpg' %}" rel="apple-touch-icon">
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static  'assets/css/main2.css' %}" rel="stylesheet">
+
+  <style>
+    /* Upper Section Compact Style */
+    .speaker-profile .top-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .speaker-profile .speaker-img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .speaker-profile .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding-top: 1rem;
+    }
+
+    @media (min-width: 992px) {
+      .speaker-profile .info {
+        text-align: left;
+        padding-left: 30px;
+        padding-top: 0;
+      }
+    }
+
+    .speaker-profile h2 {
+      font-size: 1.4rem; /* ↓ reduced */
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+    }
+
+    .speaker-profile h5 {
+      font-size: 1.2rem; /* ↑ increased */
+      margin-bottom: 0;
+      font-weight: 500;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body class="index-page">
+
+  <!-- Header -->
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href=" {% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logosi.png' %}" alt=""> 
+       
+     </a>
+
+     <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href=" {% url 'index' %}" class="active">Home</a></li> 
+        <li><a href="{% url 'Forewords' %}" >Forewords</a></li> 
+   
+        <li><a href="{% url 'speakers' %}">Speaker Profile</a></li>
+        <li><a href="{% url 'golf' %}">Golf</a></li>
+        <li><a href="/events/1/booths/">Exhibitors</a></li>
+        <li><a href="{% url 'blog' %}">Gallery</a></li>
+        <li><a href="{% url 'stay' %}">Where To Stay</a></li> 
+
+        <li><a href=" {% url 'index' %}#contact">Contact Us</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a  href="/event/1/"  class="btn-getstarted active">Register</a>
+    <a class="btn-getstarted" href="{% url 'all_tickets' %}" style="margin-left: 1px; padding: 8px 12px; font-size: 0.9rem;">
+      <i class="bi bi-person-fill" ></i>
+    </a>
+    
+
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Profile</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="current">Profile</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Speaker Profile Section -->
+    <section id="speaker-profile" class="speaker-profile py-5">
+      <div class="container" data-aos="fade-up">
+
+<!-- Top Section: Image + Info -->
+<div class="row align-items-center mb-4">
+  <!-- Image -->
+  <div class="col-lg-4 text-center mb-3 mb-lg-0">
+    <img src="{% static 'assets/img/ ' %}"alt="Speaker Name"
+         class="img-fluid rounded-circle shadow"
+         style="width: 220px; height: 220px; object-fit: cover;">
+  </div>
+
+  <!-- Info -->
+  <div class="col-lg-8 d-flex flex-column justify-content-center text-center text-lg-start">
+    <h2 class="fw-bold mb-2" style="font-size: 1.8rem;">HUDSON KARUME</h2>
+    <h5 class="mb-0" style="font-size: 1.1rem; font-weight: 600; line-height: 1.5;">
+      EXECUTIVE DIRECTOR AND FOUNDER OF<br>
+      VISION OF THE BLIND
+    </h5>
+  </div>
+</div>
+
+        <!-- Horizontal Divider -->
+        <hr class="my-4">
+
+        <!-- Words Spoken -->
+        <div class="row">
+          <div class="col-12">
+            <div class="p-4 bg-light rounded shadow-sm" style="text-align: justify;">
+              <p>Hudson Karume is a dedicated disability rights advocate and the Executive Director and Founder
+of Vision of the Blind, a national NGO he grew from a self-help group. Despite being born
+totally blind, he has forged a distinguished career championing the rights and socio-economic
+inclusion of Persons with Disabilities (PWDs).</p>
+<h5 class="fw-bold mt-3">Key Leadership & Achievements:</h5>
+<br>
+<ul>
+  <li>
+    <strong>Political Representation:</strong> Served as the Nominated Member of the Mombasa County Assembly for PWDs (2013–2017), where he successfully drafted and passed motions on inclusive sports, accessible infrastructure, and the formation of the County Committee on Equal Opportunities.
+  </li>
+
+  <li>
+    <strong>Corporate Governance:</strong> Holds several board positions, including his current role as Board Chairperson of Chapakazi Transport Investors Mombasa, and previously served on the board of MOWASSCO (Mombasa Water Supply) among other several learning institutions boards.
+  </li>
+
+  <li>
+    <strong>Policy Influence:</strong> Instrumental in developing inclusive policies for both Mombasa County and the National Government and successfully influenced the Mombasa Water Board to integrate disability issues into its corporate policies. Through his strategic engagements with Mombasa County Government, Kenya Association of Hotel Keepers and Caterers (KAHC), and Organisations of Persons with Disabilities, he played a leading role in developing disability and inclusive employment policy, Mombasa County disability mainstreaming policy, and the County PWDs Empowerment Bill of 2017, among others.
+  </li>
+
+  <li>
+    <strong>Community Empowerment:</strong> Expanded Vision of the Blind's reach, securing employment and business opportunities for PWDs, promoting access to clean water, and assisting children with disabilities in accessing education and livelihoods through their caregivers.
+  </li>
+</ul>
+<p>Hudson is a proven leader, a successful entrepreneur with a disability, and a passionate champion
+for the rights of the girl-child and marginalized communities. He holds a Diploma in County
+Governance and Management from KCA University and is a Certified Director trained in
+corporate governance.</p>
+<p>For more information: https://www.visionoftheblind.org</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- End Speaker Profile Section -->
+
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="social-links d-flex mt-4">
+          <a href="https://x.com/UgandaMombasa" target="_blank"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61557768419729" target="_blank"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/uganda_consulate_msa/" target="_blank"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/ugketourism/" target="_blank"><i class="bi bi-linkedin"></i></a>
+          <a href="https://www.youtube.com/@ugketourism" target="_blank"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="container copyright text-center mt-4">
+        <p>© <span>Copyright 2025</span>
+          <strong class="px-1 sitename">Ministry of Tourism, Wildlife and Antiquities.</strong>
+          <span>All Rights Reserved</span>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Swiper JS for sponsors -->
+  <script>
+    var swiper = new Swiper(".sponsors-slider", {
+      loop: true,
+      spaceBetween: 30,
+      speed: 3000,
+      autoplay: { delay: 3000, disableOnInteraction: false },
+      breakpoints: {
+        320: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
+        480: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 15 },
+        768: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },
+        1024: { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 30 }
+      }
+    });
+  </script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,226 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            border-radius: 8px; 
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #e9eaec; 
+            color: #000;
+        }
+        body {
+            background-color: #f4f4f4; 
+            padding-top: 30px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- Cart Section -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Your Tickets</h4>
+                    </div>
+                    <div class="card-body">
+                        {% for item in cart_items %}
+                        <div class="mb-3 cart-item" data-category-id="{{ item.category.id }}">
+                            <h6>{{ item.event.name }} - {{ item.category.name }}</h6>
+                            <p>Price: Ksh{{ item.category.price }}</p>
+                            <p>Quantity: 
+                                <button class="btn btn-sm btn-outline-secondary decrement" data-category-id="{{ item.category.id }}">-</button>
+                                <span class="mx-2 quantity">{{ item.quantity }}</span>
+                                <button class="btn btn-sm btn-outline-secondary increment" data-category-id="{{ item.category.id }}">+</button>
+                            </p>
+                            <p>Subtotal: <strong class="subtotal">Ksh {{ item.subtotal }}</strong></p>
+                            <button class="btn btn-sm btn-danger remove" data-category-id="{{ item.category.id }}">Remove</button>
+                            <hr>
+                        </div>
+                        {% empty %}
+                        <p>Your cart is empty!</p>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer">
+                        <p><strong>Total:  </strong><span id="total"> Ksh {{ total }}</span></p>
+                    </div>
+                    <span>  <a  href="{% url 'index' %}" style="text-decoration: none;" class="text-success"> Go back to Events </a> </span>
+                </div>
+                
+            </div>
+
+            <!-- Checkout Form -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Checkout</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" class="user-details-form" id="checkoutForm">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" name="name" id="fullName" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" name="phone" id="phoneNumber" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" name="email" id="email" class="form-control" required>
+                            </div>
+                            <p class="text-danger small">*Ensure your email is correct to avoid losing your ticket.</p>
+                            <button type="submit" class="btn btn-danger mt-3 w-100" {% if not cart_items %}disabled{% endif %}>
+                                Complete Purchase
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to save form data to localStorage
+            function saveFormData() {
+                const formData = {
+                    name: document.getElementById('fullName').value,
+                    phone: document.getElementById('phoneNumber').value,
+                    email: document.getElementById('email').value
+                };
+                localStorage.setItem('checkoutFormData', JSON.stringify(formData));
+            }
+
+            // Function to load form data from localStorage
+            function loadFormData() {
+                const savedData = localStorage.getItem('checkoutFormData');
+                if (savedData) {
+                    const formData = JSON.parse(savedData);
+                    document.getElementById('fullName').value = formData.name || '';
+                    document.getElementById('phoneNumber').value = formData.phone || '';
+                    document.getElementById('email').value = formData.email || '';
+                }
+            }
+
+            // Save form data on input change
+            document.getElementById('fullName').addEventListener('input', saveFormData);
+            document.getElementById('phoneNumber').addEventListener('input', saveFormData);
+            document.getElementById('email').addEventListener('input', saveFormData);
+
+            // Load saved form data when page loads
+            loadFormData();
+
+            async function updateCart(categoryId, action) {
+    try {
+        const response = await fetch(`/update_cart/${categoryId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ action: action })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            // Update quantity display
+            const quantityElement = document.querySelector(`.cart-item[data-category-id="${categoryId}"] .quantity`);
+            quantityElement.textContent = data.new_quantity;
+
+            // Update subtotal
+            const subtotalElement = document.querySelector(`.cart-item[data-category-id="${categoryId}"] .subtotal`);
+            subtotalElement.textContent = `Ksh ${data.new_subtotal}`;
+
+            // Update total - THIS WAS MISSING IN OUR LAST FIX
+            document.getElementById('total').textContent = data.new_total;
+
+            // Enable/disable checkout button
+            const checkoutBtn = document.querySelector('.user-details-form button[type="submit"]');
+            checkoutBtn.disabled = data.new_total <= 0;
+        }
+    } catch (error) {
+        console.error('Update error:', error);
+    }
+}
+
+            async function removeFromCart(categoryId) {
+                try {
+                    const response = await fetch(`/remove_from_cart/${categoryId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}',
+                        }
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        // Remove the item from the DOM
+                        const itemElement = document.querySelector(`.cart-item[data-category-id="${categoryId}"]`);
+                        if (itemElement) {
+                            itemElement.remove();
+                        }
+
+                        // Update the total
+                        document.getElementById('total').textContent = data.new_total;
+
+                        // If cart is empty, show message
+                        if (data.new_total <= 0) {
+                            const cartBody = document.querySelector('.card-body');
+                            if (!cartBody.querySelector('.empty-message')) {
+                                const emptyMsg = document.createElement('p');
+                                emptyMsg.textContent = 'Your cart is empty!';
+                                emptyMsg.classList.add('empty-message');
+                                cartBody.appendChild(emptyMsg);
+                            }
+
+                            // Disable checkout button
+                            const checkoutBtn = document.querySelector('.user-details-form button[type="submit"]');
+                            checkoutBtn.disabled = true;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Remove error:', error);
+                }
+            }
+
+            document.querySelectorAll('.increment').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const categoryId = this.dataset.categoryId;
+                    updateCart(categoryId, 'increment');
+                });
+            });
+
+            document.querySelectorAll('.decrement').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const categoryId = this.dataset.categoryId;
+                    updateCart(categoryId, 'decrement');
+                });
+            });
+
+            document.querySelectorAll('.remove').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const categoryId = this.dataset.categoryId;
+                    removeFromCart(categoryId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booth Review Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    
+    h2 {
+      color: #1a2a44;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    
+    th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 12px;
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #333;
+    }
+    
+    tbody tr {
+      transition: background-color 0.2s ease;
+    }
+    
+    tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    tbody tr:nth-child(even) {
+      background-color: #fafbfc;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      font-size: 1.1rem;
+      font-style: italic;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+      
+      table {
+        font-size: 0.85rem;
+      }
+      
+      th, td {
+        padding: 8px 6px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .container {
+        padding: 10px;
+        border-radius: 8px;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+      
+      table {
+        font-size: 0.75rem;
+      }
+      
+      th, td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📝 Booth Review Report</h2>
+    
+    {% if reviews %}
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Booth</th>
+              <th>Reviewer</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Rating</th>
+              <th>Content</th>
+              <th>Created</th>
+              <th>Edited</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for review in reviews %}
+              <tr>
+                <td>{{ review.booth.name }}</td>
+                <td>
+                  {% if review.reviewer %}
+                    {{ review.reviewer.get_full_name }} ({{ review.reviewer.email }})
+                  {% else %}
+                    Guest
+                  {% endif %}
+                </td>
+                <td>{{ review.name|default:"N/A" }}</td>
+                <td>{{ review.email|default:"N/A" }}</td>
+                <td>{{ review.phone_number|default:"N/A" }}</td>
+                <td>{{ review.rating }}</td>
+                <td>{{ review.content }}</td>
+                <td>{{ review.created_at|date:"M d, Y H:i" }}</td>
+                <td>
+                  {% if review.edited_at > review.created_at %}
+                    {{ review.edited_at|date:"M d, Y H:i" }}
+                  {% else %}
+                    Not edited
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="no-data">No reviews submitted yet.</p>
+    {% endif %}
+  </div>
+</body>
+</html>

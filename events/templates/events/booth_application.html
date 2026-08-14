@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booth Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --gray: #95a5a6;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.4;
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 18px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .event-name {
+            font-weight: 300;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .form-container {
+            padding: 18px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h3 i {
+            margin-right: 8px;
+            color: var(--secondary);
+            font-size: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            flex: 1 0 calc(50% - 12px);
+            margin-bottom: 12px;
+        }
+
+        .form-group.full-width {
+            flex: 1 0 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 9px 11px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .photo-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .photo-preview {
+            width: 85px;
+            height: 85px;
+            border: 2px dashed var(--gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+            transition: var(--transition);
+        }
+
+        .photo-preview:hover {
+            border-color: var(--secondary);
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-upload-label {
+            display: inline-block;
+            padding: 7px 12px;
+            background: var(--light);
+            color: var(--dark);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .photo-upload-label:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            margin-top: 2px;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn {
+            padding: 9px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 5px;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #bdc3c7;
+        }
+
+        .btn-add {
+            background: var(--success);
+            color: white;
+            margin: 8px 0 15px;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            background: #27ae60;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(46, 204, 113, 0.3);
+        }
+
+        .rep-form {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 7px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: var(--transition);
+        }
+
+        .rep-form:hover {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+            gap: 12px;
+        }
+
+        .notification {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 12px;
+            display: none;
+            font-size: 0.85rem;
+        }
+
+        .error {
+            background: #ffecec;
+            color: var(--error);
+            border-left: 3px solid var(--error);
+        }
+
+        .success {
+            background: #effff0;
+            color: var(--success);
+            border-left: 3px solid var(--success);
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 10px;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+            
+            .form-group {
+                flex: 1 0 100%;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            header {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            .rep-form {
+                padding: 14px;
+            }
+            
+            .form-row {
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .form-group {
+                margin-bottom: 10px;
+            }
+            
+            .photo-preview {
+                width: 75px;
+                height: 75px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 8px;
+            }
+            
+            header {
+                padding: 12px 15px;
+            }
+            
+            h1 {
+                font-size: 1.2rem;
+            }
+            
+            .event-name {
+                font-size: 0.8rem;
+            }
+            
+            .form-container {
+                padding: 12px;
+            }
+            
+            h3 {
+                font-size: 1.1rem;
+                margin-bottom: 10px;
+            }
+            
+            input, select, textarea {
+                padding: 8px 10px;
+            }
+            
+            .rep-form {
+                padding: 12px;
+            }
+            
+            .btn {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+        }
+
+        .compact-field {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Booth Representatives Application</h1>
+            <div class="event-name">4th UG-KE Tourism Conference(2025)</div>
+        </header>
+
+        <div class="form-container">
+            <div id="notification" class="notification error"></div>
+
+            <form method="post" enctype="multipart/form-data" action="{% url 'booth_application' event.id %}">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <h3><i class="fas fa-store"></i> Booth Information</h3>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="company">Company Name</label>
+                            <input type="text" id="company" name="company" required>
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="booth_number">Booth Number</label>
+                            <input type="text" id="booth_number" name="booth_number" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rep-form" id="rep1-form">
+                    <h3><i class="fas fa-user"></i> Primary Representative</h3>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep1-name">Full Name</label>
+                            <input type="text" id="rep1-name" name="rep1-name" required>
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep1-age_range">Age Range</label>
+                            <select id="rep1-age_range" name="rep1-age_range" required>
+                                <option value="">-- Select --</option>
+                                <option value="18-25">18-25</option>
+                                <option value="26-35">26-35</option>
+                                <option value="36-45">36-45</option>
+                                <option value="46+">46+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep1-email">Email Address</label>
+                            <input type="email" id="rep1-email" name="rep1-email" required>
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep1-phone">Phone Number</label>
+                            <input type="text" id="rep1-phone" name="rep1-phone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep1-country">Country</label>
+                            <input type="text" id="rep1-country" name="rep1-country" required>
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep1-city">City</label>
+                            <input type="text" id="rep1-city" name="rep1-city" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep1-industry">Industry</label>
+                            <input type="text" id="rep1-industry" name="rep1-industry" required>
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep1-tshirt_size">T-shirt Size</label>
+                            <select id="rep1-tshirt_size" name="rep1-tshirt_size" required>
+                                <option value="">-- Select --</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group photo-upload compact-field">
+                            <label>Representative Photo</label>
+                            <div class="photo-preview">
+                                <img id="preview1" src="https://via.placeholder.com/85/ecf0f1/2c3e50?text=Photo">
+                            </div>
+                            <label for="rep1-photo" class="photo-upload-label">
+                                <i class="fas fa-upload"></i> Upload Photo
+                            </label>
+                            <input type="file" id="rep1-photo" name="rep1-photo" accept="image/*" required>
+                        </div>
+                        <div class="form-group full-width compact-field">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="rep1-consent" name="rep1-consent" required>
+                                <label for="rep1-consent">I consent to the use of my data for conference purposes and communications</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" id="add-rep-btn" class="btn btn-add">
+                    <i class="fas fa-plus-circle"></i> Add Secondary Representative
+                </button>
+
+                <div class="rep-form" id="rep2-form" style="display:none;">
+                    <h3><i class="fas fa-user"></i> Secondary Representative (Optional)</h3>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep2-name">Full Name</label>
+                            <input type="text" id="rep2-name" name="rep2-name">
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep2-age_range">Age Range</label>
+                            <select id="rep2-age_range" name="rep2-age_range">
+                                <option value="">-- Select --</option>
+                                <option value="18-25">18-25</option>
+                                <option value="26-35">26-35</option>
+                                <option value="36-45">36-45</option>
+                                <option value="46+">46+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep2-email">Email Address</label>
+                            <input type="email" id="rep2-email" name="rep2-email">
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep2-phone">Phone Number</label>
+                            <input type="text" id="rep2-phone" name="rep2-phone">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep2-country">Country</label>
+                            <input type="text" id="rep2-country" name="rep2-country">
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep2-city">City</label>
+                            <input type="text" id="rep2-city" name="rep2-city">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group compact-field">
+                            <label for="rep2-industry">Industry</label>
+                            <input type="text" id="rep2-industry" name="rep2-industry">
+                        </div>
+                        <div class="form-group compact-field">
+                            <label for="rep2-tshirt_size">T-shirt Size</label>
+                            <select id="rep2-tshirt_size" name="rep2-tshirt_size">
+                                <option value="">-- Select --</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group photo-upload compact-field">
+                            <label>Representative Photo</label>
+                            <div class="photo-preview">
+                                <img id="preview2" src="https://via.placeholder.com/85/ecf0f1/2c3e50?text=Photo">
+                            </div>
+                            <label for="rep2-photo" class="photo-upload-label">
+                                <i class="fas fa-upload"></i> Upload Photo
+                            </label>
+                            <input type="file" id="rep2-photo" name="rep2-photo" accept="image/*">
+                        </div>
+                        <div class="form-group full-width compact-field">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="rep2-consent" name="rep2-consent">
+                                <label for="rep2-consent">I consent to the use of my data for conference purposes and communications</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Reset Form
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addRepBtn = document.getElementById('add-rep-btn');
+            const rep2Form = document.getElementById('rep2-form');
+            const notification = document.getElementById('notification');
+            
+            // Add 2nd rep form
+            addRepBtn.addEventListener('click', function() {
+                let company = document.getElementById('company').value;
+                let booth = document.getElementById('booth_number').value;
+
+                if (!company || !booth) {
+                    showNotification('Please fill out all booth information before adding a secondary representative.', 'error');
+                    return;
+                }
+
+                rep2Form.style.display = 'block';
+                addRepBtn.style.display = 'none';
+                
+                showNotification('Secondary representative added successfully. Please fill their details.', 'success');
+            });
+
+            // Live preview for photos
+            function setupPreview(inputId, imgId) {
+                let input = document.getElementById(inputId);
+                let img = document.getElementById(imgId);
+                if (input) {
+                    input.addEventListener('change', function(e) {
+                        let file = e.target.files[0];
+                        if (file) {
+                            img.src = URL.createObjectURL(file);
+                        }
+                    });
+                }
+            }
+
+            setupPreview('rep1-photo', 'preview1');
+            setupPreview('rep2-photo', 'preview2');
+            
+            // Show notification function
+            function showNotification(message, type) {
+                notification.textContent = message;
+                notification.className = 'notification ' + type;
+                notification.style.display = 'block';
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Enhanced form validation on submit
+            document.querySelector('form').addEventListener('submit', function(e) {
+                let company = document.getElementById('company').value;
+                let booth = document.getElementById('booth_number').value;
+                let rep1Name = document.getElementById('rep1-name').value;
+                let rep1Email = document.getElementById('rep1-email').value;
+                let rep1Phone = document.getElementById('rep1-phone').value;
+                let rep1Country = document.getElementById('rep1-country').value;
+                let rep1City = document.getElementById('rep1-city').value;
+                let rep1Industry = document.getElementById('rep1-industry').value;
+                let rep1AgeRange = document.getElementById('rep1-age_range').value;
+                let rep1TshirtSize = document.getElementById('rep1-tshirt_size').value;
+                let rep1Photo = document.getElementById('rep1-photo').files[0];
+                let rep1Consent = document.getElementById('rep1-consent').checked;
+                
+                if (!company || !booth || !rep1Name || !rep1Email || !rep1Phone || 
+                    !rep1Country || !rep1City || !rep1Industry || !rep1AgeRange || 
+                    !rep1TshirtSize || !rep1Photo || !rep1Consent) {
+                    e.preventDefault();
+                    showNotification('Please fill out all required fields for the primary representative before submitting.', 'error');
+                    window.scrollTo(0, 0);
+                    return;
+                }
+
+                // Validate secondary rep if form is visible
+                if (rep2Form.style.display !== 'none') {
+                    let rep2Name = document.getElementById('rep2-name').value;
+                    let rep2Consent = document.getElementById('rep2-consent').checked;
+                    
+                    if (rep2Name && !rep2Consent) {
+                        e.preventDefault();
+                        showNotification('Please check the consent checkbox for the secondary representative.', 'error');
+                        window.scrollTo(0, document.body.scrollHeight);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

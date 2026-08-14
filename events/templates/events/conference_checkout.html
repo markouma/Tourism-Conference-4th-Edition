@@ -1,0 +1,242 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            border-radius: 8px; 
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #e9eaec; 
+            color: #000;
+        }
+        body {
+            background-color: #f4f4f4; 
+            padding-top: 30px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- Cart Section -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Your Tickets</h4>
+                    </div>
+                    <div class="card-body">
+                        {% for item in cart_items %}
+                        <div class="mb-3 cart-item" data-category-id="{{ item.category.id }}">
+                            <h6>{{ item.event.name }} - {{ item.category.name }}</h6>
+                            <p>Price: Ksh{{ item.category.price }}</p>
+                            <p>Quantity: 
+                                <button class="btn btn-sm btn-outline-secondary decrement" data-category-id="{{ item.category.id }}">-</button>
+                                <span class="mx-2 quantity">{{ item.quantity }}</span>
+                                <button class="btn btn-sm btn-outline-secondary increment" data-category-id="{{ item.category.id }}">+</button>
+                            </p>
+                            <p>Subtotal: <strong class="subtotal">Ksh {{ item.subtotal }}</strong></p>
+                            <button class="btn btn-sm btn-danger remove" data-category-id="{{ item.category.id }}">Remove</button>
+                            <hr>
+                        </div>
+                        {% empty %}
+                        <p>Your cart is empty!</p>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer">
+                        <p><strong>Total:  </strong><span id="total"> Ksh {{ total }}</span></p>
+                    </div>
+                    <span>  <a  href="{% url 'index' %}" style="text-decoration: none;" class="text-success"> Go back to Events </a> </span>
+                </div>
+                
+            </div>
+
+            <!-- Checkout Form -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Checkout</h4>
+                    </div>
+                    <div class="card-body">
+                      
+                        <form method="post" enctype="multipart/form-data" id="conferenceCheckoutForm">
+                            {% csrf_token %}
+                            
+                            <!-- User Details -->
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" name="name" class="form-control" required value="{{ request.session.user_details.name|default:'' }}">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" name="phone" class="form-control" required value="{{ request.session.user_details.phone|default:'' }}">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" name="email" class="form-control" required value="{{ request.session.user_details.email|default:'' }}">
+                            </div>
+                            
+                            <!-- Photo Upload -->
+                            <div class="mb-3">
+                                <label for="attendeePhoto" class="form-label">Attendee Photo</label>
+                                <input type="file" name="attendee_photo" class="form-control" required accept="image/*">
+                                <small class="text-muted">Clear headshot (max 2MB)</small>
+                            </div>
+                            
+                          
+                            
+                            <button type="submit" class="btn btn-primary w-100">Complete Purchase</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+   
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Conference checkout JS loaded");  // Debug
+        
+            // Form data handling (keep existing)
+            // ... [your existing form data code] ...
+        
+            // Enhanced cart functions with debugging
+            async function updateCart(categoryId, action) {
+                console.log(`Updating cart: ${categoryId}, ${action}`);
+                try {
+                    const response = await fetch(`/update_cart/${categoryId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}',
+                        },
+                        body: JSON.stringify({ action: action })
+                    });
+        
+                    const data = await response.json();
+                    console.log("Server response:", data);
+                    
+                    if (data.success) {
+                        // Update UI
+                        const itemElement = document.querySelector(`.cart-item[data-category-id="${categoryId}"]`);
+                        if (itemElement) {
+                            // Update quantity
+                            const quantityElement = itemElement.querySelector('.quantity');
+                            if (quantityElement) quantityElement.textContent = data.new_quantity;
+                            
+                            // Update subtotal
+                            const subtotalElement = itemElement.querySelector('.subtotal');
+                            if (subtotalElement) subtotalElement.textContent = `Ksh ${data.new_subtotal}`;
+                        }
+                        
+                        // Update total
+                        const totalElement = document.getElementById('total');
+                        if (totalElement) totalElement.textContent = `Ksh ${data.new_total}`;
+                        
+                        // Toggle checkout button
+                        const checkoutBtn = document.querySelector('#conferenceCheckoutForm button[type="submit"]');
+                        if (checkoutBtn) checkoutBtn.disabled = data.new_total <= 0;
+                    } else {
+                        console.error('Server reported error:', data.error);
+                        alert('Failed to update cart: ' + (data.error || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Network error:', error);
+                    alert('Network error - please try again');
+                }
+            }
+        
+            async function removeFromCart(categoryId) {
+                console.log("Removing item:", categoryId);
+                try {
+                    const response = await fetch(`/remove_from_cart/${categoryId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}',
+                        }
+                    });
+        
+                    const data = await response.json();
+                    console.log("Remove response:", data);
+                    
+                    if (data.success) {
+                        // Remove item from UI
+                        const itemElement = document.querySelector(`.cart-item[data-category-id="${categoryId}"]`);
+                        if (itemElement) itemElement.remove();
+                        
+                        // Update total
+                        const totalElement = document.getElementById('total');
+                        if (totalElement) totalElement.textContent = `Ksh ${data.new_total}`;
+                        
+                        // Handle empty cart
+                        if (data.new_total <= 0) {
+                            const cartBody = document.querySelector('.card-body');
+                            if (cartBody) {
+                                const emptyMsg = document.createElement('p');
+                                emptyMsg.textContent = 'Your cart is empty!';
+                                emptyMsg.classList.add('empty-message');
+                                cartBody.appendChild(emptyMsg);
+                            }
+                        }
+                        
+                        // Toggle checkout button
+                        const checkoutBtn = document.querySelector('#conferenceCheckoutForm button[type="submit"]');
+                        if (checkoutBtn) checkoutBtn.disabled = data.new_total <= 0;
+                    }
+                } catch (error) {
+                    console.error('Remove error:', error);
+                    alert('Failed to remove item - please try again');
+                }
+            }
+        
+            // Event delegation for dynamic elements
+            document.addEventListener('click', function(e) {
+                // Increment button
+                if (e.target.classList.contains('increment')) {
+                    e.preventDefault();
+                    const categoryId = e.target.dataset.categoryId;
+                    updateCart(categoryId, 'increment');
+                    return;
+                }
+                
+                // Decrement button
+                if (e.target.classList.contains('decrement')) {
+                    e.preventDefault();
+                    const categoryId = e.target.dataset.categoryId;
+                    updateCart(categoryId, 'decrement');
+                    return;
+                }
+                
+                // Remove button
+                if (e.target.classList.contains('remove')) {
+                    e.preventDefault();
+                    const categoryId = e.target.dataset.categoryId;
+                    removeFromCart(categoryId);
+                    return;
+                }
+            });
+        });
+        </script>
+
+
+</body>
+</html>

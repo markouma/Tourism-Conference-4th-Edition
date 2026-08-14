@@ -1,0 +1,1237 @@
+{% load static %}
+<style>
+    /* Modern Reset & Base */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --primary: #3b82f6;
+        --primary-dark: #2563eb;
+        --primary-light: #60a5fa;
+        --secondary: #8b5cf6;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark: #1e293b;
+        --dark-light: #334155;
+        --gray: #64748b;
+        --gray-light: #cbd5e1;
+        --gray-lighter: #f1f5f9;
+        --white: #ffffff;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        --radius: 12px;
+        --radius-lg: 16px;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        color: var(--dark);
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+    /* Modern Navbar */
+    .navbar {
+        background: var(--white);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--gray-light);
+        padding: 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .navbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem 1.5rem;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--dark);
+        transition: opacity 0.2s;
+    }
+
+    .navbar-brand:hover {
+        opacity: 0.8;
+    }
+
+    .navbar-logo {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        object-fit: contain;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .navbar-brand-text {
+        display: none;
+    }
+
+    .navbar-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--dark);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+    }
+
+    .navbar-toggle:hover {
+        background-color: var(--gray-lighter);
+    }
+
+    .navbar-menu {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .navbar-link {
+        color: var(--gray);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 0.625rem 1rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+    }
+
+    .navbar-link:hover {
+        color: var(--primary);
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .navbar-link.active {
+        color: var(--primary);
+        background-color: rgba(59, 130, 246, 0.15);
+        font-weight: 600;
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .mobile-menu-overlay.active {
+        opacity: 1;
+    }
+
+    /* Main Content */
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .dashboard-header {
+        margin-bottom: 2rem;
+        animation: fadeInUp 0.5s ease;
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .dashboard-subtitle {
+        color: var(--gray);
+        font-size: 1rem;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        animation: fadeInUp 0.5s ease 0.1s backwards;
+    }
+
+    .stat-card {
+        background: var(--white);
+        padding: 1.25rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-light);
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .stat-icon.visitors {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+    }
+
+    .stat-icon.reviews {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+
+    .stat-info h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-info p {
+        font-size: 0.875rem;
+        color: var(--gray);
+        font-weight: 500;
+    }
+
+    /* Card Grid */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        animation: fadeInUp 0.5s ease 0.2s backwards;
+    }
+
+    /* Modern Card */
+    .card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid var(--gray-light);
+    }
+
+    .card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-light);
+    }
+
+    .card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--gray-lighter);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 100%);
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .card-title i {
+        color: var(--primary);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .card-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .card-body::-webkit-scrollbar-track {
+        background: var(--gray-lighter);
+        border-radius: 10px;
+    }
+
+    .card-body::-webkit-scrollbar-thumb {
+        background: var(--gray-light);
+        border-radius: 10px;
+    }
+
+    .card-body::-webkit-scrollbar-thumb:hover {
+        background: var(--gray);
+    }
+
+    /* QR Code Section */
+    .qr-container {
+        text-align: center;
+    }
+
+    .qr-booth {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--gray-lighter);
+        border-radius: var(--radius);
+    }
+
+    .qr-booth:last-child {
+        margin-bottom: 0;
+    }
+
+    .qr-booth h5 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .qr-code-wrapper {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        display: inline-block;
+        box-shadow: var(--shadow);
+        margin-bottom: 1rem;
+    }
+
+    .qr-code {
+        width: 200px;
+        height: 200px;
+        border-radius: 8px;
+        display: block;
+    }
+
+    .qr-description {
+        color: var(--gray);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    .qr-actions {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        border: none;
+        white-space: nowrap;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    .btn-outline {
+        background: var(--white);
+        border: 2px solid var(--gray-light);
+        color: var(--gray);
+    }
+
+    .btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    #scanVisitorBtn {
+        background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 0.625rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    #scanVisitorBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Visitor Item */
+    .visitor-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: var(--radius);
+        margin-bottom: 0.75rem;
+        background: var(--gray-lighter);
+        transition: all 0.2s ease;
+    }
+
+    .visitor-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .visitor-item:hover {
+        background: #e2e8f0;
+        transform: translateX(4px);
+    }
+
+    .visitor-photo {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 2px solid var(--white);
+        box-shadow: var(--shadow-sm);
+        flex-shrink: 0;
+    }
+
+    .visitor-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .visitor-name {
+        font-weight: 600;
+        font-size: 0.9375rem;
+        color: var(--dark);
+        margin-bottom: 0.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .visitor-meta {
+        font-size: 0.8125rem;
+        color: var(--gray);
+        line-height: 1.4;
+    }
+
+    /* Review Item */
+    .review-item {
+        padding: 1.25rem;
+        border-radius: var(--radius);
+        background: var(--gray-lighter);
+        margin-bottom: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .review-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .review-item:hover {
+        background: #e2e8f0;
+        transform: translateX(4px);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+        gap: 1rem;
+    }
+
+    .review-author {
+        font-weight: 600;
+        color: var(--dark);
+        font-size: 0.9375rem;
+    }
+
+    .review-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--warning);
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .review-content {
+        color: var(--dark-light);
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+    }
+
+    .review-meta {
+        font-size: 0.8125rem;
+        color: var(--gray);
+    }
+
+    .review-history {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--gray-light);
+    }
+
+    .review-history-title {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--gray);
+        margin-bottom: 0.5rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--gray);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    .empty-state p {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    /* Modal */
+    #scanVisitorModal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 90%;
+        max-width: 480px;
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        transform: translate(-50%, -50%);
+        z-index: 1050;
+        animation: modalSlideIn 0.3s ease;
+    }
+
+    #scanVisitorModal h5 {
+        margin: 0 0 1.5rem 0;
+        color: var(--dark);
+        font-size: 1.375rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    #scanVisitorModal h5 i {
+        color: var(--primary);
+    }
+
+    #visitorScanner {
+        width: 100%;
+        height: auto;
+        max-height: 320px;
+        border-radius: var(--radius);
+        border: 2px solid var(--gray-light);
+        margin-bottom: 1rem;
+        background: #000;
+    }
+
+    #visitorScanMessage {
+        font-weight: 600;
+        color: var(--primary);
+        min-height: 1.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        background: rgba(59, 130, 246, 0.1);
+    }
+
+    #visitorScanMessage:empty {
+        display: none;
+    }
+
+    #closeVisitorModal {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--gray-light);
+        background: var(--white);
+        border-radius: 8px;
+        font-weight: 600;
+        color: var(--gray);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    #closeVisitorModal:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -45%);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    /* Responsive Design */
+    @media (min-width: 768px) {
+        .navbar-brand-text {
+            display: block;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .navbar-logo {
+            width: 56px;
+            height: 56px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .card-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .stats-bar {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .navbar-toggle {
+            display: block;
+        }
+
+        .navbar-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: var(--white);
+            flex-direction: column;
+            padding: 5rem 1.5rem 1.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            gap: 0.25rem;
+        }
+
+        .navbar-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-overlay {
+            display: block;
+        }
+
+        .navbar-link {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+        }
+
+        .container {
+            padding: 1.5rem 1rem;
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+        }
+
+        .stats-bar {
+            grid-template-columns: 1fr;
+        }
+
+        .card-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        #scanVisitorBtn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .qr-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        #scanVisitorModal {
+            width: 95%;
+            max-width: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .visitor-item {
+            flex-wrap: wrap;
+        }
+
+        .visitor-photo {
+            width: 48px;
+            height: 48px;
+        }
+
+        .review-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stat-card {
+            padding: 1rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.25rem;
+        }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{% url 'index' %}" class="navbar-brand">
+             <span class="navbar-brand-text">UG-KE Tourism Conference</span>
+        </a>
+        
+        <button class="navbar-toggle" id="navbarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="navbar-menu" id="navbarMenu">
+            <a href="#" class="navbar-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="{% url 'Forewords' %}" class="navbar-link"><i class="fas fa-info-circle"></i> Forewords</a>
+            <a href="{% url 'golf' %}" class="navbar-link"><i class="fa-solid fa-golf-ball-tee"></i> Golf</a>
+            <a href="{% url 'blog' %}" class="navbar-link"><i class="fas fa-pen-to-square"></i> Blog</a>
+            <a href="{% url 'stay' %}" class="navbar-link"><i class="fas fa-house"></i> Accommodation</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Exhibitor Dashboard</h1>
+        <p class="dashboard-subtitle">Track booth visits and manage reviews in real-time</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="stat-icon visitors">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ visitors|length }}</h3>
+                <p>Total Visitors</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon reviews">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ reviews_received|length }}</h3>
+                <p>Reviews Received</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-grid">
+        <!-- Booth QR Code Section -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-qrcode"></i>
+                    <span>Your Booth QR Code</span>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if booths %}
+                    {% for booth in booths %}
+                        <div class="qr-booth">
+                            <h5>{{ booth.name }}</h5>
+                            {% if booth.booth_qr_code %}
+                                <div class="qr-code-wrapper">
+                                    <img src="{{ booth.booth_qr_code.url }}" alt="Booth QR Code" class="qr-code">
+                                </div>
+                                <p class="qr-description">Visitors scan this code to check in and leave reviews</p>
+                                <div class="qr-actions">
+                                    <a href="{{ booth.booth_qr_code.url }}" download="booth_{{ booth.id }}_qr.png" class="btn btn-primary">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                    <button onclick="printQR('{{ booth.booth_qr_code.url }}', '{{ booth.name }}')" class="btn btn-outline">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Generating QR code...</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-store-slash"></i>
+                        <p>No booth assigned yet</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Visitors Section -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-users"></i>
+                    <span>Recent Visitors</span>
+                </div>
+                <button id="scanVisitorBtn">
+                    <i class="fas fa-camera"></i> Scan QR
+                </button>
+            </div>
+            <div class="card-body">
+                {% if visitors %}
+                    <div id="visitorsList">
+                        {% for visit in visitors %}
+                            <div class="visitor-item" data-visitor-id="{{ visit.visitor.id }}">
+                                {% if visit.guest_photo %}
+                                    <img src="{{ visit.guest_photo.url }}" alt="Visitor" class="visitor-photo">
+                                {% else %}
+                                    <div class="visitor-photo" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.25rem;">
+                                        {{ visit.guest_name|default:visit.visitor.username|slice:":1"|upper }}
+                                    </div>
+                                {% endif %}
+                                <div class="visitor-details">
+                                    <div class="visitor-name">
+                                        {% if visit.visitor %}
+                                            {% if visit.guest_name %}
+                                                {{ visit.guest_name }}
+                                            {% else %}
+                                                {{ visit.visitor.get_full_name|default:visit.visitor.username }}
+                                            {% endif %}
+                                        {% else %}
+                                            {{ visit.guest_name }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="visitor-meta">
+                                        {{ visit.booth.name }}<br>
+                                        {{ visit.scanned_at|date:"M d, Y • g:i A" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-user-slash"></i>
+                        <p>No visitors yet. Share your QR code!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews</span>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if reviews_received %}
+                    {% for review in reviews_received %}
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div>
+                                    <div class="review-author">
+                                        {% if review.guest_name %}
+                                            {{ review.guest_name }}
+                                        {% else %}
+                                            {{ review.reviewer.get_full_name|default:review.reviewer.username }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="review-meta">{{ review.booth.name }}</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>{{ review.rating }}/5</span>
+                                </div>
+                            </div>
+                            <div class="review-content">{{ review.content }}</div>
+                            <div class="review-meta">
+                                {{ review.created_at|date:"M d, Y • g:i A" }}
+                                {% if review.edited_at %}
+                                    <span style="color: var(--warning);"> • Edited</span>
+                                {% endif %}
+                            </div>
+                            {% if review.edited_at %}
+                                {% with latest_history=review.history.last %}
+                                    {% if latest_history %}
+                                        <div class="review-history">
+                                            <div class="review-history-title">Previous Version:</div>
+                                            <div class="review-rating" style="margin-bottom: 0.5rem;">
+                                                <i class="fas fa-star"></i>
+                                                <span>{{ latest_history.rating }}/5</span>
+                                            </div>
+                                            <div style="color: var(--gray); font-size: 0.875rem; margin-bottom: 0.5rem;">
+                                                {{ latest_history.content }}
+                                            </div>
+                                            <div style="font-size: 0.75rem; color: var(--gray);">
+                                                {{ latest_history.timestamp|date:"M d, Y • g:i A" }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-star-half-alt"></i>
+                        <p>No reviews yet. Encourage visitors to share feedback!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QR Scanner Modal -->
+<div id="scanVisitorModal">
+    <h5><i class="fas fa-camera"></i> Scan Visitor QR Code</h5>
+    <video id="visitorScanner" playsinline></video>
+    <div id="visitorScanMessage"></div>
+    <button id="closeVisitorModal">Close Scanner</button>
+</div>
+
+<script src="https://unpkg.com/@zxing/library@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<script>
+    // Mobile Menu Toggle
+    const navbarToggle = document.getElementById('navbarToggle');
+    const navbarMenu = document.getElementById('navbarMenu');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    
+    function toggleMenu() {
+        navbarMenu.classList.toggle('active');
+        mobileMenuOverlay.classList.toggle('active');
+        document.body.style.overflow = navbarMenu.classList.contains('active') ? 'hidden' : 'auto';
+    }
+    
+    navbarToggle.addEventListener('click', toggleMenu);
+    mobileMenuOverlay.addEventListener('click', toggleMenu);
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.navbar-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+        });
+    });
+
+    // Print QR function
+    function printQR(qrUrl, boothName) {
+        const printWindow = window.open('', '', 'width=600,height=400');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Print Booth QR - ${boothName}</title>
+                    <style>
+                        body { 
+                            text-align: center; 
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            margin: 40px;
+                            background: white;
+                        }
+                        img { 
+                            width: 300px; 
+                            height: 300px;
+                            border: 2px solid #e5e7eb;
+                            border-radius: 12px;
+                            padding: 20px;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        }
+                        h2 { 
+                            margin: 20px 0; 
+                            color: #1e293b;
+                            font-size: 24px;
+                        }
+                        p {
+                            color: #64748b;
+                            font-size: 16px;
+                        }
+                        .footer {
+                            margin-top: 30px;
+                            font-size: 12px;
+                            color: #94a3b8;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>${boothName}</h2>
+                    <p>Scan to visit booth and leave a review</p>
+                    <img src="${qrUrl}" alt="Booth QR Code">
+                    <p class="footer">Generated by EventExpo System</p>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+    // QR Scanner functionality
+    const visitorScanBtn = document.getElementById('scanVisitorBtn');
+    const visitorModal = document.getElementById('scanVisitorModal');
+    const visitorScannerVideo = document.getElementById('visitorScanner');
+    const closeVisitorModal = document.getElementById('closeVisitorModal');
+    const visitorScanMessage = document.getElementById('visitorScanMessage');
+
+    let visitorCodeReader;
+    let visitorScanningActive = false;
+    let warmedUp = false;
+
+    // Warmup API
+    async function warmupAPI() {
+        try {
+            await fetch("{% url 'universal_scan_api' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ code: 'warmup' })
+            });
+            warmedUp = true;
+        } catch (err) {
+            console.warn('Warmup request failed', err);
+        }
+    }
+
+    // Start scanner
+    function startVisitorScanner() {
+        visitorCodeReader = new ZXing.BrowserQRCodeReader();
+        visitorScanningActive = true;
+
+        visitorCodeReader.decodeFromVideoDevice(null, visitorScannerVideo, async (result, err) => {
+            if (!visitorScanningActive || !warmedUp) return;
+            if (!result) return;
+
+            visitorScanningActive = false;
+            const qrCode = result.getText();
+            visitorScanMessage.textContent = 'Validating visitor...';
+            visitorScanMessage.style.color = 'var(--primary)';
+
+            try {
+                const res = await fetch("{% url 'universal_scan_api' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ code: qrCode })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    visitorScanMessage.style.color = 'var(--success)';
+                    visitorScanMessage.textContent = data.already_logged ? 
+                        '✓ Visitor already logged' : 
+                        '✓ Visitor logged successfully!';
+                    
+                    if (!data.already_logged) {
+                        const listContainer = document.getElementById('visitorsList');
+                        if (!listContainer) {
+                            // Replace empty state
+                            const cardBody = document.querySelector('.card-body');
+                            const emptyState = cardBody.querySelector('.empty-state');
+                            if (emptyState) {
+                                const newList = document.createElement('div');
+                                newList.id = 'visitorsList';
+                                cardBody.replaceChild(newList, emptyState);
+                            }
+                        }
+                        
+                        const ul = document.getElementById('visitorsList');
+                        const newVisitor = document.createElement('div');
+                        newVisitor.className = 'visitor-item';
+                        newVisitor.style.animation = 'fadeInUp 0.5s ease';
+                        
+                        const photoHtml = data.visitor_photo ? 
+                            `<img src="${data.visitor_photo}" class="visitor-photo" alt="Visitor">` :
+                            `<div class="visitor-photo" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.25rem;">
+                                ${data.visitor_name.charAt(0).toUpperCase()}
+                            </div>`;
+                        
+                        newVisitor.innerHTML = `
+                            ${photoHtml}
+                            <div class="visitor-details">
+                                <div class="visitor-name">${data.visitor_name}</div>
+                                <div class="visitor-meta">Visited just now</div>
+                            </div>`;
+                        ul.insertBefore(newVisitor, ul.firstChild);
+                        
+                        // Update stats
+                        const statsCount = document.querySelector('.stat-icon.visitors + .stat-info h3');
+                        if (statsCount) {
+                            const currentCount = parseInt(statsCount.textContent);
+                            statsCount.textContent = currentCount + 1;
+                        }
+                    }
+                } else {
+                    visitorScanMessage.style.color = 'var(--danger)';
+                    visitorScanMessage.textContent = '✗ ' + (data.message || 'Invalid QR code');
+                }
+            } catch (e) {
+                visitorScanMessage.style.color = 'var(--danger)';
+                visitorScanMessage.textContent = '✗ Network error. Please try again.';
+            }
+
+            setTimeout(() => {
+                visitorScanMessage.textContent = '';
+                visitorScanningActive = true;
+            }, 2500);
+        });
+    }
+
+    function stopVisitorScanner() {
+        if (visitorCodeReader) {
+            visitorCodeReader.reset();
+        }
+        visitorScanningActive = false;
+    }
+
+    // Open scanner modal
+    visitorScanBtn.addEventListener('click', async () => {
+        visitorModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        visitorScanMessage.textContent = 'Initializing camera...';
+        visitorScanMessage.style.color = 'var(--primary)';
+
+        await warmupAPI();
+        visitorScanMessage.textContent = '';
+        startVisitorScanner();
+    });
+
+    // Close scanner modal
+    closeVisitorModal.addEventListener('click', () => {
+        stopVisitorScanner();
+        visitorModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        visitorScanMessage.textContent = '';
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && visitorModal.style.display === 'block') {
+            closeVisitorModal.click();
+        }
+    });
+</script>
