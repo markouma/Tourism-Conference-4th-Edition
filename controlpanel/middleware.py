@@ -3,9 +3,23 @@ from django_user_agents.utils import get_user_agent
 from .models import SiteVisit
 from django.conf import settings
 
-# Path to  GeoLite2 db
-GEOIP_DB_PATH = 'geoip/GeoLite2-City.mmdb'
-reader = geoip2.database.Reader(GEOIP_DB_PATH)
+import logging
+
+logger = logging.getLogger(__name__)
+
+# Path to  GeoLite2 db. Absolute, so manage.py works from any directory.
+# MaxMind restricts redistribution, so the file is not in the repo - see README.
+# Without it the site still runs, visits are just logged without country/city.
+GEOIP_DB_PATH = settings.BASE_DIR / 'geoip' / 'GeoLite2-City.mmdb'
+
+try:
+    reader = geoip2.database.Reader(str(GEOIP_DB_PATH))
+except (OSError, ValueError) as exc:
+    logger.warning(
+        "GeoLite2 database unavailable at %s (%s) - visits will be logged "
+        "without geolocation.", GEOIP_DB_PATH, exc,
+    )
+    reader = None
 
 INTERNAL_IPS = ['127.0.0.1', '192.168.X.X']
 
@@ -54,6 +68,8 @@ class TrafficLoggerMiddleware:
         return ip
 
     def get_location(self, ip):
+        if reader is None:
+            return None, None
         try:
             response = reader.city(ip)
             country = response.country.name

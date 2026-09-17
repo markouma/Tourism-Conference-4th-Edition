@@ -34,14 +34,18 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = ['thetourismconference.org', 'www.thetourismconference.org',
-                 '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = [
-    "https://thetourismconference.org",
-    "https://www.thetourismconference.org",
-]
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='thetourismconference.org,www.thetourismconference.org,127.0.0.1,localhost',
+    cast=Csv(),
+)
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://thetourismconference.org,https://www.thetourismconference.org',
+    cast=Csv(),
+)
 
-BASE_URL = "https://thetourismconference.org/"
+BASE_URL = config('BASE_URL', default='https://thetourismconference.org').rstrip('/')
  
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -100,8 +104,8 @@ DATABASES = {
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='3306'),
         'OPTIONS': {
             'ssl': {'ssl-disabled': True},
         }
@@ -137,7 +141,7 @@ APPEND_SLASH = True
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.thetourismconference.org'
+EMAIL_HOST = config('EMAIL_HOST', default='mail.thetourismconference.org')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
@@ -146,20 +150,23 @@ EMAIL_USE_SSL = False
 
 
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='halloo@thetourismconference.org')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL='The 4th Conference <halloo@thetourismconference.org>'
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = config(
+    'DEFAULT_FROM_EMAIL',
+    default='The 4th Conference <halloo@thetourismconference.org>',
+)
 EMAIL_SUBJECT_PREFIX = '[4thConf] '
 
 
 # Pesapal
 PESAPAL_CONFIG = {
-    'CONSUMER_KEY': config('PESAPAL_CONSUMER_KEY'),
-    'CONSUMER_SECRET': config('PESAPAL_CONSUMER_SECRET'),
-    'AUTH_URL': config('PESAPAL_AUTH_URL'),
-    'ORDER_URL': config('PESAPAL_ORDER_URL'),
+    'CONSUMER_KEY': config('PESAPAL_CONSUMER_KEY', default=''),
+    'CONSUMER_SECRET': config('PESAPAL_CONSUMER_SECRET', default=''),
+    'AUTH_URL': config('PESAPAL_AUTH_URL', default=''),
+    'ORDER_URL': config('PESAPAL_ORDER_URL', default=''),
     'CALLBACK_URL': f"{BASE_URL}/payment_callback/",
-    'IPN_ID': config('PESAPAL_IPN_ID'),
-    'ENVIRONMENT': config('PESAPAL_ENVIRONMENT'),
+    'IPN_ID': config('PESAPAL_IPN_ID', default=''),
+    'ENVIRONMENT': config('PESAPAL_ENVIRONMENT', default=''),
     "STATUS_URL": "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus",    
 
 }
@@ -168,14 +175,14 @@ PESAPAL_CONFIG = {
 
 # Daraja
 DARAJA_CONFIG = {
-    'CONSUMER_KEY': config('DARAJA_CONSUMER_KEY'),
-    'CONSUMER_SECRET': config('DARAJA_CONSUMER_SECRET'),
-    'SHORTCODE': config('DARAJA_SHORTCODE'),
-    'PASSKEY': config('DARAJA_PASSKEY'),
-    'INITIATE_URL': config('DARAJA_INITIATE_URL'),
-    'TOKEN_URL': config('DARAJA_TOKEN_URL'),
+    'CONSUMER_KEY': config('DARAJA_CONSUMER_KEY', default=''),
+    'CONSUMER_SECRET': config('DARAJA_CONSUMER_SECRET', default=''),
+    'SHORTCODE': config('DARAJA_SHORTCODE', default=''),
+    'PASSKEY': config('DARAJA_PASSKEY', default=''),
+    'INITIATE_URL': config('DARAJA_INITIATE_URL', default=''),
+    'TOKEN_URL': config('DARAJA_TOKEN_URL', default=''),
     'CALLBACK_URL': f"{BASE_URL}/api/daraja/callback/",
-    'ENVIRONMENT': config('DARAJA_ENVIRONMENT'),
+    'ENVIRONMENT': config('DARAJA_ENVIRONMENT', default=''),
 }
 
 
@@ -243,4 +250,4 @@ BOOTH_RESERVE_MINUTES = 10
 
 RECAPTCHA_SITE_KEY = 'your-site-key'
 RECAPTCHA_SECRET_KEY = 'your-secret-key'
-SITE_URL = 'https://thetourismconference.org'
+SITE_URL = config('SITE_URL', default=BASE_URL)
