@@ -18,7 +18,7 @@ from django.core.files.storage import FileSystemStorage
 
 # pdf
 from django.template.loader import render_to_string
-from weasyprint import HTML
+from tourismconference.pdf import HTML
 
 
 # login/signup

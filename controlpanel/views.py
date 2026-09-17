@@ -13,7 +13,7 @@ from reportlab.pdfgen import canvas
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from collections import defaultdict
-from weasyprint import HTML
+from tourismconference.pdf import HTML
 import tempfile
 import csv
 from decimal import Decimal
@@ -795,7 +795,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.core.files.base import ContentFile
 from django.utils import timezone
-from weasyprint import HTML
+from tourismconference.pdf import HTML
 
 def unified_reports_view(request):
     if not request.session.get('reports_authenticated'):

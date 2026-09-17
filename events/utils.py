@@ -10,7 +10,7 @@ from django.core.mail import EmailMessage
 from django.urls import reverse
 from django.templatetags.static import static
 from pathlib import Path
-from weasyprint import HTML
+from tourismconference.pdf import HTML
 from django.core.files.storage import default_storage
 
 from django.core.signing import Signer, TimestampSigner
@@ -724,7 +724,7 @@ import os
 from datetime import datetime
 from django.conf import settings
 from django.template.loader import render_to_string
-from weasyprint import HTML
+from tourismconference.pdf import HTML
 from .models import InvoiceReceipt, DocumentCounter
 
 
